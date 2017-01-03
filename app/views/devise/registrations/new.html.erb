@@ -1,0 +1,57 @@
+<!-- Main Wrapper -->
+<div id="main-wrapper">
+  <div class="top-bg">
+    <div class="container">
+      <div class="login-logo">
+        <figure>
+          <img src="<%=image_path("login-logo.png")%>" class="img-responsive" alt="ERP" />
+        </figure>
+      </div>
+      <div class="login-box">
+        <div class="login-head">
+          <h1>Sign up</h1>
+        </div>    
+        <div class="login-form">
+          <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+            <%= devise_error_messages! %>
+            <div class="form-group">
+              <input value="" name="user[email]" id="user_email" type="email">
+              <label for="input" class="input-label">Email</label><i class="bar"></i>
+            </div>     
+            <div class="form-group">
+              <input value="" name="user[first_name]" id="user_first_name" type="text">
+              <label for="input" class="input-label">First Name</label><i class="bar"></i>
+            </div>     
+            <div class="form-group">
+              <input value="" name="user[last_name]" id="user_last_name" type="text">
+              <label for="input" class="input-label">Last Name</label><i class="bar"></i>
+            </div>       
+            <div class="form-group">
+              <input value="" name="user[password]" id="user_password" type="password">
+              <label for="input" class="input-label">Password</label><i class="bar"></i>
+            </div>      
+            <div class="form-group">
+              <input value="" name="user[password_confirmation]" id="user_password_confirmation" type="password">
+              <label for="input" class="input-label">Repeat Password</label><i class="bar"></i>
+            </div>     
+            <div class="button-container">
+              <button type="submit" class="button-signup"><span>Sign Up</span></button>
+            </div>        
+            <div class="row">
+              <div class="col-md-4 col-sm-4">
+                <%= link_to new_session_path(resource_name), class:"button-1" do %>
+                  <span>Login</span>
+                <% end %>
+              </div>
+              <div class="col-md-8 col-sm-8">
+                <div class="text-li1">
+                  <%= link_to "Didn't receive confirmation instructions?", new_confirmation_path(resource_name) %>
+                </div>
+              </div>
+            </div>            
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

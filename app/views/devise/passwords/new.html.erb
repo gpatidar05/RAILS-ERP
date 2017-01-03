@@ -1,0 +1,48 @@
+<!-- Main Wrapper -->
+<div id="main-wrapper">
+	<div class="top-bg">
+    <div class="container">
+      <div class="login-logo">
+        <figure>
+          <img src="<%=image_path("login-logo.png")%>" class="img-responsive" alt="ERP" />
+        </figure>
+      </div>
+      <div class="login-box">
+        <div class="login-head">
+          <h1>forgot password</h1>
+        </div> 
+        <div class="login-form">
+          <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
+            <%= devise_error_messages! %>
+            <div class="form-group">
+              <%= f.email_field :email, autofocus: true %>
+              <label for="input" class="input-label">Email</label><i class="bar"></i>
+            </div>       
+            <div class="button-container">
+              <button type="submit" class="button-forgot"><span>send password reset instructions</span></button>
+            </div>
+            <div class="row">
+              <div class="col-md-3 col-sm-3 col-xs-6">
+                <%= link_to new_session_path(resource_name), class:"button-1" do %>
+                  <span>Login</span>
+                <% end %>
+              </div>
+              <div class="col-md-9 col-sm-9 col-xs-6 padd-b">
+                <%= link_to new_registration_path(resource_name), class:"button-1" do %>
+                  <span>Sign up</span>
+                <% end %>
+              </div>
+	          </div>          
+	          <div class="row">
+	            <div class="col-md-12 col-sm-12">
+	              <div class="text-li1">
+	              	<%= link_to "Didn't receive confirmation instructions?", new_confirmation_path(resource_name) %>
+	              </div>
+	            </div>
+	          </div>             
+	        <% end %>
+	      </div>
+	    </div>
+	  </div>
+  </div>
+</div>

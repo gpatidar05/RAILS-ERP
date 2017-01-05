@@ -35,6 +35,12 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use Devise for user authentication
 gem 'devise'
 
+#Clerk adds the creator,updater to your ActiveRecord objects
+gem 'clerk'
+
+# Multilpe Emails
+gem 'devise-multi_email'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'

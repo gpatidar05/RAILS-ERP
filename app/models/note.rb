@@ -1,5 +1,8 @@
 class Note < ActiveRecord::Base
-	belongs_to :user
-	
-	track_who_does_it
+
+    has_many :users_note
+    has_many :users
+
+    track_who_does_it
+    
 end

@@ -1,36 +1,47 @@
 class User < ActiveRecord::Base
-  # Include default devise modules. Others available are:
-  # :lockable, :timeoutable and :omniauthable
-  has_many :emails, dependent: :destroy
-  has_one :customer, dependent: :destroy
-  has_one :contact, dependent: :destroy
-  has_many :notes, dependent: :destroy
-  has_many :orders, dependent: :destroy
+    # Include default devise modules. Others available are:
+    # :lockable, :timeoutable and :omniauthable
 
-  devise :multi_email_authenticatable, :registerable, :multi_email_confirmable,
-         :recoverable, :rememberable, :trackable, :multi_email_validatable
+    has_one :customer, dependent: :destroy
+    has_one :contact, dependent: :destroy
+    has_one :supplier, dependent: :destroy
 
-  #validations
-  validates :first_name, :last_name, :role, presence: true
+    has_many :emails, dependent: :destroy
+    has_many :sales_orders, dependent: :destroy
+    has_many :purchase_orders, dependent: :destroy
+    has_many :notes, dependent: :destroy
+    has_many :notes
+    has_many :users_note
 
-  include SentientUser
+    devise :multi_email_authenticatable, :registerable, :multi_email_confirmable,
+             :recoverable, :rememberable, :trackable, :multi_email_validatable
 
-  #constants
-  ROLES = %w(Admin Sales Customer Contact)
+    #validations
+    validates :first_name, :last_name, :role, presence: true
 
-  def admin?
-    self.role == 'Admin'
-  end
+    #constants
+    ROLES = %w(Admin Sales Customer Contact Supplier)
 
-  def Sales?
-    self.role == 'Sales'
-  end
+    include SentientUser
 
-  def Customer?
-    self.role == 'Customer'
-  end
+    def admin?
+        self.role == 'Admin'
+    end
 
-  def Contact?
-    self.role == 'Contact'
-  end
+    def Sales?
+        self.role == 'Sales'
+    end
+
+    def Customer?
+        self.role == 'Customer'
+    end
+
+    def Contact?
+        self.role == 'Contact'
+    end
+
+    def Supplier?
+        self.role == 'Supplier'
+    end
+  
 end

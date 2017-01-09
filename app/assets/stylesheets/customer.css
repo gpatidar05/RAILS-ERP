@@ -11,9 +11,9 @@
  * file per style scope.
  *
  *= require_self
- *= require bootstrap.css
- *= require font-awesome.css
- *= require responsive.css
- *= require style.css
+ *= require css1_style.css
+ *= require css2_font-awesome.css
+ *= require css3_responsive.css
+ *= require css4_bootstrap.css
 
  */

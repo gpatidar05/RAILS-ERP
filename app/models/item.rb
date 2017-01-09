@@ -5,6 +5,7 @@ class Item < ActiveRecord::Base
 
     has_many :purchase_orders
     has_many :purchase_order_items
+    has_many :item_images, dependent: :destroy
 
     track_who_does_it
     

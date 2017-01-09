@@ -11,10 +11,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170105193748) do
+ActiveRecord::Schema.define(version: 20170108084518) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "categories", force: :cascade do |t|
+    t.string   "name"
+    t.string   "unit"
+    t.decimal  "tax"
+    t.string   "manufacturer"
+    t.string   "description"
+    t.integer  "created_by_id"
+    t.integer  "updated_by_id"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
 
   create_table "contacts", force: :cascade do |t|
     t.integer  "user_id"
@@ -68,6 +80,33 @@ ActiveRecord::Schema.define(version: 20170105193748) do
     t.datetime "updated_at",                           null: false
   end
 
+  create_table "item_images", force: :cascade do |t|
+    t.integer  "item_id"
+    t.string   "image"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "items", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "category_id"
+    t.integer  "supplier_id"
+    t.string   "unit"
+    t.decimal  "tax"
+    t.integer  "item_in_stock"
+    t.integer  "max_level"
+    t.integer  "min_level"
+    t.decimal  "selling_price"
+    t.decimal  "purchase_price"
+    t.string   "item_description"
+    t.string   "purchase_description"
+    t.string   "selling_description"
+    t.integer  "created_by_id"
+    t.integer  "updated_by_id"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
   create_table "notes", force: :cascade do |t|
     t.integer  "user_id"
     t.string   "subject"
@@ -88,6 +127,47 @@ ActiveRecord::Schema.define(version: 20170105193748) do
     t.integer  "updated_by_id"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
+  end
+
+  create_table "purchase_order_items", force: :cascade do |t|
+    t.integer  "purchase_order_id"
+    t.integer  "item_id"
+    t.integer  "quantity"
+    t.decimal  "total"
+    t.decimal  "unit_price"
+    t.decimal  "discount"
+    t.decimal  "item_total"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
+
+  create_table "purchase_orders", force: :cascade do |t|
+    t.string   "subject"
+    t.decimal  "total_price"
+    t.decimal  "sub_total"
+    t.decimal  "tax"
+    t.decimal  "grand_total"
+    t.string   "description"
+    t.integer  "supplier_user_id"
+    t.integer  "created_by_id"
+    t.integer  "updated_by_id"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  create_table "suppliers", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "phone"
+    t.string   "country"
+    t.string   "supplier_currency"
+    t.string   "street"
+    t.string   "city"
+    t.string   "state"
+    t.string   "postal_code"
+    t.integer  "created_by_id"
+    t.integer  "updated_by_id"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
   end
 
   create_table "users", force: :cascade do |t|
@@ -113,5 +193,26 @@ ActiveRecord::Schema.define(version: 20170105193748) do
 
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
+
+  create_table "users_notes", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "note_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "warehouse_locations", force: :cascade do |t|
+    t.string   "subject"
+    t.integer  "row_no"
+    t.string   "warehouse"
+    t.string   "status"
+    t.string   "description"
+    t.integer  "rack_from"
+    t.integer  "rack_to"
+    t.integer  "created_by_id"
+    t.integer  "updated_by_id"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
 
 end

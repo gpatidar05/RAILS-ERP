@@ -42,6 +42,10 @@ GEM
       debug_inspector (>= 0.0.1)
     builder (3.2.2)
     byebug (9.0.6)
+    carrierwave (1.0.0)
+      activemodel (>= 4.0.0)
+      activesupport (>= 4.0.0)
+      mime-types (>= 1.16)
     clerk (0.2.2)
       activerecord (> 3)
       railties (> 3.1)
@@ -165,6 +169,7 @@ PLATFORMS
 
 DEPENDENCIES
   byebug
+  carrierwave (~> 1.0)
   clerk
   coffee-rails (~> 4.1.0)
   devise

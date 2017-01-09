@@ -5,6 +5,9 @@ class CreateWarehouseLocations < ActiveRecord::Migration
             t.integer :row_no
             t.string :warehouse
             t.string :status
+            t.string :description
+            t.integer :rack_from
+            t.integer :rack_to
 
             t.integer :created_by_id
             t.integer :updated_by_id
@@ -12,4 +15,7 @@ class CreateWarehouseLocations < ActiveRecord::Migration
         end
     end
 end
+#Need to make warehouse id
 
+
+Item

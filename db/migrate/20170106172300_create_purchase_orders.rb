@@ -8,10 +8,6 @@ class CreatePurchaseOrders < ActiveRecord::Migration
             t.decimal :grand_total #Autocalculated: Subtotal + Tax
             t.string :description
             t.integer :supplier_user_id
-            t.integer :quantity
-            t.decimal :unit_price 
-            t.decimal :discount 
-            t.decimal :item_total #Auto Calculated: Total - Discount
 
             t.integer :created_by_id
             t.integer :updated_by_id

@@ -24,6 +24,10 @@ class User < ActiveRecord::Base
 
     include SentientUser
 
+    def full_name
+        [self.first_name, self.last_name].reject(&:blank?).join(' ')
+    end
+
     def admin?
         self.role == 'Admin'
     end

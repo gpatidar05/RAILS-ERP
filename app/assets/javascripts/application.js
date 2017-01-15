@@ -16,3 +16,5 @@
 //= require bootstrap.js
 //= require jquery.min.js
 //= require npm.js
+//= require main.js
+//= require z_dialog-bootstrap.min.js

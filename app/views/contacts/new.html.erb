@@ -1,0 +1,281 @@
+<!-- Page Content -->
+<div id="page-content-wrapper">
+    <div class="top-cont">
+        <a href="<%=contacts_path%>">CRM</a> / <a href="<%=contacts_path%>">Contacts</a> / New
+    </div>
+    <%=  form_for(@user, url:contacts_path) do |f| %>
+    <div class="">
+        <div class="col-md-12">
+            <!-- Nav tabs -->
+            <div class="card card-1 padd0">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Personal Info </a></li>
+                    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab"> Address Info</a></li>
+                    <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Other Info</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="home">
+                    <div class="card card-1">
+                        <div class="search-panel">
+                            <h4>Personal Info</h4>
+                        </div>
+                        <div class="form-search">
+                            <div class="row">
+                                <div class="col-md-4 col-sm-4">
+                                    <div class="input-field">
+                                        <%= f.email_field :email ,:class=>"validate",:id=>"email"%>
+                                        <label class="active" for="email">Email <code><%= @user.errors[:email][0] %></code></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-4">
+                                    <div class="input-field">
+                                        <%= f.text_field :first_name ,:class=>"validate",:id=>"first_name"%>
+                                        <label class="active" for="first_name">First Name <code><%= @user.errors[:first_name][0] %></code></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-4">
+                                    <div class="input-field">
+                                        <%= f.text_field :middle_name ,:class=>"validate",:id=>"middle_name"%>
+                                        <label class="active" for="middle_name">Middle Name <code><%= @user.errors[:middle_name][0] %></code></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 col-sm-4">
+                                    <div class="input-field">
+                                        <%= f.text_field :last_name ,:class=>"validate",:id=>"last_name"%>
+                                        <label class="active" for="last_name">Last Name <code><%= @user.errors[:last_name][0] %></code></label>
+                                    </div>
+                                </div>
+                                <%= f.fields_for :contact do |c| %>                                            
+                                <div class="col-md-4 col-sm-4">
+                                    <div class="input-field">
+                                        <%= c.select(:salutation, options_for_select(Array[*SALUTATION.collect {|v,i| [v,v] }]),:prompt => 'Please Select') %>
+                                        <label>Salutation <code><%= @user.contact.errors[:salutation][0] %></code></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-4">
+                                    <div class="input-field">
+                                        <%= c.text_field :phone_mobile ,:class=>"validate",:id=>"phone_mobile"%>
+                                        <label class="active" for="phone_mobile">Phone Mobile <code><%= @user.contact.errors[:phone_mobile][0] %></code></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 col-sm-4">
+                                    <div class="input-field">
+                                        <%= c.text_field :phone_work ,:class=>"validate",:id=>"phone_work"%>
+                                        <label class="active" for="phone_work">Phone Work <code><%= @user.contact.errors[:phone_work][0] %></code></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-4">
+                                    <div class="input-field">
+                                        <%= c.text_field :company ,:class=>"validate",:id=>"company"%>
+                                        <label class="active" for="company">Company <i style="float:right" class="material-icons">call_made</i> <code><%= @user.contact.errors[:company][0] %></code></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-4">
+                                    <div class="input-field">
+                                        <%= c.text_field :designation ,:class=>"validate",:id=>"designation"%>
+                                        <label class="active" for="designation">Designation <code><%= @user.contact.errors[:designation][0] %></code></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 col-sm-4">
+                                    <div class="input-field">
+                                        <%= c.text_field :department ,:class=>"validate",:id=>"department"%>
+                                        <label class="active" for="department">Department <code><%= @user.contact.errors[:department][0] %></code></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-4">
+                                    <div class="input-field">
+                                        <%= c.select(:customer_id, options_for_select(Array[*User.where("role IN (?)",["Customer"]).collect {|v,i| [v.full_name,v.customer.id] if v.customer.present? }] ),:prompt => 'Please Select') %>
+                                        <label>Customer <code><%= @user.contact.errors[:customer_id][0] %></code></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-4"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12">
+                                    <div class="input-field">
+                                        <%= c.text_field :decription ,:class=>"validate",:id=>"decription"%>
+                                        <label class="active" for="decription">Decription <code><%= @user.contact.errors[:decription][0] %></code></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button type="submit" class="button-1"><span>Save</span></button>
+                                    <button type="button" class="button-1 clear"><span>Clear</span></button>
+                                    <%= link_to :back, class:"button-1" do%><span>Back</span>
+                                    <%end%>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="profile">
+                    <div class="card card-1">
+                        <div class="search-panel">
+                            <h4>Primary Address Info</h4>
+                        </div>
+                        <div class="form-search">
+                            <div class="row">
+                                <div class="col-md-4 col-sm-4">
+                                    <div class="input-field">
+                                        <%= c.text_field :primary_street ,:class=>"validate",:id=>"primary_street"%>
+                                        <label class="active" for="primary_street">Street <code><%= @user.contact.errors[:primary_street][0] %></code></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-4">
+                                    <div class="input-field">
+                                        <%= c.text_field :primary_city ,:class=>"validate",:id=>"primary_city"%>
+                                        <label class="active" for="primary_city">City <code><%= @user.contact.errors[:primary_city][0] %></code></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-4">
+                                    <div class="input-field">
+                                        <%= c.text_field :primary_state ,:class=>"validate",:id=>"primary_state"%>
+                                        <label class="active" for="primary_state">State <code><%= @user.contact.errors[:primary_state][0] %></code></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 col-sm-4">
+                                    <div class="input-field">
+                                        <%= c.text_field :primary_country ,:class=>"validate",:id=>"primary_country"%>
+                                        <label class="active" for="primary_country">Country <code><%= @user.contact.errors[:primary_country][0] %></code></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-4">
+                                    <div class="input-field">
+                                        <%= c.text_field :primary_postal_code ,:class=>"validate",:id=>"primary_postal_code"%>
+                                        <label class="active" for="primary_postal_code">Postal Code <code><%= @user.contact.errors[:primary_postal_code][0] %></code></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-4"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card card-1">
+                        <div class="search-panel">
+                            <h4>Alternative Address Info</h4>
+                        </div>
+                        <div class="form-search">
+                            <div class="row">
+                                <div class="col-md-4 col-sm-4">
+                                    <div class="input-field">
+                                        <%= c.text_field :alternative_street ,:class=>"validate",:id=>"alternative_street"%>
+                                        <label class="active" for="alternative_street">Street <code><%= @user.contact.errors[:alternative_street][0] %></code></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-4">
+                                    <div class="input-field">
+                                        <%= c.text_field :alternative_city ,:class=>"validate",:id=>"alternative_city"%>
+                                        <label class="active" for="alternative_city">City <code><%= @user.contact.errors[:alternative_city][0] %></code></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-4">
+                                    <div class="input-field">
+                                        <%= c.text_field :alternative_state ,:class=>"validate",:id=>"alternative_state"%>
+                                        <label class="active" for="alternative_state">State <code><%= @user.contact.errors[:alternative_state][0] %></code></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 col-sm-4">
+                                    <div class="input-field">
+                                        <%= c.text_field :alternative_country ,:class=>"validate",:id=>"alternative_country"%>
+                                        <label class="active" for="alternative_country">Country <code><%= @user.contact.errors[:alternative_country][0] %></code></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-4">
+                                    <div class="input-field">
+                                        <%= c.text_field :alternative_postal_code ,:class=>"validate",:id=>"alternative_postal_code"%>
+                                        <label class="active" for="alternative_postal_code">Postal Code <code><%= @user.contact.errors[:alternative_postal_code][0] %></code></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-4"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button type="submit" class="button-1"><span>Save</span></button>
+                                    <button type="button" class="button-1 clear"><span>Clear</span></button>
+                                    <%= link_to :back, class:"button-1" do%><span>Back</span>
+                                    <%end%>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="messages">
+                    <div class="card card-1">
+                        <div class="search-panel">
+                            <h4>Other Info</h4>
+                        </div>
+                        <div class="form-search">
+                            <div class="row">
+                                <div class="col-md-4 col-sm-4">
+                                    <div class="input-field">
+                                        <%= c.date_field :created_at ,:class=>"datepicker",:id=>"created_at"%>
+                                        <label class="active" for="created_at">Created Date <code><%= @user.contact.errors[:created_at][0] %></code></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-4">
+                                    <div class="input-field">
+                                        <%= c.select(:created_by_id, options_for_select(Array[*User.all.collect {|v,i| [v.full_name,v.id] }]),:prompt => 'Please Select') %>
+                                        <label>Created by <code><%= @user.contact.errors[:created_by_id][0] %></code></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-4">
+                                    <div class="input-field">
+                                        <%= c.date_field :updated_at ,:class=>"datepicker",:id=>"updated_at"%>
+                                        <label class="active" for="updated_at">Modified Date <code><%= @user.contact.errors[:updated_at][0] %></code></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 col-sm-4">
+                                    <div class="input-field">
+                                        <%= c.select(:updated_by_id, options_for_select(Array[*User.all.collect {|v,i| [v.full_name,v.id] }]),:prompt => 'Please Select') %>
+                                        <label>Modified by <code><%= @user.contact.errors[:updated_by_id][0] %></code></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-4"></div>
+                                <div class="col-md-4 col-sm-4"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button type="submit" class="button-1"><span>Save</span></button>
+                                    <button type="button" class="button-1 clear"><span>Clear</span></button>
+                                    <%= link_to :back, class:"button-1" do%><span>Back</span>
+                                    <%end%>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%end%>
+<%end%>
+</div>
+<!-- /#page-content-wrapper -->
+<script type="text/javascript">
+    $('form').find("input[type=text], textarea, input[type=email]").focusout();
+            $('#phone_mobile').mask('(000) 000-0000');
+    
+     $(".clear").click(function(){
+        $(this).closest('form').find("input[type=text], textarea, input[type=email]").val("");
+        $(this).closest('form').find("input[type=text], textarea, input[type=email]").focusout();
+     });
+    
+          
+</script>

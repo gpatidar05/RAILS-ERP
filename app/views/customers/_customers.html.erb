@@ -1,0 +1,85 @@
+<div class="material-table-01">
+    <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp new">
+        <thead>
+            <tr>
+                <th class="mdl-data-table__cell--non-numeric new">Customer Name</th>
+                <th>Phone#</th>
+                <th>Customer Type</th>
+                <th>Country</th>
+                <th>Created Date</th>
+                <th>Created By</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <%if @customers.present? %>
+            <% @customers.each do |customer| %>
+            <tr>
+                <td class="mdl-data-table__cell--non-numeric new"><%= link_to customer.user.full_name , customer ,class:"click_link"%></td>
+                <td><%= customer.phone %></td>
+                <td><%= customer.c_type %></td>
+                <td><%= customer.country %></td>
+                <td><%= customer.created_at.strftime('%d %B, %Y') %></td>
+                <td><%= customer.creator.try(:full_name) %></td>
+                <td>
+                    <%= link_to edit_customer_path(customer) do %>
+                    <i class="material-icons">border_color</i>
+                    <%end%>
+                    <%= link_to customer do %>
+                    <i class="material-icons">remove_red_eye</i>
+                    <%end%>
+                    <a href="javascript:void(0)" class="confirm-delete"><i class="material-icons">delete_forever</i></a>
+                    <%= link_to customer, method: :delete, :class=>"deleted hide" do %><%end%>
+                </td>
+            </tr>
+            <% end %>
+            <%else%>
+            <tr>
+                <td colspan="7">
+                    <div class="no_data alert alert-danger text-center">
+                        <strong>Sorry!</strong> You have no customers</a>.
+                    </div>
+                </td>
+            </tr>
+            <%end%>
+        </tbody>
+    </table>
+    <div class="row">
+        <div class="col-md-4 col-sm-5">
+            <div class="tfoot">
+            </div>
+        </div>
+        <div class="col-md-8 col-sm-7 col-xs-12">
+            <div class="pagination-section">
+                <%= will_paginate @customers, renderer: BootstrapPagination::Rails %>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+      $('.pagination > li > a').attr('data-remote', 'true');
+    });
+    
+    $(document).on('click', '.confirm-delete', function () {
+        that = this;
+        console.log("this",$(that))
+        BootstrapDialog.show({
+          title: 'Confirm',
+          message: 'Are you sure?',
+          buttons: [{
+            label: 'Ok',
+            action: function(dialogItself) {
+              $(that).siblings('a.deleted')[0].click();
+              dialogItself.close();
+            }
+          },{
+            label: 'Cancel',
+            action: function(dialogItself) {
+              dialogItself.close();
+            }
+          }]
+        });
+      });
+    
+</script>

@@ -16,6 +16,8 @@ class User < ActiveRecord::Base
     devise :multi_email_authenticatable, :registerable, :multi_email_confirmable,
              :recoverable, :rememberable, :trackable, :multi_email_validatable
 
+    accepts_nested_attributes_for :customer
+    accepts_nested_attributes_for :contact
     #validations
     validates :first_name, :last_name, :role, presence: true
 

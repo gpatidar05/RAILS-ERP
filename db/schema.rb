@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170108084518) do
+ActiveRecord::Schema.define(version: 20170115101244) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,12 +50,14 @@ ActiveRecord::Schema.define(version: 20170108084518) do
     t.integer  "updated_by_id"
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
+    t.text     "decription"
+    t.string   "company"
   end
 
   create_table "customers", force: :cascade do |t|
     t.integer  "user_id"
     t.string   "phone"
-    t.string   "type"
+    t.string   "c_type"
     t.string   "street"
     t.string   "city"
     t.string   "state"
@@ -64,8 +66,13 @@ ActiveRecord::Schema.define(version: 20170108084518) do
     t.string   "decription"
     t.integer  "created_by_id"
     t.integer  "updated_by_id"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.decimal  "discount_percent"
+    t.decimal  "credit_limit"
+    t.string   "tax_reference"
+    t.string   "payment_terms"
+    t.string   "customer_currency"
   end
 
   create_table "emails", force: :cascade do |t|
@@ -108,21 +115,8 @@ ActiveRecord::Schema.define(version: 20170108084518) do
   end
 
   create_table "notes", force: :cascade do |t|
-    t.integer  "user_id"
     t.string   "subject"
     t.string   "decription"
-    t.integer  "created_by_id"
-    t.integer  "updated_by_id"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-  end
-
-  create_table "orders", force: :cascade do |t|
-    t.integer  "user_id"
-    t.string   "subject"
-    t.integer  "subtotal"
-    t.integer  "tax"
-    t.integer  "grand_total"
     t.integer  "created_by_id"
     t.integer  "updated_by_id"
     t.datetime "created_at",    null: false
@@ -149,6 +143,19 @@ ActiveRecord::Schema.define(version: 20170108084518) do
     t.decimal  "grand_total"
     t.string   "description"
     t.integer  "supplier_user_id"
+    t.integer  "created_by_id"
+    t.integer  "updated_by_id"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  create_table "sales_orders", force: :cascade do |t|
+    t.integer  "customer_user_id"
+    t.integer  "contact_user_id"
+    t.string   "name"
+    t.decimal  "subtotal"
+    t.decimal  "tax"
+    t.decimal  "grand_total"
     t.integer  "created_by_id"
     t.integer  "updated_by_id"
     t.datetime "created_at",       null: false

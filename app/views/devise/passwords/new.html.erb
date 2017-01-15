@@ -13,10 +13,9 @@
         </div> 
         <div class="login-form">
           <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
-            <%= devise_error_messages! %>
             <div class="form-group">
               <%= f.email_field :email, autofocus: true %>
-              <label for="input" class="input-label">Email</label><i class="bar"></i>
+              <label for="input" class="input-label">Email <code><%= resource.errors[:email][0] %></code></label><i class="bar"></i>
             </div>       
             <div class="button-container">
               <button type="submit" class="button-forgot"><span>send password reset instructions</span></button>

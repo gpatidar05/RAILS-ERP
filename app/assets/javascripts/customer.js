@@ -14,5 +14,10 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require bootstrap.js
+//= require z_dialog-bootstrap.min.js
 //= require jquery.min.js
 //= require npm.js
+//= require materialize.min.js
+//= require main.js
+//= require jquery.mask.js
+

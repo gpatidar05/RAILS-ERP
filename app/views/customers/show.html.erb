@@ -1,0 +1,500 @@
+<!-- Page Content -->
+<div id="page-content-wrapper">
+    <div class="top-cont">
+        <a href="<%=customers_path%>">CRM</a> / <a href="<%=customers_path%>">Customers</a> / View
+    </div>
+    <div class="">
+        <div class="col-md-12">
+            <!-- Nav tabs -->
+            <div class="card card-1 padd0">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#general" aria-controls="general" role="tab" data-toggle="tab">General Info </a></li>
+                    <li role="presentation"><a href="#payment" aria-controls="payment" role="tab" data-toggle="tab"> Payment Info</a></li>
+                    <li role="presentation"><a href="#other" aria-controls="other" role="tab" data-toggle="tab">Other Info</a></li>
+                    <li role="presentation"><a href="#Contact" aria-controls="Contact" role="tab" data-toggle="tab">Contacts </a></li>
+                    <li role="presentation"><a href="#notes" aria-controls="notes" role="tab" data-toggle="tab"> Notes</a></li>
+                    <li role="presentation"><a href="#sales" aria-controls="sales" role="tab" data-toggle="tab">Sales Orders</a></li>
+                    <li role="presentation"><a href="#invoices" aria-controls="invoices" role="tab" data-toggle="tab">Invoices </a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="card card-1">
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="general">
+                        <div class="search-panel">
+                            <h4>General Info</h4>
+                        </div>
+                        <div class="form-search">
+                            <form>
+                                <div class="row">
+                                    <div class="col-md-4 col-sm-4">
+                                        <div class="input-field">
+                                            <label class="control-label" for="disabledInput" class="input-label">Customer Code</label>
+                                            <input class="form-control" id="disabledInput" type="text" placeholder="<%= customer_code(@customer) %>" disabled="">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-4">
+                                        <div class="input-field">
+                                            <label class="control-label" for="disabledInput" class="input-label">Customer Name</label>
+                                            <input class="form-control" id="disabledInput" type="text" placeholder="<%= @customer.user.full_name %>" disabled="">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-4">
+                                        <div class="input-field">
+                                            <label class="control-label" for="disabledInput" class="input-label">Phone#</label>
+                                            <input class="form-control" id="disabledInput" type="text" placeholder="<%= @customer.phone %>" disabled="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 col-sm-4">
+                                        <div class="input-field">
+                                            <label class="control-label" for="disabledInput" class="input-label">Email</label>
+                                            <input class="form-control" id="disabledInput" type="text" placeholder="<%= @customer.user.email %>" disabled="">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-4">
+                                        <div class="input-field">
+                                            <label class="control-label" for="disabledInput" class="input-label">Street</label>
+                                            <input class="form-control" id="disabledInput" type="text" placeholder="<%= @customer.street %>" disabled="">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-4">
+                                        <div class="input-field">
+                                            <label class="control-label" for="disabledInput" class="input-label">City</label>
+                                            <input class="form-control" id="disabledInput" type="text" placeholder="<%= @customer.city %>" disabled="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 col-sm-4">
+                                        <div class="input-field">
+                                            <label class="control-label" for="disabledInput" class="input-label">State</label>
+                                            <input class="form-control" id="disabledInput" type="text" placeholder="<%= @customer.state %>" disabled="">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-4">
+                                        <div class="input-field">
+                                            <label class="control-label" for="disabledInput" class="input-label">Country</label>
+                                            <input class="form-control" id="disabledInput" type="text" placeholder="<%= @customer.country %>" disabled="">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-4">
+                                        <div class="input-field">
+                                            <label class="control-label" for="disabledInput" class="input-label">Postal Code</label>
+                                            <input class="form-control" id="disabledInput" type="text" placeholder="<%= @customer.postal_code %>" disabled="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 col-sm-4">
+                                        <div class="input-field">
+                                            <label class="control-label" for="disabledInput" class="input-label">Customer Type</label>
+                                            <input class="form-control" id="disabledInput" type="text" placeholder="<%= @customer.c_type %>" disabled="">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-4">
+                                        <div class="input-field">
+                                            <label class="control-label" for="disabledInput" class="input-label">Customer Since</label>
+                                            <input class="form-control" id="disabledInput" type="text" placeholder="<%= @customer.created_at.strftime('%d %B, %Y') %>" disabled="">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-4"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12">
+                                        <div class="input-field">
+                                            <label class="control-label" for="disabledInput" class="input-label">Decription</label>
+                                            <input class="form-control" id="disabledInput" type="text" placeholder="<%= @customer.decription%>" disabled="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <%= link_to edit_customer_path(@customer),:class=>"button-1" do %>
+                                        <span>Edit</span>
+                                        <%end%>
+                                        <%= link_to :back, class:"button-1" do%><span>Back</span>
+                                        <%end%>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="payment">
+                        <div class="search-panel">
+                            <h4>Payment Info</h4>
+                        </div>
+                        <div class="form-search">
+                            <form>
+                                <div class="row">
+                                    <div class="col-md-4 col-sm-4">
+                                        <div class="input-field">
+                                            <label class="control-label" for="disabledInput" class="input-label">Discount Percent</label>
+                                            <input class="form-control" id="disabledInput" type="text" placeholder="<%= @customer.discount_percent%>" disabled="">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-4">
+                                        <div class="input-field">
+                                            <label class="control-label" for="disabledInput" class="input-label">Credit Limit</label>
+                                            <input class="form-control" id="disabledInput" type="text" placeholder="<%= @customer.credit_limit%>" disabled="">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-4">
+                                        <div class="input-field">
+                                            <label class="control-label" for="disabledInput" class="input-label">Tax Reference</label>
+                                            <input class="form-control" id="disabledInput" type="text" placeholder="<%= @customer.tax_reference%>" disabled="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 col-sm-4">
+                                        <div class="input-field">
+                                            <label class="control-label" for="disabledInput" class="input-label">Payment Terms</label>
+                                            <input class="form-control" id="disabledInput" type="text" placeholder="<%= @customer.payment_terms%>" disabled="">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-4">
+                                        <div class="input-field">
+                                            <label class="control-label" for="disabledInput" class="input-label">Customer Currency</label>
+                                            <input class="form-control" id="disabledInput" type="text" placeholder="<%= @customer.customer_currency%>" disabled="">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-4"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <%= link_to edit_customer_path(@customer),:class=>"button-1" do %>
+                                        <span>Edit</span>
+                                        <%end%>
+                                        <%= link_to :back, class:"button-1" do%><span>Back</span>
+                                        <%end%>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="other">
+                        <div class="search-panel">
+                            <h4>Other Info</h4>
+                        </div>
+                        <div class="form-search">
+                            <form>
+                                <div class="row">
+                                    <div class="col-md-4 col-sm-4">
+                                        <div class="input-field">
+                                            <label class="control-label" for="disabledInput" class="input-label">Created Date</label>
+                                            <input class="form-control" id="disabledInput" type="text" placeholder="<%= @customer.created_at.strftime('%d %B, %Y')%>" disabled="">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-4">
+                                        <div class="input-field">
+                                            <label class="control-label" for="disabledInput" class="input-label">Created by</label>
+                                            <input class="form-control" id="disabledInput" type="text" placeholder="<%= @customer.creator.try(:full_name)%>" disabled="">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-4">
+                                        <div class="input-field">
+                                            <label class="control-label" for="disabledInput" class="input-label">Modified Date</label>
+                                            <input class="form-control" id="disabledInput" type="text" placeholder="<%= @customer.updated_at.strftime('%d %B, %Y')%>" disabled="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 col-sm-4">
+                                        <div class="input-field">
+                                            <label class="control-label" for="disabledInput" class="input-label">Modified by</label>
+                                            <input class="form-control" id="disabledInput" type="text" placeholder="<%= @customer.updater.try(:full_name)%>" disabled="">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-4"></div>
+                                    <div class="col-md-4 col-sm-4"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <%= link_to edit_customer_path(@customer),:class=>"button-1" do %>
+                                        <span>Edit</span>
+                                        <%end%>
+                                        <%= link_to :back, class:"button-1" do%><span>Back</span>
+                                        <%end%>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="Contact">
+                        <div class="table-panel">
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <h4>Contacts</h4>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <div class="right-icon">
+                                    <a href="">
+                                        <md-icon class="material-icons">filter_list</md-icon>
+                                    </a>
+                                    <a href="">
+                                        <md-icon class="material-icons">local_dining</md-icon>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="material-table-01">
+                            <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp new">
+                                <thead>
+                                    <tr>
+                                        <th class="mdl-data-table__cell--non-numeric new">Contact ID</th>
+                                        <th>Full Name</th>
+                                        <th>Mobile</th>
+                                        <th>Date Created</th>
+                                        <th>Created By</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <%if @customer.contacts.present? %>
+                                    <% @customer.contacts.each do |contact| %>
+                                    <tr>
+                                        <td class="mdl-data-table__cell--non-numeric new"><%= contact_code(contact) %></td>
+                                        <td><%= link_to contact_path(contact),:class=>"click_link" do %><%= contact.user.full_name %>
+                                            <%end%>
+                                        </td>
+                                        <td><%= contact.phone_mobile %></td>
+                                        <td><%= contact.created_at.strftime('%d %B, %Y') %></td>
+                                        <td><%= contact.creator.full_name %></td>
+                                        <td>
+                                            <%= link_to edit_contact_path(contact) do %><i class="material-icons">border_color</i>
+                                            <%end%>
+                                            <%= link_to contact_path(contact) do %><i class="material-icons">remove_red_eye</i><%end%>
+                                            <%= link_to contact, method: :delete, data: { confirm: 'Are you sure?' } do %>
+                                            <i class="material-icons">delete_forever</i>
+                                            <%end%>
+                                        </td>
+                                    </tr>
+                                    <%end%>                                   
+                                    <%else%>
+                                    <tr>
+                                        <td colspan="6">
+                                            <div class="no_data alert alert-danger text-center">
+                                                <strong>Sorry!</strong> You have no contacts</a>.
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <%end%>
+                                </tbody>
+                            </table>
+                            <div class="row">
+                                <div class="col-md-4 col-sm-5">
+                                </div>
+                                <div class="col-md-7 col-sm-6 col-xs-7">
+                                    <div class="page-dd">
+                                        <p>1 - 5 of 2917 </p>
+                                    </div>
+                                </div>
+                                <div class="col-md-1 col-sm-1 col-xs-5">
+                                    <div class="arr1">
+                                        <i class="material-icons">keyboard_arrow_left</i> <i class="material-icons">keyboard_arrow_right</i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="notes">
+                        <div class="table-panel">
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <h4>Notes</h4>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <div class="right-icon">
+                                    <a href="">
+                                        <md-icon class="material-icons">filter_list</md-icon>
+                                    </a>
+                                    <a href="">
+                                        <md-icon class="material-icons">local_dining</md-icon>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="material-table-01">
+                            <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp new">
+                                <thead>
+                                    <tr>
+                                        <th class="mdl-data-table__cell--non-numeric new">Note ID</th>
+                                        <th>Subject</th>
+                                        <th>Created Date</th>
+                                        <th>Created By</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!--                                             <tr>
+                                        <td class="mdl-data-table__cell--non-numeric new">Patricia D Wilson</td>
+                                        <td>Lorem Ipsum</td>
+                                        <td>Lorem Ipsum</td>
+                                        <td>Lorem Ipsum</td>
+                                        <td>
+                                          <a href=""><i class="material-icons">border_color</i></a>
+                                          <a href=""><i class="material-icons">remove_red_eye</i></a>
+                                          <a href=""><i class="material-icons">delete_forever</i></a>
+                                        </td>
+                                        </tr> -->
+                                </tbody>
+                            </table>
+                            <div class="row">
+                                <div class="col-md-4 col-sm-5">
+                                    <div class="tfoot">
+                                    </div>
+                                </div>
+                                <div class="col-md-7 col-sm-6 col-xs-7">
+                                    <div class="page-dd">
+                                        <p>1 - 5 of 2917 </p>
+                                    </div>
+                                </div>
+                                <div class="col-md-1 col-sm-1 col-xs-5">
+                                    <div class="arr1">
+                                        <i class="material-icons">keyboard_arrow_left</i> <i class="material-icons">keyboard_arrow_right</i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="sales">
+                        <div class="table-panel">
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <h4>Sales Orders</h4>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <div class="right-icon">
+                                    <a href="">
+                                        <md-icon class="material-icons">filter_list</md-icon>
+                                    </a>
+                                    <a href="">
+                                        <md-icon class="material-icons">local_dining</md-icon>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="material-table-01">
+                            <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp new">
+                                <thead>
+                                    <tr>
+                                        <th class="mdl-data-table__cell--non-numeric new">Order ID</th>
+                                        <th>Subject</th>
+                                        <th>Subtotal</th>
+                                        <th>Tax</th>
+                                        <th>Created Date</th>
+                                        <th>Date Created</th>
+                                        <th>Created By</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!--                                             <tr>
+                                        <td class="mdl-data-table__cell--non-numeric new">CUS00001</td>
+                                        <td>Lorem Ipsum</td>
+                                        <td>Lorem Ipsum</td>
+                                        <td>Lorem Ipsum</td>
+                                        <td>Lorem Ipsum</td>
+                                        <td>Lorem Ipsum</td>
+                                        <td>Lorem Ipsum</td>
+                                        <td>
+                                          <a href=""><i class="material-icons">border_color</i></a>
+                                          <a href=""><i class="material-icons">remove_red_eye</i></a>
+                                          <a href=""><i class="material-icons">delete_forever</i></a>
+                                        </td>
+                                        </tr> -->
+                                </tbody>
+                            </table>
+                            <div class="row">
+                                <div class="col-md-4 col-sm-5">
+                                    <div class="tfoot">
+                                    </div>
+                                </div>
+                                <div class="col-md-7 col-sm-6 col-xs-7">
+                                    <div class="page-dd">
+                                        <p>1 - 5 of 2917 </p>
+                                    </div>
+                                </div>
+                                <div class="col-md-1 col-sm-1 col-xs-5">
+                                    <div class="arr1">
+                                        <i class="material-icons">keyboard_arrow_left</i> <i class="material-icons">keyboard_arrow_right</i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="invoices">
+                        <div class="table-panel">
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <h4>Invoices</h4>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <div class="right-icon">
+                                    <a href="">
+                                        <md-icon class="material-icons">filter_list</md-icon>
+                                    </a>
+                                    <a href="">
+                                        <md-icon class="material-icons">local_dining</md-icon>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="material-table-01">
+                            <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp new">
+                                <thead>
+                                    <tr>
+                                        <th class="mdl-data-table__cell--non-numeric new">Quote ID</th>
+                                        <th>Subject</th>
+                                        <th>Subtotal</th>
+                                        <th>Tax</th>
+                                        <th>Grand Total</th>
+                                        <th>Date Created</th>
+                                        <th>Created By</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!--                                             <tr>
+                                        <td class="mdl-data-table__cell--non-numeric new">CUS0001</td>
+                                        <td>Lorem Ipsum</td>
+                                        <td>Lorem Ipsum</td>
+                                        <td>Lorem Ipsum</td>
+                                        <td>Lorem Ipsum</td>
+                                        <td>Lorem Ipsum</td>
+                                        <td>Lorem Ipsum</td>
+                                        <td>
+                                          <a href=""><i class="material-icons">border_color</i></a>
+                                          <a href=""><i class="material-icons">remove_red_eye</i></a>
+                                          <a href=""><i class="material-icons">delete_forever</i></a>
+                                        </td>
+                                        </tr> -->
+                                </tbody>
+                            </table>
+                            <div class="row">
+                                <div class="col-md-4 col-sm-5">
+                                    <div class="tfoot">
+                                    </div>
+                                </div>
+                                <div class="col-md-7 col-sm-6 col-xs-7">
+                                    <div class="page-dd">
+                                        <p>1 - 5 of 2917 </p>
+                                    </div>
+                                </div>
+                                <div class="col-md-1 col-sm-1 col-xs-5">
+                                    <div class="arr1">
+                                        <i class="material-icons">keyboard_arrow_left</i> <i class="material-icons">keyboard_arrow_right</i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /#page-content-wrapper -->
+<script type="text/javascript">
+    $('form').find("input[type=text], textarea, input[type=email]").focusin();
+</script>

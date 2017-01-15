@@ -1,0 +1,116 @@
+<!-- Page Content -->
+<div id="page-content-wrapper clearfix">
+   <div class="top-cont">
+      <a href="">CRM</a> / Contacts
+      <a href="<%=new_contact_path%>" class="new_button button-1"><span>New Contact</span></a>
+   </div>
+   <div class="">
+      <div class="col-md-12">
+         <div class="card card-1">
+            <div class="search-panel">
+               <h4>Search</h4>
+            </div>
+            <div class="form-search">
+               <%= form_tag contacts_path, :method => 'get',:remote=> true do %>
+               <div class="row">
+                  <div class="col-md-4 col-sm-4">
+                     <div class="input-field">
+                        <input name="code" id="last_name" type="text" class="validate">
+                        <label for="last_name">Contact ID</label>
+                     </div>
+                  </div>
+                  <div class="col-md-4 col-sm-4">
+                     <div class="input-field">
+                        <input name="first_name" id="last_name" type="text" class="validate">
+                        <label for="last_name">First Name</label>
+                     </div>
+                  </div>
+                  <div class="col-md-4 col-sm-4">
+                     <div class="input-field">
+                        <input name="middle_name" id="last_name" type="text" class="validate">
+                        <label for="last_name">Middle Name</label>
+                     </div>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-md-4 col-sm-4">
+                     <div class="input-field">
+                        <input name="last_name" id="last_name" type="text" class="validate">
+                        <label for="last_name">Last Name</label>
+                     </div>
+                  </div>
+                  <div class="col-md-4 col-sm-4">
+                     <div class="input-field">
+                        <input name="mobile" id="phone" type="text" class="validate">
+                        <label for="last_name">Mobile #</label>
+                     </div>
+                  </div>
+                  <div class="col-md-4 col-sm-4">
+                     <div class="input-field">
+                        <input name="company" id="company" type="text" class="validate">
+                        <label for="company">Company</label>
+                     </div>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-md-4 col-sm-4">
+                     <div class="input-field">
+                        <input name="address_country" id="last_name" type="text" class="validate">
+                        <label for="last_name">Address Country </label>
+                     </div>
+                  </div>
+                  <div class="col-md-4 col-sm-4">
+                     <div class="input-field">
+                        <input name="designation" id="last_name" type="text" class="validate">
+                        <label for="last_name">Designation</label>
+                     </div>
+                  </div>
+                  <div class="col-md-4 col-sm-4">
+                     <div class="input-field">
+                        <input name="created_at" type="date" class="datepicker">
+                        <label for="datepicker">Date Created</label>
+                     </div>
+                  </div>
+               </div>
+               <div class="">
+                  <div class="col-md-12">
+                     <button type="submit" class="button-1"><span>Search</span></button>
+                     <button type="submit" class="button-1 clear"><span>Clear</span></button>
+                  </div>
+               </div>
+               <%end%>
+            </div>
+         </div>
+      </div>
+   </div>
+   <div class="">
+      <div class="col-md-12">
+         <div class="card card-1">
+            <div class="table-panel">
+               <div class="col-md-6 col-sm-6 col-xs-6">
+                  <h4>List</h4>
+               </div>
+               <div class="col-md-6 col-sm-6 col-xs-6">
+                  <div class="right-icon">
+                     <a href="">
+                        <md-icon class="material-icons">filter_list</md-icon>
+                     </a>
+                     <a href="">
+                        <md-icon class="material-icons">local_dining</md-icon>
+                     </a>
+                  </div>
+               </div>
+            </div>
+            <div id="search_page"><%= render 'contacts' %></div>
+         </div>
+      </div>
+   </div>
+</div>
+<!-- /#page-content-wrapper -->
+<script type="text/javascript">
+   $('#phone').mask('(000) 000-0000');
+   $(".clear").click(function(){
+    $(this).closest('form').find("input[type=text], textarea, input[type=email]").val("");
+    $(this).closest('form').find("input[type=text], textarea, input[type=email]").focusout();
+   });
+</script>

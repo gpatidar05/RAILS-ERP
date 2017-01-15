@@ -6,15 +6,15 @@ default: &default
 
 development:
   <<: *default
-  database: erp
+  database: erp1
   username: postgres
   password: postgres
 
 staging:
-  database: erp
+  database: erp1
 
 production:
-  database: erp
+  database: erp1
 
 test:
-  database: erp
+  database: erp1

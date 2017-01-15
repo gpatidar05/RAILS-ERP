@@ -10,11 +10,13 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
- *= require_tree .
  *= require_self
- *= require css1_style.css
- *= require css2_font-awesome.css
- *= require css3_responsive.css
- *= require css4_bootstrap.css
+
+ *= require css4_style.css
+ *= require css1_font-awesome.css
+ *= require css5_responsive.css
+ *= require css3_bootstrap.css
+ *= require main.css
+
 
  */

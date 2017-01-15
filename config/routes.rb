@@ -1,11 +1,15 @@
 Rails.application.routes.draw do
 
+  resources :contacts
+  resources :customers
   devise_for :users, controllers: {
         sessions: 'users/sessions',registrations: 'users/registrations',passwords: 'users/passwords'
   }
 
-  root 'landing#index'
-
+  devise_scope :user do
+   root :to => 'devise/sessions#new'
+  end
+  
   # Admin all routes
   namespace :admin do
     resources :dashboard, only: [:index]

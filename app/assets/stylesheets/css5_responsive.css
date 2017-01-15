@@ -1,0 +1,159 @@
+@charset "utf-8";
+/* CSS Document */
+
+/* Large desktops and laptops */
+@media (min-width: 1200px) {
+#wrapper {
+        padding-left: 334px;
+    }
+
+    #wrapper.toggled {
+        padding-left: 0;
+    }
+
+    #sidebar-wrapper {
+        width: 334px;
+    }
+
+    #wrapper.toggled #sidebar-wrapper {
+        width: 0;
+    }
+
+    #page-content-wrapper {
+        position: relative;
+    }
+
+    #wrapper.toggled #page-content-wrapper {
+        position: relative;
+        margin-right: 0;
+    }
+}
+
+/* Landscape tablets and medium desktops */
+@media (min-width: 992px) and (max-width: 1199px) {
+#wrapper {
+        padding-left: 334px;
+    }
+
+    #wrapper.toggled {
+        padding-left: 0;
+    }
+
+    #sidebar-wrapper {
+        width: 334px;
+    }
+
+    #wrapper.toggled #sidebar-wrapper {
+        width: 0;
+    }
+
+    #page-content-wrapper {
+        position: relative;
+    }
+
+    #wrapper.toggled #page-content-wrapper {
+        position: relative;
+        margin-right: 0;
+    }
+	.pad-logo0 {
+    margin-left: 0px;
+}
+.mdl-badge.mdl-badge--overlap {
+    margin-right: 0px !important;
+}
+.material-table-01{width: 100%;
+overflow-y: auto;}
+.nav-tabs > li > a::after { bottom:0;}
+}
+
+/* Portrait tablets and small desktops */
+@media (min-width: 768px) and (max-width: 991px) {
+
+.pad-logo0 {
+    margin-left: 0px;
+}
+.top-icons a {
+    padding: 29px 7px;
+}
+.mdl-badge.mdl-badge--overlap {
+    margin-right: 0px !important;
+}
+.material-table-01{width: 100%;
+overflow-y: auto;}
+.nav-tabs > li > a::after { bottom:0;}
+}
+
+/* Landscape phones and portrait tablets */
+@media (max-width: 767px) {
+	
+.material-table-01{width: 100%;
+overflow-y: auto;}
+.pad-logo0 {
+    margin-left: -83px;
+}
+.top-icons a {
+    padding: 29px 7px;
+}
+.top-icons {
+    float: right;
+    background: #00BCFF;
+    padding: 15px;
+	margin:0;
+}
+.top-icons a:hover {
+    padding: 29px 9px;
+    color: #0c1224;
+}
+.mdl-badge.mdl-badge--overlap {
+    margin-right: 0px;
+}
+.top-section {
+    background: #0c1224;
+    border-top: 4px solid #00bcff;
+    position:static;
+    width: 100%;
+    z-index:auto;
+}
+.top-mrg {
+    margin-top: 0px;
+}
+.nav-tabs > li > a::after { bottom:0;}
+}
+
+/* Portrait phones and smaller */
+@media (max-width: 480px) {
+.pad-logo0 {
+    margin-left: -11px;
+}
+.top-icons {
+    float: right;
+    background: #00BCFF;
+    padding: 15px;
+	margin:0;
+}
+.top-icons a:hover {
+    padding: 29px 7px;
+    color: #0c1224;
+}
+
+.top-section {
+    background: #0c1224;
+    border-top: 4px solid #00bcff;
+    position:static;
+    width: 100%;
+    z-index:auto;
+}
+.top-mrg {
+    margin-top: 0px;
+}
+.material-table-01{width: 100%;
+overflow-y: auto;}
+.padd-b { margin-bottom:15px !important;}
+
+.button-1 { padding:6px 16px;}
+.nav-tabs > li {
+    width: 100%;
+}
+.nav-tabs > li > a::after { bottom:0;}
+.card { width:90%;} 
+}

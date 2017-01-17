@@ -5,7 +5,7 @@ class ContactsController < ApplicationController
   # GET /contacts
   # GET /contacts.json
   def index
-    @contacts = Contact.search(params).paginate(:per_page => 5, :page => params[:page])
+    @contacts = Contact.search(params).sales_contacts(current_user).paginate(:per_page => 5, :page => params[:page])
   end
 
   # GET /contacts/1
@@ -28,7 +28,7 @@ class ContactsController < ApplicationController
   # POST /contacts.json
   def create
     @user = User.new(contact_params)
-
+    @user.contact.sales_user_id = current_user.id
     respond_to do |format|
       if @user.save
         format.html { redirect_to edit_contact_path(@user.contact), notice: 'Contact was successfully created.' }
@@ -44,7 +44,6 @@ class ContactsController < ApplicationController
   # PATCH/PUT /contacts/1.json
   def update
     @user = User.find(params[:id])
-
     respond_to do |format|
       if @user.update(contact_params)
         format.html { redirect_to contact_path(@user.contact), notice: 'Contact was successfully updated.' }

@@ -9,7 +9,6 @@ class User < ActiveRecord::Base
     has_many :emails, dependent: :destroy
     has_many :sales_orders, dependent: :destroy
     has_many :purchase_orders, dependent: :destroy
-    has_many :notes, dependent: :destroy
     has_many :notes
     has_many :users_note
 
@@ -50,4 +49,13 @@ class User < ActiveRecord::Base
         self.role == 'Supplier'
     end
   
+    def self.sales_customers(current_user)
+        joins(:customer).where("role IN (?)",["Customer"]).where("customers.sales_user_id = ?",current_user.id)
+    end
+
+    def self.sales_staff_users(current_user)
+        user_ids = []
+        user_ids << current_user.id if current_user.Sales?
+        where("id IN (?)",user_ids)
+    end
 end

@@ -28,4 +28,8 @@ class Contact < ActiveRecord::Base
 	  search = search.where('DATE(contacts.created_at) = ?', params[:created_at].to_date) if params[:created_at].present?
 	  return search
 	end
+
+	def self.sales_contacts(current_user)
+		where("contacts.sales_user_id = ?",current_user.id)
+	end
 end

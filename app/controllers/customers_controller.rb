@@ -5,7 +5,7 @@ class CustomersController < ApplicationController
   # GET /customers
   # GET /customers.json
   def index
-    @customers = Customer.search(params).paginate(:per_page => 5, :page => params[:page])
+    @customers = Customer.search(params).sales_customers(current_user).paginate(:per_page => 5, :page => params[:page])
   end
 
   # GET /customers/1
@@ -28,6 +28,7 @@ class CustomersController < ApplicationController
   # POST /customers.json
   def create
     @user = User.new(customer_params)
+    @user.customer.sales_user_id = current_user.id
     respond_to do |format|
       if @user.save
         format.html { redirect_to edit_customer_path(@user.customer), notice: 'Customer was successfully created.' }

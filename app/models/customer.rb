@@ -29,5 +29,9 @@ class Customer < ActiveRecord::Base
 	  return search
 	end
 
+	def self.sales_customers(current_user)
+		where("customers.sales_user_id = ?",current_user.id)
+	end
+
 end
 #created_by

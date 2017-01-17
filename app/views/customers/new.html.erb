@@ -182,7 +182,7 @@
                                 </div>
                                 <div class="col-md-4 col-sm-4">
                                     <div class="input-field">
-                                        <%= c.select(:created_by_id, options_for_select(Array[*User.all.collect {|v,i| [v.full_name,v.id] }]),:prompt => 'Please Select') %>
+                                        <%= c.select(:created_by_id, options_for_select(Array[*User.sales_staff_users(current_user).collect {|v,i| [v.full_name,v.id] }]),:prompt => 'Please Select') %>
                                         <label>Created by <code><%= @user.customer.errors[:created_by_id][0] %></code></label>
                                     </div>
                                 </div>
@@ -196,7 +196,7 @@
                             <div class="row">
                                 <div class="col-md-4 col-sm-4">
                                     <div class="input-field">
-                                        <%= c.select(:updated_by_id, options_for_select(Array[*User.all.collect {|v,i| [v.full_name,v.id] }]),:prompt => 'Please Select') %>
+                                        <%= c.select(:updated_by_id, options_for_select(Array[*User.sales_staff_users(current_user).collect {|v,i| [v.full_name,v.id] }]),:prompt => 'Please Select') %>
                                         <label>Modified by <code><%= @user.customer.errors[:updated_by_id][0] %></code></label>
                                     </div>
                                 </div>

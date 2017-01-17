@@ -58,7 +58,7 @@
                     <div class="row">
                         <div class="col-md-4 col-sm-4">
                             <div class="input-field">
-                                <%= select_tag(:created_by_id, options_for_select(Array[*User.all.collect {|v,i| [v.full_name,v.id] }]),:prompt => 'Please Select') %>
+                                <%= select_tag(:created_by_id, options_for_select(Array[*User.sales_staff_users(current_user).collect {|v,i| [v.full_name,v.id] }]),:prompt => 'Please Select') %>
                                 <label>Created By</label>
                             </div>
                         </div>

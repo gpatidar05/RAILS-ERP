@@ -110,8 +110,11 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <button type="submit" class="button-1"><span>Edit</span></button>
-                                        <button type="submit" class="button-1"><span>Delete</span></button>
+                                        <%= link_to edit_contact_path(@contact),:class=>"button-1" do %>
+                                        <span>Edit</span>
+                                        <%end%>
+                                        <%= link_to :back, class:"button-1" do%><span>Back</span>
+                                        <%end%>
                                     </div>
                                 </div>
                             </form>
@@ -206,8 +209,11 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <button type="submit" class="button-1"><span>Edit</span></button>
-                                        <button type="submit" class="button-1"><span>Delete</span></button>
+                                        <%= link_to edit_contact_path(@contact),:class=>"button-1" do %>
+                                        <span>Edit</span>
+                                        <%end%>
+                                        <%= link_to :back, class:"button-1" do%><span>Back</span>
+                                        <%end%>
                                     </div>
                                 </div>
                             </form>
@@ -253,8 +259,11 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <button type="submit" class="button-1"><span>Edit</span></button>
-                                        <button type="submit" class="button-1"><span>Delete</span></button>
+                                        <%= link_to edit_contact_path(@contact),:class=>"button-1" do %>
+                                        <span>Edit</span>
+                                        <%end%>
+                                        <%= link_to :back, class:"button-1" do%><span>Back</span>
+                                        <%end%>
                                     </div>
                                 </div>
                             </form>
@@ -290,17 +299,34 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <!--                                             <tr>
-                                        <td class="mdl-data-table__cell--non-numeric new">Patricia D Wilson</td>
-                                        <td>Lorem Ipsum</td>
-                                        <td>Lorem Ipsum</td>
-                                        <td>Lorem Ipsum</td>
-                                        <td>
-                                          <a href=""><i class="material-icons">border_color</i></a>
-                                          <a href=""><i class="material-icons">remove_red_eye</i></a>
-                                          <a href=""><i class="material-icons">delete_forever</i></a>
-                                        </td>
-                                        </tr> -->
+                                    <%if @contact.notes.present? %>
+                                        <% @contact.notes.each do |note| %>
+                                            <tr>
+                                                <td class="mdl-data-table__cell--non-numeric new"><%= note_code(note) %></td>
+                                                <td><%= note.subject %></td>
+                                                <td><%= note.created_at.strftime('%d %B, %Y') %></td>
+                                                <td><%= note.creator.full_name %></td>
+                                                <td>
+                                                    <%= link_to edit_note_path(note) do%>
+                                                      <i class="material-icons">border_color</i>
+                                                    <%end%>
+                                                    <%= link_to note do %>
+                                                      <i class="material-icons">remove_red_eye</i>
+                                                    <%end%>
+                                                    <a href="javascript:void(0)" class="confirm-delete"><i class="material-icons">delete_forever</i></a>
+                                                    <%= link_to note, method: :delete, :class=>"deleted hide" do %><%end%>
+                                                </td>
+                                            </tr>
+                                        <%end%>
+                                    <%else%>
+                                      <tr>
+                                          <td colspan="7">
+                                              <div class="no_data alert alert-danger text-center">
+                                                  <strong>Sorry!</strong> You have no notes</a>.
+                                              </div>
+                                          </td>
+                                      </tr>
+                                    <%end%>
                                 </tbody>
                             </table>
                             <div class="row">
@@ -309,14 +335,8 @@
                                     </div>
                                 </div>
                                 <div class="col-md-7 col-sm-6 col-xs-7">
-                                    <div class="page-dd">
-                                        <p>1 - 5 of 2917 </p>
-                                    </div>
                                 </div>
                                 <div class="col-md-1 col-sm-1 col-xs-5">
-                                    <div class="arr1">
-                                        <i class="material-icons">keyboard_arrow_left</i> <i class="material-icons">keyboard_arrow_right</i>
-                                    </div>
                                 </div>
                             </div>
                         </div>

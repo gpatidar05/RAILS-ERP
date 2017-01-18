@@ -3,6 +3,8 @@ class Contact < ActiveRecord::Base
     belongs_to :user
     belongs_to :customer
 
+    has_many :notes
+
 	validates :customer_id,:salutation,:phone_mobile,:phone_work,:designation,:department, presence: true
     track_who_does_it
 

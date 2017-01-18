@@ -267,9 +267,10 @@
                                             <%= link_to edit_contact_path(contact) do %><i class="material-icons">border_color</i>
                                             <%end%>
                                             <%= link_to contact_path(contact) do %><i class="material-icons">remove_red_eye</i><%end%>
-                                            <%= link_to contact, method: :delete, data: { confirm: 'Are you sure?' } do %>
-                                            <i class="material-icons">delete_forever</i>
-                                            <%end%>
+
+                                            <a href="javascript:void(0)" class="confirm-delete"><i class="material-icons">delete_forever</i></a>
+                                            <%= link_to contact, method: :delete, :class=>"deleted hide" do %><%end%>
+
                                         </td>
                                     </tr>
                                     <%end%>                                   
@@ -288,14 +289,8 @@
                                 <div class="col-md-4 col-sm-5">
                                 </div>
                                 <div class="col-md-7 col-sm-6 col-xs-7">
-                                    <div class="page-dd">
-                                        <p>1 - 5 of 2917 </p>
-                                    </div>
                                 </div>
                                 <div class="col-md-1 col-sm-1 col-xs-5">
-                                    <div class="arr1">
-                                        <i class="material-icons">keyboard_arrow_left</i> <i class="material-icons">keyboard_arrow_right</i>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -328,17 +323,34 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <!--                                             <tr>
-                                        <td class="mdl-data-table__cell--non-numeric new">Patricia D Wilson</td>
-                                        <td>Lorem Ipsum</td>
-                                        <td>Lorem Ipsum</td>
-                                        <td>Lorem Ipsum</td>
-                                        <td>
-                                          <a href=""><i class="material-icons">border_color</i></a>
-                                          <a href=""><i class="material-icons">remove_red_eye</i></a>
-                                          <a href=""><i class="material-icons">delete_forever</i></a>
-                                        </td>
-                                        </tr> -->
+                                    <%if @customer.notes.present? %>
+                                        <% @customer.notes.each do |note| %>
+                                            <tr>
+                                                <td class="mdl-data-table__cell--non-numeric new"><%= note_code(note) %></td>
+                                                <td><%= note.subject %></td>
+                                                <td><%= note.created_at.strftime('%d %B, %Y') %></td>
+                                                <td><%= note.creator.full_name %></td>
+                                                <td>
+                                                    <%= link_to edit_note_path(note) do%>
+                                                      <i class="material-icons">border_color</i>
+                                                    <%end%>
+                                                    <%= link_to note do %>
+                                                      <i class="material-icons">remove_red_eye</i>
+                                                    <%end%>
+                                                    <a href="javascript:void(0)" class="confirm-delete"><i class="material-icons">delete_forever</i></a>
+                                                    <%= link_to note, method: :delete, :class=>"deleted hide" do %><%end%>
+                                                </td>
+                                            </tr>
+                                        <%end%>
+                                    <%else%>
+                                      <tr>
+                                          <td colspan="7">
+                                              <div class="no_data alert alert-danger text-center">
+                                                  <strong>Sorry!</strong> You have no notes</a>.
+                                              </div>
+                                          </td>
+                                      </tr>
+                                    <%end%>
                                 </tbody>
                             </table>
                             <div class="row">
@@ -347,14 +359,8 @@
                                     </div>
                                 </div>
                                 <div class="col-md-7 col-sm-6 col-xs-7">
-                                    <div class="page-dd">
-                                        <p>1 - 5 of 2917 </p>
-                                    </div>
                                 </div>
                                 <div class="col-md-1 col-sm-1 col-xs-5">
-                                    <div class="arr1">
-                                        <i class="material-icons">keyboard_arrow_left</i> <i class="material-icons">keyboard_arrow_right</i>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -497,4 +503,25 @@
 <!-- /#page-content-wrapper -->
 <script type="text/javascript">
     $('form').find("input[type=text], textarea, input[type=email]").focusin();
+
+   $(".confirm-delete").click(function (e) {
+       that = this;
+       console.log("this",$(that))
+       BootstrapDialog.show({
+         title: 'Confirm',
+         message: 'Are you sure?',
+         buttons: [{
+           label: 'Ok',
+           action: function(dialogItself) {
+             $(that).siblings('a.deleted')[0].click();
+             dialogItself.close();
+           }
+         },{
+           label: 'Cancel',
+           action: function(dialogItself) {
+             dialogItself.close();
+           }
+         }]
+       });
+     });
 </script>

@@ -61,7 +61,8 @@
       $('.pagination > li > a').attr('data-remote', 'true');
     });
     
-    $(document).on('click', '.confirm-delete', function () {
+    $(".confirm-delete").click(function (e) {
+        e.preventDefault()
         that = this;
         console.log("this",$(that))
         BootstrapDialog.show({

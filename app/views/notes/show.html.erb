@@ -1,0 +1,117 @@
+<!-- Page Content -->
+<div id="page-content-wrapper">
+  <div class="top-cont">
+      <a href="<%=notes_path%>">CRM</a> / <a href="<%=notes_path%>">Notes</a> / View
+    </div>
+    
+    <div class="">
+     <div class="col-md-12">
+<!-- Nav tabs --><div class="card card-1 padd0">
+                   <ul class="nav nav-tabs" role="tablist">
+                       <li role="presentation" class="active"><a href="#general" aria-controls="general" role="tab" data-toggle="tab">General Info </a></li>
+                    </ul>
+               </div>
+           </div>
+               
+           <div class="col-md-12">
+               <div class="card card-1">
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="general">
+                           <div class="search-panel">
+                               <h4>General Info</h4>
+                           </div>
+                          <div class="form-search">
+                                <form>
+                                    <div class="row">
+                                        <div class="col-md-4 col-sm-4">
+                                            <div class="input-field">
+                                              <label class="control-label" for="disabledInput" class="input-label">Note ID</label>
+                                              <input class="form-control" id="disabledInput" type="text" placeholder="<%= note_code(@note) %>" disabled="">
+                                            </div>
+                                         </div>
+                                    
+                                        <div class="col-md-4 col-sm-4">
+                                            <div class="input-field">
+                                              <label class="control-label" for="disabledInput" class="input-label">Subject</label>
+                                              <input class="form-control" id="disabledInput" type="text" placeholder="<%= @note.subject %>" disabled="">
+                                            </div>
+                                         </div>
+                                    
+                                        <div class="col-md-4 col-sm-4">
+                                            <div class="input-field">
+                                              <label class="control-label" for="disabledInput" class="input-label">Decription</label>
+                                              <input class="form-control" id="disabledInput" type="text" placeholder="<%= @note.decription %>" disabled="">
+                                            </div>
+                                         </div>
+                                      </div>
+                                      
+                                      <div class="row">
+                                        <div class="col-md-4 col-sm-4">
+                                            <div class="input-field">
+                                              <label class="control-label" for="disabledInput" class="input-label">Customer</label>
+                                              <input class="form-control" id="disabledInput" type="text" placeholder="<%= @note.customer.try(:user).try(:full_name) %>" disabled="">
+                                            </div>
+                                         </div>
+                                    
+                                        <div class="col-md-4 col-sm-4">
+                                            <div class="input-field">
+                                              <label class="control-label" for="disabledInput" class="input-label">Contact</label>
+                                              <input class="form-control" id="disabledInput" type="text" placeholder="<%= @note.contact.try(:user).try(:full_name) %>" disabled="">
+                                            </div>
+                                         </div>
+                                    
+                                        <div class="col-md-4 col-sm-4">
+                                            <div class="input-field">
+                                              <label class="control-label" for="disabledInput" class="input-label">Date Created</label>
+                                              <input class="form-control" id="disabledInput" type="text" placeholder="<%= @note.created_at.strftime('%d %B, %Y') %>" disabled="">
+                                            </div>
+                                         </div>
+                                      </div>
+                                      
+                                      <div class="row">
+                                        <div class="col-md-4 col-sm-4">
+                                            <div class="input-field">
+                                              <label class="control-label" for="disabledInput" class="input-label">Created By</label>
+                                              <input class="form-control" id="disabledInput" type="text" placeholder="<%= @note.creator.full_name %>" disabled="">
+                                            </div>
+                                         </div>
+                                    
+                                        <div class="col-md-4 col-sm-4">
+                                            <div class="input-field">
+                                              <label class="control-label" for="disabledInput" class="input-label">Date Modified</label>
+                                              <input class="form-control" id="disabledInput" type="text" placeholder="<%= @note.updated_at.strftime('%d %B, %Y') %>" disabled="">
+                                            </div>
+                                         </div>
+                                    
+                                        <div class="col-md-4 col-sm-4">
+                                            <div class="input-field">
+                                              <label class="control-label" for="disabledInput" class="input-label">Modified By</label>
+                                              <input class="form-control" id="disabledInput" type="text" placeholder="<%= @note.updater.full_name %>" disabled="">
+                                            </div>
+                                         </div>
+                                      </div>
+                           
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                          <%= link_to edit_note_path(@note),:class=>"button-1" do %>
+                                          <span>Edit</span>
+                                          <%end%>
+                                          <%= link_to :back, class:"button-1" do%><span>Back</span>
+                                          <%end%>
+                                        </div>
+                                    </div>
+                                </form> 
+                            </div>
+                        </div>
+                        
+                    </div>
+    </div>
+            </div>
+      </div>
+    
+</div>
+<!-- /#page-content-wrapper -->
+<script type="text/javascript">
+    $('form').find("input[type=text], textarea, input[type=email]").focusin();
+</script>

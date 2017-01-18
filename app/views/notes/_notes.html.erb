@@ -1,0 +1,82 @@
+<div class="material-table-01">
+     <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp new">
+      <thead>
+        <tr>
+          <th class="mdl-data-table__cell--non-numeric new">Note ID</th>
+          <th>Subject</th>
+          <th>Customer</th>
+          <th>Contact</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%if @notes.present? %>
+          <% @notes.each do |note| %>
+          <tr>
+              <td class="mdl-data-table__cell--non-numeric new"><%= note_code(note) %></td>
+              <td><%= note.subject %></td>
+              <td><%= note.customer.try(:user).try(:full_name) %></td>
+              <td><%= note.contact.try(:user).try(:full_name) %></td>
+              <td>
+                <%= link_to edit_note_path(note) do%>
+                  <i class="material-icons">border_color</i>
+                <%end%>
+                <%= link_to note do %>
+                  <i class="material-icons">remove_red_eye</i>
+                <%end%>
+                <a href="javascript:void(0)" class="confirm-delete"><i class="material-icons">delete_forever</i></a>
+                <%= link_to note, method: :delete, :class=>"deleted hide" do %><%end%>
+              </td>
+            </tr>
+          <% end %>
+        <%else%>
+          <tr>
+              <td colspan="7">
+                  <div class="no_data alert alert-danger text-center">
+                      <strong>Sorry!</strong> You have no notes</a>.
+                  </div>
+              </td>
+          </tr>
+        <%end%>
+
+      </tbody>
+    </table>
+    <div class="row">
+      <div class="col-md-4 col-sm-5">
+          <div class="tfoot">
+          </div>
+        </div>
+        <div class="col-md-8 col-sm-7 col-xs-12">
+            <div class="pagination-section">
+                <%= will_paginate @notes, renderer: BootstrapPagination::Rails %>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+      $('.pagination > li > a').attr('data-remote', 'true');
+    });
+    
+    $(".confirm-delete").click(function (e) {
+        that = this;
+        console.log("this",$(that))
+        BootstrapDialog.show({
+          title: 'Confirm',
+          message: 'Are you sure?',
+          buttons: [{
+            label: 'Ok',
+            action: function(dialogItself) {
+              $(that).siblings('a.deleted')[0].click();
+              dialogItself.close();
+            }
+          },{
+            label: 'Cancel',
+            action: function(dialogItself) {
+              dialogItself.close();
+            }
+          }]
+        });
+      });
+    
+</script>

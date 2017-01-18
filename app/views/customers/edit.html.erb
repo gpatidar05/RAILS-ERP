@@ -111,9 +111,10 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <button type="submit" class="button-1"><span>Save</span></button>
-                                    <%= link_to @user.customer, method: :delete, data: { confirm: 'Are you sure?' } ,:class=>"button-1" do %>
-                                    <span>Delete</span>  
-                                    <%end%>
+
+                                    <a href="javascript:void(0)" class="button-1 confirm-delete"><span>Delete</span> </a>
+                                    <%= link_to @user.customer, method: :delete, :class=>"deleted hide" do %><%end%>
+
                                     <%= link_to customer_path(@user.customer),:class=>"button-1" do %>
                                     <span>View</span>                       
                                     <%end%>
@@ -164,9 +165,8 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <button type="submit" class="button-1"><span>Save</span></button>
-                                    <%= link_to @user.customer, method: :delete, data: { confirm: 'Are you sure?' } ,:class=>"button-1" do %>
-                                    <span>Delete</span>  
-                                    <%end%>
+                                     <a href="javascript:void(0)" class="button-1 confirm-delete"><span>Delete</span> </a>
+                                    <%= link_to @user.customer, method: :delete, :class=>"deleted hide" do %><%end%>
                                     <%= link_to customer_path(@user.customer),:class=>"button-1" do %>
                                     <span>View</span>                       
                                     <%end%>
@@ -212,9 +212,8 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <button type="submit" class="button-1"><span>Save</span></button>
-                                    <%= link_to @user.customer, method: :delete, data: { confirm: 'Are you sure?' } ,:class=>"button-1" do %>
-                                    <span>Delete</span>  
-                                    <%end%>
+                                    <a href="javascript:void(0)" class="button-1 confirm-delete"><span>Delete</span> </a>
+                                    <%= link_to @user.customer, method: :delete, :class=>"deleted hide" do %><%end%>
                                     <%= link_to customer_path(@user.customer),:class=>"button-1" do %>
                                     <span>View</span>                       
                                     <%end%>
@@ -233,4 +232,25 @@
 <script type="text/javascript">
     $('#phone').mask('(000) 000-0000');
     $('#postal_code').mask('000000');
+    
+    $(".confirm-delete").click(function (e) {
+        that = this;
+        console.log("this",$(that))
+        BootstrapDialog.show({
+          title: 'Confirm',
+          message: 'Are you sure?',
+          buttons: [{
+            label: 'Ok',
+            action: function(dialogItself) {
+              $(that).siblings('a.deleted')[0].click();
+              dialogItself.close();
+            }
+          },{
+            label: 'Cancel',
+            action: function(dialogItself) {
+              dialogItself.close();
+            }
+          }]
+        });
+      });
 </script>

@@ -3,7 +3,8 @@ class Customer < ActiveRecord::Base
     belongs_to :user
     
     has_many :contacts, dependent: :destroy
-
+    has_many :notes
+    
 	validates :phone, :street, :city, :state, :country, :postal_code, :decription, presence: true
 
     track_who_does_it

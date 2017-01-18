@@ -9,8 +9,6 @@ class User < ActiveRecord::Base
     has_many :emails, dependent: :destroy
     has_many :sales_orders, dependent: :destroy
     has_many :purchase_orders, dependent: :destroy
-    has_many :notes
-    has_many :users_note
 
     devise :multi_email_authenticatable, :registerable, :multi_email_confirmable,
              :recoverable, :rememberable, :trackable, :multi_email_validatable
@@ -53,9 +51,19 @@ class User < ActiveRecord::Base
         joins(:customer).where("role IN (?)",["Customer"]).where("customers.sales_user_id = ?",current_user.id)
     end
 
+    def self.sales_contacts(current_user)
+        joins(:contact).where("role IN (?)",["Contact"]).where("contacts.sales_user_id = ?",current_user.id)
+    end
+
     def self.sales_staff_users(current_user)
         user_ids = []
         user_ids << current_user.id if current_user.Sales?
         where("id IN (?)",user_ids)
     end
+
+    def send_reset_password_instructions
+        return false if self.Customer? or self.Contact?
+        super
+    end
+
 end

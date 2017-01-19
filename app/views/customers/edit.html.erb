@@ -241,9 +241,9 @@
 </div>
 <!-- /#page-content-wrapper -->
 <script type="text/javascript">
+    $('form').find("input[type=text], textarea, input[type=email]").focusin();
     $('#phone').mask('(000) 000-0000');
     $('#postal_code').mask('000000');
-    
     $(".confirm-delete").click(function (e) {
         that = this;
         console.log("this",$(that))

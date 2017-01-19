@@ -2,6 +2,7 @@ class User < ActiveRecord::Base
     # Include default devise modules. Others available are:
     # :lockable, :timeoutable and :omniauthable
 
+    #Has One Relationship
     has_one :customer, dependent: :destroy
     has_one :contact, dependent: :destroy
     has_one :supplier, dependent: :destroy
@@ -13,10 +14,13 @@ class User < ActiveRecord::Base
     devise :multi_email_authenticatable, :registerable, :multi_email_confirmable,
              :recoverable, :rememberable, :trackable, :multi_email_validatable
 
+    #Html Form Nested Attributes
     accepts_nested_attributes_for :customer
     accepts_nested_attributes_for :contact
+
     #validations
-    validates :first_name, :last_name, :role, presence: true
+    validates :first_name, :role, presence: true
+    validates :last_name, presence: true, unless: ->(user){user.Customer?}
 
     #constants
     ROLES = %w(Admin Sales Customer Contact Supplier)

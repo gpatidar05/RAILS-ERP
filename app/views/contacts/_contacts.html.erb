@@ -5,7 +5,7 @@
             <th class="mdl-data-table__cell--non-numeric new">Contact ID</th>
             <th>Full Name</th>
             <th>Mobile #</th>
-            <th>Company</th>
+            <th>Customer</th>
             <th>Address Country</th>
             <th>Designation</th>
             <th>Date Created</th>
@@ -21,7 +21,7 @@
                <%end%>
             </td>
             <td><%= contact.phone_mobile %></td>
-            <td><%= contact.company %></td>
+            <td><%= contact.customer.user.full_name %></td>
             <td><%= contact.primary_country %></td>
             <td><%= contact.designation %></td>
             <td><%= contact.created_at.strftime('%d %B, %Y') %></td>

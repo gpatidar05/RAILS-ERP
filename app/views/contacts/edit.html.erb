@@ -25,12 +25,6 @@
                   </div>
                   <div class="form-search">
                      <div class="row">
-                        <div class="col-md-4 col-sm-4">
-                           <div class="input-field">
-                              <%= f.email_field :email ,:class=>"validate",:id=>"first_name2"%>
-                              <label class="active" for="first_name2">Email</label>
-                           </div>
-                        </div>
                         <%= f.fields_for :contact do |c| %>    
                         <div class="col-md-4 col-sm-4">
                            <div class="input-field">
@@ -45,18 +39,24 @@
                               <label class="active" for="first_name2">First Name</label>
                            </div>
                         </div>
-                     </div>
-                     <div class="row">
                         <div class="col-md-4 col-sm-4">
                            <div class="input-field">
                               <%= f.text_field :middle_name ,:class=>"validate",:id=>"first_name2"%>
                               <label class="active" for="first_name2">Middle Name</label>
                            </div>
                         </div>
+                     </div>
+                     <div class="row">
                         <div class="col-md-4 col-sm-4">
                            <div class="input-field">
                               <%= f.text_field :last_name ,:class=>"validate",:id=>"first_name2"%>
                               <label class="active" for="first_name2">Last Name</label>
+                           </div>
+                        </div>
+                        <div class="col-md-4 col-sm-4">
+                           <div class="input-field">
+                              <%= f.email_field :email ,:class=>"validate",:id=>"first_name2"%>
+                              <label class="active" for="first_name2">Email</label>
                            </div>
                         </div>
                         <%= f.fields_for :contact do |c| %>                                            
@@ -76,8 +76,8 @@
                         </div>
                         <div class="col-md-4 col-sm-4">
                            <div class="input-field">
-                              <%= c.text_field :company ,:class=>"validate",:id=>"company"%>
-                              <label class="active" for="company">Company <i style="float:right" class="material-icons">call_made</i> <code><%= @user.contact.errors[:company][0] %></code></label>
+                              <%= c.select(:customer_id, options_for_select(Array[*User.sales_customers(current_user).collect {|v,i| [v.full_name,v.customer.id] if v.customer.present? }],@user.contact.customer_id)) %>
+                              <label>Customer <code><%= @user.contact.errors[:customer_id][0] %></code></label>
                            </div>
                         </div>
                         <div class="col-md-4 col-sm-4">
@@ -95,10 +95,6 @@
                            </div>
                         </div>
                         <div class="col-md-4 col-sm-4">
-                           <div class="input-field">
-                              <%= c.select(:customer_id, options_for_select(Array[*User.sales_customers(current_user).collect {|v,i| [v.full_name,v.customer.id] if v.customer.present? }],@user.contact.customer_id)) %>
-                              <label>Customer <code><%= @user.contact.errors[:customer_id][0] %></code></label>
-                           </div>
                         </div>
                      </div>
                      <div class="row">
@@ -228,30 +224,46 @@
                   <div class="form-search">
                      <div class="row">
                         <div class="col-md-4 col-sm-4">
-                           <div class="input-field">
+                               <div class="input-field">
+                                   <label class="control-label" for="disabledInput" class="input-label">Created Date</label>
+                                   <input class="form-control" id="disabledInput" type="text" placeholder="<%= @user.contact.created_at.strftime('%d %B, %Y') %>" disabled="">
+                               </div>
+<!--                            <div class="input-field">
                               <%= c.date_field :created_at ,:class=>"datepicker",:id=>"created_at", :value=>@user.contact.created_at.strftime('%d %B, %Y')%>
                               <label class="active" for="created_at">Created Date <code><%= @user.contact.errors[:created_at][0] %></code></label>
-                           </div>
+                           </div> -->
                         </div>
                         <div class="col-md-4 col-sm-4">
-                           <div class="input-field">
+                               <div class="input-field">
+                                   <label class="control-label" for="disabledInput" class="input-label">Created by</label>
+                                   <input class="form-control" id="disabledInput" type="text" placeholder="<%= @user.contact.creator.full_name %>" disabled="">
+                               </div>
+<!--                            <div class="input-field">
                               <%= c.select(:created_by_id, options_for_select(Array[*User.sales_staff_users(current_user).collect {|v,i| [v.full_name,v.id] }], :selected => @user.contact.created_by_id)) %>
                               <label>Created by <code><%= @user.contact.errors[:created_by_id][0] %></code></label>
-                           </div>
+                           </div> -->
                         </div>
                         <div class="col-md-4 col-sm-4">
-                           <div class="input-field">
+                               <div class="input-field">
+                                   <label class="control-label" for="disabledInput" class="input-label">Modified Date</label>
+                                   <input class="form-control" id="disabledInput" type="text" placeholder="<%= @user.contact.updated_at.strftime('%d %B, %Y') %>" disabled="">
+                               </div>
+<!--                            <div class="input-field">
                               <%= c.date_field :updated_at ,:class=>"datepicker",:id=>"updated_at", :value=>@user.contact.updated_at.strftime('%d %B, %Y')%>
                               <label class="active" for="updated_at">Modified Date <code><%= @user.contact.errors[:updated_at][0] %></code></label>
-                           </div>
+                           </div> -->
                         </div>
                      </div>
                      <div class="row">
                         <div class="col-md-4 col-sm-4">
-                           <div class="input-field">
+                               <div class="input-field">
+                                   <label class="control-label" for="disabledInput" class="input-label">Modified by</label>
+                                   <input class="form-control" id="disabledInput" type="text" placeholder="<%= @user.contact.updater.full_name %>" disabled="">
+                               </div>
+<!--                            <div class="input-field">
                               <%= c.select(:updated_by_id, options_for_select(Array[*User.sales_staff_users(current_user).collect {|v,i| [v.full_name,v.id] }], :selected => @user.contact.updated_by_id)) %>
                               <label>Modified by <code><%= @user.contact.errors[:updated_by_id][0] %></code></label>
-                           </div>
+                           </div> -->
                         </div>
                         <div class="col-md-4 col-sm-4"></div>
                         <div class="col-md-4 col-sm-4"></div>

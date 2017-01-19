@@ -47,8 +47,8 @@
                   </div>
                   <div class="col-md-4 col-sm-4">
                      <div class="input-field">
-                        <input name="company" id="company" type="text" class="validate">
-                        <label for="company">Company</label>
+                        <%= select_tag(:customer_id, options_for_select(Array[*User.sales_customers(current_user).collect {|v,i| [v.full_name,v.customer.id] if v.customer.present? }]),:prompt => 'Please Select') %>
+                        <label for="customer_id">Customer </label>
                      </div>
                   </div>
                </div>

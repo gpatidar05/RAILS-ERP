@@ -54,31 +54,47 @@
                                       
                                       <div class="row">
                                         <div class="col-md-4 col-sm-4">
-		                                    <div class="input-field">
+                                            <div class="input-field">
+                                              <label class="control-label" for="disabledInput" class="input-label">Date Created</label>
+                                              <input class="form-control" id="disabledInput" type="text" placeholder="<%= @note.created_at.strftime('%d %B, %Y') %>" disabled="">
+                                            </div>
+<!-- 		                                    <div class="input-field">
 		                                        <%= f.text_field :created_at ,:class=>"datepicker",:id=>"created_at", :value=>@note.created_at.strftime('%d %B, %Y')%>
 		                                        <label class="active" for="created_at">Date Created <code><%= @note.errors[:created_at][0] %></code></label>
-		                                    </div>
+		                                    </div> -->
                                         </div>
                                         <div class="col-md-4 col-sm-4">
-		                                    <div class="input-field">
+                                            <div class="input-field">
+                                              <label class="control-label" for="disabledInput" class="input-label">Created By</label>
+                                              <input class="form-control" id="disabledInput" type="text" placeholder="<%= @note.creator.full_name %>" disabled="">
+                                            </div>
+<!-- 		                                    <div class="input-field">
                                           <%= f.select(:created_by_id, options_for_select(Array[*User.sales_staff_users(current_user).collect {|v,i| [v.full_name,v.id] }], :selected => @note.created_by_id)) %>
 		                                        <label >Created By <code><%= @note.errors[:created_by_id][0] %></code></label>
-		                                    </div>
+		                                    </div> -->
                                         </div>
                                         <div class="col-md-4 col-sm-4">
-		                                    <div class="input-field">
+                                            <div class="input-field">
+                                              <label class="control-label" for="disabledInput" class="input-label">Date Modified</label>
+                                              <input class="form-control" id="disabledInput" type="text" placeholder="<%= @note.updated_at.strftime('%d %B, %Y') %>" disabled="">
+                                            </div>
+<!-- 		                                    <div class="input-field">
 		                                        <%= f.text_field :updated_at ,:class=>"datepicker",:id=>"updated_at" , :value=>@note.updated_at.strftime('%d %B, %Y')%>
 		                                        <label class="active" for="updated_at">Date Modified <code><%= @note.errors[:updated_at][0] %></code></label>
-		                                    </div>
+		                                    </div> -->
                                         </div>
                                       </div>
                                       
                                       <div class="row">
                                         <div class="col-md-4 col-sm-4">
-		                                    <div class="input-field">
+                                            <div class="input-field">
+                                              <label class="control-label" for="disabledInput" class="input-label">Modified By</label>
+                                              <input class="form-control" id="disabledInput" type="text" placeholder="<%= @note.updater.full_name %>" disabled="">
+                                            </div>
+<!-- 		                                    <div class="input-field">
                                           <%= f.select(:updated_by_id, options_for_select(Array[*User.sales_staff_users(current_user).collect {|v,i| [v.full_name,v.id] }], :selected => @note.updated_by_id)) %>
 		                                        <label >Modified By <code><%= @note.errors[:updated_by_id][0] %></code></label>
-		                                    </div>
+		                                    </div> -->
                                         </div>
                                         <div class="col-md-4 col-sm-4"></div>
                                         <div class="col-md-4 col-sm-4"></div>
@@ -109,6 +125,7 @@
 </div>
 <!-- /#page-content-wrapper -->
 <script type="text/javascript">
+    $('form').find("input[type=text], textarea, input[type=email]").focusin();
     $(".confirm-delete").click(function (e) {
         that = this;
         console.log("this",$(that))

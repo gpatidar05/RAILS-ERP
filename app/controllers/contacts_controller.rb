@@ -31,7 +31,7 @@ class ContactsController < ApplicationController
     @user.contact.sales_user_id = current_user.id
     respond_to do |format|
       if @user.save
-        format.html { redirect_to edit_contact_path(@user.contact), notice: 'Contact was successfully created.' }
+        format.html { redirect_to contact_path(@user.contact), notice: 'Contact was successfully created.' }
         format.json { render :show, status: :created, location: @user }
       else
         format.html { render :new }

@@ -31,7 +31,7 @@ class CustomersController < ApplicationController
     @user.customer.sales_user_id = current_user.id
     respond_to do |format|
       if @user.save
-        format.html { redirect_to edit_customer_path(@user.customer), notice: 'Customer was successfully created.' }
+        format.html { redirect_to customer_path(@user.customer), notice: 'Customer was successfully created.' }
         format.json { render :show, status: :created, location: @user }
       else
         format.html { render :new }

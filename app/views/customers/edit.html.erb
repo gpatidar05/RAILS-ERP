@@ -28,13 +28,7 @@
                                 <div class="col-md-4 col-sm-4">
                                     <div class="input-field">
                                         <%= f.text_field :first_name ,:class=>"validate",:id=>"first_name"%>
-                                        <label class="active" for="first_name">First Name <code><%= @user.errors[:first_name][0] %></code></label>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 col-sm-4">
-                                    <div class="input-field">
-                                        <%= f.text_field :last_name ,:class=>"validate",:id=>"last_name"%>
-                                        <label class="active" for="last_name">Last Name <code><%= @user.errors[:last_name][0] %></code></label>
+                                        <label class="active" for="first_name">Customer Name <code><%= @user.errors[:first_name][0] %></code></label>
                                     </div>
                                 </div>
                                 <div class="col-md-4 col-sm-4">
@@ -43,15 +37,15 @@
                                         <label class="active" for="email">Email <code><%= @user.errors[:email][0] %></code></label>
                                     </div>
                                 </div>
-                            </div>
-                            <%= f.fields_for :customer do |c| %>                                           
-                            <div class="row">
+                            <%= f.fields_for :customer do |c| %>
                                 <div class="col-md-4 col-sm-4">
                                     <div class="input-field">
                                         <%= c.text_field :phone ,:class=>"validate",:id=>"phone"%>
                                         <label class="active" for="phone">Phone# <code><%= @user.customer.errors[:phone][0] %></code></label>
                                     </div>
                                 </div>
+                            </div>          
+                            <div class="row">
                                 <div class="col-md-4 col-sm-4">
                                     <div class="input-field">
                                         <%= c.text_field :street ,:class=>"validate",:id=>"street"%>
@@ -64,14 +58,14 @@
                                         <label class="active" for="city">City <code><%= @user.customer.errors[:city][0] %></code></label>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
                                 <div class="col-md-4 col-sm-4">
                                     <div class="input-field">
                                         <%= c.text_field :state ,:class=>"validate",:id=>"state"%>
                                         <label class="active" for="state">State <code><%= @user.customer.errors[:state][0] %></code></label>
                                     </div>
-                                </div>
+                                </div> 
+                            </div>
+                            <div class="row">
                                 <div class="col-md-4 col-sm-4">
                                     <div class="input-field">
                                         <%= c.text_field :country ,:class=>"validate",:id=>"country"%>
@@ -84,20 +78,21 @@
                                         <label class="active" for="postal_code">Postal Code <code><%= @user.customer.errors[:postal_code][0] %></code></label>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
                                 <div class="col-md-4 col-sm-4">
                                     <div class="input-field">
                                         <%= c.select(:c_type, options_for_select(Array[*CUSTOMER_TYPE.collect {|v,i| [v,v] }], :selected => @user.customer.c_type)) %>
                                         <label>Customer Type</label>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row">
                                 <div class="col-md-4 col-sm-4">
                                     <div class="input-field">
                                         <label class="active" for="created_at">Customer Since</label>
                                         <%= c.date_field :created_at, :value=>@user.customer.created_at.strftime('%d %B, %Y') ,:class=>"datepicker",:id=>"created_at"%>
                                     </div>
                                 </div>
+                                <div class="col-md-4 col-sm-4"></div>
                                 <div class="col-md-4 col-sm-4"></div>
                             </div>
                             <div class="row">
@@ -181,30 +176,46 @@
                         <div class="form-search">
                             <div class="row">
                                 <div class="col-md-4 col-sm-4">
-                                    <div class="input-field">
-                                        <%= c.date_field :created_at ,:class=>"datepicker",:id=>"created_at", :value=>@user.customer.created_at.strftime('%d %B, %Y')%>
+                                        <div class="input-field">
+                                            <label class="control-label" for="disabledInput" class="input-label">Created Date</label>
+                                            <input class="form-control" id="disabledInput" type="text" placeholder="<%= @user.customer.created_at.strftime('%d %B, %Y')%>" disabled="">
+                                        </div>
+<!--                                     <div class="input-field">
+                                        <%= c.date_field :created_at ,:class=>"datepicker",:id=>"created_at", :value=>@user.customer.created_at.strftime('%d %B, %Y'), :disabled=>""%>
                                         <label class="active" for="created_at">Created Date <code><%= @user.customer.errors[:created_at][0] %></code></label>
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <div class="col-md-4 col-sm-4">
-                                    <div class="input-field">
-                                        <%= c.select(:created_by_id, options_for_select(Array[*User.sales_staff_users(current_user).collect {|v,i| [v.full_name,v.id] }], :selected => @user.customer.created_by_id)) %>
+                                        <div class="input-field">
+                                            <label class="control-label" for="disabledInput" class="input-label">Created by</label>
+                                            <input class="form-control" id="disabledInput" type="text" placeholder="<%= @user.customer.creator.try(:full_name)%>" disabled="">
+                                        </div>
+<!--                                     <div class="input-field">
+                                        <%= c.select(:created_by_id, options_for_select(Array[*User.sales_staff_users(current_user).collect {|v,i| [v.full_name,v.id] }], :selected => @user.customer.created_by_id, :disabled=>"")) %>
                                         <label>Created by <code><%= @user.customer.errors[:created_by_id][0] %></code></label>
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <div class="col-md-4 col-sm-4">
-                                    <div class="input-field">
-                                        <%= c.date_field :updated_at ,:class=>"datepicker",:id=>"updated_at", :value=>@user.customer.updated_at.strftime('%d %B, %Y')%>
-                                        <label class="active" for="updated_at">Modified Date <code><%= @user.customer.errors[:updated_at][0] %></code></label>
-                                    </div>
+                                        <div class="input-field">
+                                            <label class="control-label" for="disabledInput" class="input-label">Modified Date</label>
+                                            <input class="form-control" id="disabledInput" type="text" placeholder="<%= @user.customer.updated_at.strftime('%d %B, %Y')%>" disabled="">
+                                        </div>
+<!--                                     <div class="input-field">
+                                        <%= c.date_field :updated_at ,:class=>"datepicker",:id=>"updated_at", :value=>@user.customer.updated_at.strftime('%d %B, %Y'), :disabled=>""%>
+                                        <label class="active" for="updated_at">Modified Date <code><%= @user.customer.errors[:updated_at][0]%></code></label>
+                                    </div> -->
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-4 col-sm-4">
-                                    <div class="input-field">
+                                        <div class="input-field">
+                                            <label class="control-label" for="disabledInput" class="input-label">Modified by</label>
+                                            <input class="form-control" id="disabledInput" type="text" placeholder="<%= @user.customer.updater.try(:full_name)%>" disabled="">
+                                        </div>
+<!--                                     <div class="input-field">
                                         <%= c.select(:updated_by_id, options_for_select(Array[*User.sales_staff_users(current_user).collect {|v,i| [v.full_name,v.id] }], :selected => @user.customer.updated_by_id)) %>
                                         <label>Modified by <code><%= @user.customer.errors[:updated_by_id][0] %></code></label>
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <div class="col-md-4 col-sm-4"></div>
                                 <div class="col-md-4 col-sm-4"></div>

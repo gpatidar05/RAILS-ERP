@@ -23,4 +23,4 @@ en:
   activerecord:
     errors:
       messages:
-        blank: "Mandatory field"
+        blank: "Mandatory"

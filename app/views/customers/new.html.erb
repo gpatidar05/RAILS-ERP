@@ -11,7 +11,7 @@
                 <ul class="nav nav-tabs" role="tablist">
                     <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">General Info </a></li>
                     <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab"> Payment Info</a></li>
-                    <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Other Info</a></li>
+<!--                     <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Other Info</a></li> -->
                 </ul>
             </div>
         </div>
@@ -28,13 +28,7 @@
                                 <div class="col-md-4 col-sm-4">
                                     <div class="input-field">
                                         <%= f.text_field :first_name ,:class=>"validate",:id=>"first_name"%>
-                                        <label class="active" for="first_name">First Name <code><%= @user.errors[:first_name][0] %></code></label>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 col-sm-4">
-                                    <div class="input-field">
-                                        <%= f.text_field :last_name ,:class=>"validate",:id=>"last_name"%>
-                                        <label class="active" for="last_name">Last Name <code><%= @user.errors[:last_name][0] %></code></label>
+                                        <label class="active" for="first_name">Customer Name <code><%= @user.errors[:first_name][0] %></code></label>
                                     </div>
                                 </div>
                                 <div class="col-md-4 col-sm-4">
@@ -43,15 +37,16 @@
                                         <label class="active" for="email">Email <code><%= @user.errors[:email][0] %></code></label>
                                     </div>
                                 </div>
-                            </div>
-                            <%= f.fields_for :customer do |c| %>                                           
-                            <div class="row">
+                            <%= f.fields_for :customer do |c| %>
                                 <div class="col-md-4 col-sm-4">
                                     <div class="input-field">
                                         <%= c.text_field :phone ,:class=>"validate",:id=>"phone"%>
                                         <label class="active" for="phone">Phone# <code><%= @user.customer.errors[:phone][0] %></code></label>
                                     </div>
-                                </div>
+                                </div> 
+                            </div>
+                                           
+                            <div class="row">
                                 <div class="col-md-4 col-sm-4">
                                     <div class="input-field">
                                         <%= c.text_field :street ,:class=>"validate",:id=>"street"%>
@@ -64,14 +59,14 @@
                                         <label class="active" for="city">City <code><%= @user.customer.errors[:city][0] %></code></label>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
                                 <div class="col-md-4 col-sm-4">
                                     <div class="input-field">
                                         <%= c.text_field :state ,:class=>"validate",:id=>"state"%>
                                         <label class="active" for="state">State <code><%= @user.customer.errors[:state][0] %></code></label>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row">
                                 <div class="col-md-4 col-sm-4">
                                     <div class="input-field">
                                         <%= c.text_field :country ,:class=>"validate",:id=>"country"%>
@@ -84,20 +79,21 @@
                                         <label class="active" for="postal_code">Postal Code <code><%= @user.customer.errors[:postal_code][0] %></code></label>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
                                 <div class="col-md-4 col-sm-4">
                                     <div class="input-field">
                                         <%= c.select(:c_type, options_for_select(Array[*CUSTOMER_TYPE.collect {|v,i| [v,v] }]),:prompt => 'Please Select') %>
                                         <label>Customer Type</label>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row">
                                 <div class="col-md-4 col-sm-4">
                                     <div class="input-field">
                                         <label class="active" for="customer_since">Customer Since</label>
                                         <%= c.date_field :created_at ,:class=>"datepicker",:id=>"created_at"%>
                                     </div>
                                 </div>
+                                <div class="col-md-4 col-sm-4"></div>
                                 <div class="col-md-4 col-sm-4"></div>
                             </div>
                             <div class="row">
@@ -168,7 +164,7 @@
                             </div>
                         </div>
                     </div>
-                    <div role="tabpanel" class="tab-pane" id="messages">
+<!--                     <div role="tabpanel" class="tab-pane" id="messages">
                         <div class="search-panel">
                             <h4>Other Info</h4>
                         </div>
@@ -211,10 +207,10 @@
                                     <%end%>
                                 </div>
                             </div>
-                            <%end%>    
                         </div>
-                    </div>
+                    </div> -->
                 </div>
+                 <%end%>  
             </div>
         </div>
     </div>

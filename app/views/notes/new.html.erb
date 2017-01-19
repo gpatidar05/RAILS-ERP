@@ -52,7 +52,7 @@
                                          </div>
                                       </div>
                                       
-                                      <div class="row">
+<!--                                       <div class="row">
                                         <div class="col-md-4 col-sm-4">
 		                                    <div class="input-field">
 		                                        <%= f.text_field :created_at ,:class=>"datepicker",:id=>"created_at"%>
@@ -71,9 +71,9 @@
 		                                        <label class="active" for="updated_at">Date Modified <code><%= @note.errors[:updated_at][0] %></code></label>
 		                                    </div>
                                         </div>
-                                      </div>
+                                      </div> -->
                                       
-                                      <div class="row">
+<!--                                       <div class="row">
                                         <div class="col-md-4 col-sm-4">
 		                                    <div class="input-field">
                                           <%= f.select(:updated_by_id, options_for_select(Array[*User.sales_staff_users(current_user).collect {|v,i| [v.full_name,v.id]}]),:prompt => 'Please Select') %>
@@ -82,7 +82,7 @@
                                         </div>
                                         <div class="col-md-4 col-sm-4"></div>
                                         <div class="col-md-4 col-sm-4"></div>
-                                    </div>
+                                    </div> -->
                            
                                     <div class="row">
                                         <div class="col-md-12">

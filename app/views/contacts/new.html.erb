@@ -11,7 +11,7 @@
                 <ul class="nav nav-tabs" role="tablist">
                     <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Personal Info </a></li>
                     <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab"> Address Info</a></li>
-                    <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Other Info</a></li>
+<!--                     <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Other Info</a></li> -->
                 </ul>
             </div>
         </div>
@@ -25,12 +25,14 @@
                         </div>
                         <div class="form-search">
                             <div class="row">
+                            <%= f.fields_for :contact do |c| %>
                                 <div class="col-md-4 col-sm-4">
                                     <div class="input-field">
-                                        <%= f.email_field :email ,:class=>"validate",:id=>"email"%>
-                                        <label class="active" for="email">Email <code><%= @user.errors[:email][0] %></code></label>
+                                        <%= c.select(:salutation, options_for_select(Array[*SALUTATION.collect {|v,i| [v,v] }]),:prompt => 'Please Select') %>
+                                        <label>Salutation <code><%= @user.contact.errors[:salutation][0] %></code></label>
                                     </div>
                                 </div>
+                            <%end%>
                                 <div class="col-md-4 col-sm-4">
                                     <div class="input-field">
                                         <%= f.text_field :first_name ,:class=>"validate",:id=>"first_name"%>
@@ -51,13 +53,13 @@
                                         <label class="active" for="last_name">Last Name <code><%= @user.errors[:last_name][0] %></code></label>
                                     </div>
                                 </div>
-                                <%= f.fields_for :contact do |c| %>                                            
                                 <div class="col-md-4 col-sm-4">
                                     <div class="input-field">
-                                        <%= c.select(:salutation, options_for_select(Array[*SALUTATION.collect {|v,i| [v,v] }]),:prompt => 'Please Select') %>
-                                        <label>Salutation <code><%= @user.contact.errors[:salutation][0] %></code></label>
+                                        <%= f.email_field :email ,:class=>"validate",:id=>"email"%>
+                                        <label class="active" for="email">Email <code><%= @user.errors[:email][0] %></code></label>
                                     </div>
                                 </div>
+                                <%= f.fields_for :contact do |c| %>
                                 <div class="col-md-4 col-sm-4">
                                     <div class="input-field">
                                         <%= c.text_field :phone_mobile ,:class=>"validate",:id=>"phone_mobile"%>
@@ -74,8 +76,8 @@
                                 </div>
                                 <div class="col-md-4 col-sm-4">
                                     <div class="input-field">
-                                        <%= c.text_field :company ,:class=>"validate",:id=>"company"%>
-                                        <label class="active" for="company">Company <i style="float:right" class="material-icons">call_made</i> <code><%= @user.contact.errors[:company][0] %></code></label>
+                                        <%= c.select(:customer_id, options_for_select(Array[*User.sales_customers(current_user).collect {|v,i| [v.full_name,v.customer.id] if v.customer.present? }] ),:prompt => 'Please Select') %>
+                                        <label>Customer <code><%= @user.contact.errors[:customer_id][0] %></code></label>
                                     </div>
                                 </div>
                                 <div class="col-md-4 col-sm-4">
@@ -93,10 +95,6 @@
                                     </div>
                                 </div>
                                 <div class="col-md-4 col-sm-4">
-                                    <div class="input-field">
-                                        <%= c.select(:customer_id, options_for_select(Array[*User.sales_customers(current_user).collect {|v,i| [v.full_name,v.customer.id] if v.customer.present? }] ),:prompt => 'Please Select') %>
-                                        <label>Customer <code><%= @user.contact.errors[:customer_id][0] %></code></label>
-                                    </div>
                                 </div>
                                 <div class="col-md-4 col-sm-4"></div>
                             </div>
@@ -213,7 +211,7 @@
                         </div>
                     </div>
                 </div>
-                <div role="tabpanel" class="tab-pane" id="messages">
+<!--                 <div role="tabpanel" class="tab-pane" id="messages">
                     <div class="card card-1">
                         <div class="search-panel">
                             <h4>Other Info</h4>
@@ -259,7 +257,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>

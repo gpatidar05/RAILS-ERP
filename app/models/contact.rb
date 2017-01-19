@@ -26,7 +26,7 @@ class Contact < ActiveRecord::Base
 	  search = search.where('contacts.phone_mobile = ?', params[:mobile]) if params[:mobile].present?
 	  search = search.where('(contacts.primary_country = ?) OR( contacts.alternative_country = ?)', params[:address_country],params[:address_country]) if params[:address_country].present?
 	  search = search.where('contacts.designation = ?', params[:designation]) if params[:designation].present?
-	  search = search.where('contacts.company = ?', params[:company]) if params[:company].present?
+	  search = search.where('contacts.customer_id = ?', params[:customer_id]) if params[:customer_id].present?
 	  search = search.where('DATE(contacts.created_at) = ?', params[:created_at].to_date) if params[:created_at].present?
 	  return search
 	end

@@ -289,7 +289,7 @@
                             </div>
                         </div>
                         <div class="material-table-01">
-                            <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp new">
+                            <table class="mdl-data-table mdl-js-data-table <%if @contact.notes.present? %>mdl-data-table--selectable<%end%> mdl-shadow--2dp new">
                                 <thead>
                                     <tr>
                                         <th class="mdl-data-table__cell--non-numeric new">Note ID</th>

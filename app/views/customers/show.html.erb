@@ -241,7 +241,7 @@
                             </div>
                         </div>
                         <div class="material-table-01">
-                            <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp new">
+                            <table class="mdl-data-table mdl-js-data-table <%if @customer.contacts.present? %>mdl-data-table--selectable<%end%>  mdl-shadow--2dp new">
                                 <thead>
                                     <tr>
                                         <th class="mdl-data-table__cell--non-numeric new">Contact ID</th>
@@ -312,7 +312,7 @@
                             </div>
                         </div>
                         <div class="material-table-01">
-                            <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp new">
+                            <table class="mdl-data-table mdl-js-data-table <%if @customer.notes.present? %>mdl-data-table--selectable<%end%> mdl-shadow--2dp new">
                                 <thead>
                                     <tr>
                                         <th class="mdl-data-table__cell--non-numeric new">Note ID</th>
@@ -382,7 +382,7 @@
                             </div>
                         </div>
                         <div class="material-table-01">
-                            <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp new">
+                            <table class="mdl-data-table mdl-js-data-table  mdl-shadow--2dp new">
                                 <thead>
                                     <tr>
                                         <th class="mdl-data-table__cell--non-numeric new">Order ID</th>
@@ -396,6 +396,13 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <tr>
+                                          <td colspan="8">
+                                              <div class="no_data alert alert-danger text-center">
+                                                  <strong>Sorry!</strong> You have no sales orders</a>.
+                                              </div>
+                                          </td>
+                                      </tr>
                                     <!--                                             <tr>
                                         <td class="mdl-data-table__cell--non-numeric new">CUS00001</td>
                                         <td>Lorem Ipsum</td>
@@ -414,18 +421,10 @@
                             </table>
                             <div class="row">
                                 <div class="col-md-4 col-sm-5">
-                                    <div class="tfoot">
-                                    </div>
                                 </div>
                                 <div class="col-md-7 col-sm-6 col-xs-7">
-                                    <div class="page-dd">
-                                        <p>1 - 5 of 2917 </p>
-                                    </div>
                                 </div>
                                 <div class="col-md-1 col-sm-1 col-xs-5">
-                                    <div class="arr1">
-                                        <i class="material-icons">keyboard_arrow_left</i> <i class="material-icons">keyboard_arrow_right</i>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -447,7 +446,7 @@
                             </div>
                         </div>
                         <div class="material-table-01">
-                            <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp new">
+                            <table class="mdl-data-table mdl-js-data-table  mdl-shadow--2dp new">
                                 <thead>
                                     <tr>
                                         <th class="mdl-data-table__cell--non-numeric new">Quote ID</th>
@@ -461,6 +460,13 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <tr>
+                                          <td colspan="8">
+                                              <div class="no_data alert alert-danger text-center">
+                                                  <strong>Sorry!</strong> You have no invoices</a>.
+                                              </div>
+                                          </td>
+                                      </tr>
                                     <!--                                             <tr>
                                         <td class="mdl-data-table__cell--non-numeric new">CUS0001</td>
                                         <td>Lorem Ipsum</td>
@@ -479,18 +485,10 @@
                             </table>
                             <div class="row">
                                 <div class="col-md-4 col-sm-5">
-                                    <div class="tfoot">
-                                    </div>
                                 </div>
                                 <div class="col-md-7 col-sm-6 col-xs-7">
-                                    <div class="page-dd">
-                                        <p>1 - 5 of 2917 </p>
-                                    </div>
                                 </div>
                                 <div class="col-md-1 col-sm-1 col-xs-5">
-                                    <div class="arr1">
-                                        <i class="material-icons">keyboard_arrow_left</i> <i class="material-icons">keyboard_arrow_right</i>
-                                    </div>
                                 </div>
                             </div>
                         </div>

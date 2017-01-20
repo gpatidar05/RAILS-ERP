@@ -7,10 +7,12 @@ class User < ActiveRecord::Base
     has_one :contact, dependent: :destroy
     has_one :supplier, dependent: :destroy
 
+    #Has Many Relationship
     has_many :emails, dependent: :destroy
     has_many :sales_orders, dependent: :destroy
     has_many :purchase_orders, dependent: :destroy
 
+    #Devise Setting
     devise :multi_email_authenticatable, :registerable, :multi_email_confirmable,
              :recoverable, :rememberable, :trackable, :multi_email_validatable
 
@@ -25,10 +27,11 @@ class User < ActiveRecord::Base
     #constants
     ROLES = %w(Admin Sales Customer Contact Supplier)
 
+    #Included Module for the Create by and updated by user
     include SentientUser
 
     def full_name
-        [self.first_name, self.last_name].reject(&:blank?).join(' ')
+        [self.first_name, self.middle_name, self.last_name].reject(&:blank?).join(' ')
     end
 
     def admin?

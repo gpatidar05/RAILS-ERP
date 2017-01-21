@@ -16,7 +16,6 @@
 //= require turbolinks
 //= require materialize.min.js
 //= require bootstrap.js
-//= require z_dialog-bootstrap.min.js
 //= require npm.js
 //= require main.js
 //= require jquery.mask.js

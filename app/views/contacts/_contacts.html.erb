@@ -30,8 +30,7 @@
                <%end%>
                <%= link_to contact_path(contact) do %><i class="material-icons">remove_red_eye</i>
                <%end%>
-               <a href="javascript:void(0)" class="confirm-delete"><i class="material-icons">delete_forever</i></a>
-               <%= link_to contact, method: :delete, :class=>"deleted hide" do %><%end%>
+               <%= link_to contact, method: :delete do %><i class="material-icons">delete_forever</i><%end%>
             </td>
          </tr>
          <% end %>
@@ -62,25 +61,5 @@
    $(document).ready(function() {
      $('.pagination > li > a').attr('data-remote', 'true');
    });
-   $(".confirm-delete").click(function (e) {
-       that = this;
-       console.log("this",$(that))
-       BootstrapDialog.show({
-         title: 'Confirm',
-         message: 'Are you sure?',
-         buttons: [{
-           label: 'Ok',
-           action: function(dialogItself) {
-             $(that).siblings('a.deleted')[0].click();
-             dialogItself.close();
-           }
-         },{
-           label: 'Cancel',
-           action: function(dialogItself) {
-             dialogItself.close();
-           }
-         }]
-       });
-     });
 componentHandler.upgradeDom();
 </script>

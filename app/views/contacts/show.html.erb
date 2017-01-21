@@ -314,8 +314,7 @@
                                                     <%= link_to note do %>
                                                       <i class="material-icons">remove_red_eye</i>
                                                     <%end%>
-                                                    <a href="javascript:void(0)" class="confirm-delete"><i class="material-icons">delete_forever</i></a>
-                                                    <%= link_to note, method: :delete, :class=>"deleted hide" do %><%end%>
+                                                    <%= link_to note, method: :delete do %><i class="material-icons">delete_forever</i><%end%>
                                                 </td>
                                             </tr>
                                         <%end%>

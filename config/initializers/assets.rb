@@ -1,5 +1,5 @@
 Rails.application.config.assets.version = '1.0'
-Rails.application.config.assets.precompile += %w( main.js main.css z_dialog-bootstrap.js)
+Rails.application.config.assets.precompile += %w( main.js main.css)
 
 # For Customer
 Rails.application.config.assets.precompile += %w( customer.css customer.js)

@@ -1,7 +1,8 @@
 class CustomersController < ApplicationController
   before_action :set_customer, only: [:show, :edit, :destroy]
-  layout 'customer'
   before_filter :require_login
+  layout 'customer'
+
   # GET /customers
   # GET /customers.json
   def index
@@ -67,6 +68,7 @@ class CustomersController < ApplicationController
   end
 
   private
+
     # Use callbacks to share common setup or constraints between actions.
     def set_customer
       @customer = Customer.find(params[:id])
@@ -76,7 +78,6 @@ class CustomersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def customer_params
       params[:user][:role] = 'Customer'
-      params[:user][:password] = '12345678'
       params.require(:user).permit(:id,:password, :role, :first_name, :last_name, :email, customer_attributes:[:id, :user_id, :phone, :c_type, :street, :city, :state, :country, :postal_code, :decription, :created_at,:discount_percent, :credit_limit, :tax_reference, :payment_terms, :customer_currency,:created_at, :created_by_id, :updated_at, :updated_by_id])
     end
 end

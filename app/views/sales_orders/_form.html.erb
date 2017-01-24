@@ -1,0 +1,57 @@
+<%= form_for(@sales_order) do |f| %>
+  <% if @sales_order.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@sales_order.errors.count, "error") %> prohibited this sales_order from being saved:</h2>
+
+      <ul>
+      <% @sales_order.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :customer_user_id %><br>
+    <%= f.text_field :customer_user_id %>
+  </div>
+  <div class="field">
+    <%= f.label :contact_user_id %><br>
+    <%= f.text_field :contact_user_id %>
+  </div>
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :subtotal %><br>
+    <%= f.text_field :subtotal %>
+  </div>
+  <div class="field">
+    <%= f.label :tax %><br>
+    <%= f.text_field :tax %>
+  </div>
+  <div class="field">
+    <%= f.label :grand_total %><br>
+    <%= f.text_field :grand_total %>
+  </div>
+  <div class="field">
+    <%= f.label :created_by_id %><br>
+    <%= f.text_field :created_by_id %>
+  </div>
+  <div class="field">
+    <%= f.label :updated_by_id %><br>
+    <%= f.text_field :updated_by_id %>
+  </div>
+  <div class="field">
+    <%= f.label :created_at %><br>
+    <%= f.text_field :created_at %>
+  </div>
+  <div class="field">
+    <%= f.label :updated_at %><br>
+    <%= f.text_field :updated_at %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

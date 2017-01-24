@@ -36,10 +36,16 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
+    angular-rails-templates (0.3.0)
+      railties (>= 3.1)
+      sprockets (~> 2.0)
+      tilt
+    angularjs-rails (1.6.1)
     arel (6.0.4)
     bcrypt (3.1.11)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
+    bower-rails (0.11.0)
     builder (3.2.2)
     byebug (9.0.6)
     carrierwave (1.0.0)
@@ -179,6 +185,9 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  angular-rails-templates
+  angularjs-rails
+  bower-rails
   byebug
   carrierwave (~> 1.0)
   clerk

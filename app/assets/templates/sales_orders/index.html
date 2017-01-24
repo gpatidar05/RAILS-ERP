@@ -1,0 +1,28 @@
+<br/>
+<div class="row">
+    <div class="col-md-12">
+        <a class="btn btn-primary" href="/OM/sales_orders/new">Create a sales orders</a>
+        <h3 class="block">SalesOrders</h3>
+        <table class="table table-striped">
+            <tr>
+                <th>Name</th>
+                <th>Sub Total</th>
+                <th>Tax</th>
+                <th>Grand Total</th>
+                <th></th>
+            </tr>
+            <tr ng-hide="sales_orders.length" >
+                <td colspan="5">No sales orders found, Please create one.</td>
+            </tr>
+            <tr ng-show="sales_orders.length" ng-repeat="sales_order in sales_orders">
+                <td>{{sales_order.name}}</td>
+                <td>{{sales_order.subtotal}}</td>
+                <td>{{sales_order.tax}}</td>
+                <td>{{sales_order.grand_total}}</td>
+                <td>
+                    <a href="/OM/sales_orders/{{sales_order.id}}/edit">Edit</a> | <a href="" ng-click="deleteSalesOrder(sales_order.id)">Remove</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

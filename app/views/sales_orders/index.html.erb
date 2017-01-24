@@ -1,0 +1,45 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Sales Orders</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Customer user</th>
+      <th>Contact user</th>
+      <th>Name</th>
+      <th>Subtotal</th>
+      <th>Tax</th>
+      <th>Grand total</th>
+      <th>Created by</th>
+      <th>Updated by</th>
+      <th>Created at</th>
+      <th>Updated at</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @sales_orders.each do |sales_order| %>
+      <tr>
+        <td><%= sales_order.customer_user_id %></td>
+        <td><%= sales_order.contact_user_id %></td>
+        <td><%= sales_order.name %></td>
+        <td><%= sales_order.subtotal %></td>
+        <td><%= sales_order.tax %></td>
+        <td><%= sales_order.grand_total %></td>
+        <td><%= sales_order.created_by_id %></td>
+        <td><%= sales_order.updated_by_id %></td>
+        <td><%= sales_order.created_at %></td>
+        <td><%= sales_order.updated_at %></td>
+        <td><%= link_to 'Show', sales_order %></td>
+        <td><%= link_to 'Edit', edit_sales_order_path(sales_order) %></td>
+        <td><%= link_to 'Destroy', sales_order, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Sales order', new_sales_order_path %>

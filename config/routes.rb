@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
-
+  
+  resources :sales_orders
   resources :notes
   resources :contacts
   resources :customers
@@ -11,14 +12,6 @@ Rails.application.routes.draw do
    root :to => 'devise/sessions#new'
   end
   
-  # Admin all routes
-  namespace :admin do
-    resources :dashboard, only: [:index]
-  end
-
-  # Customer all routes
-  namespace :customer do
-    resources :dashboard, only: [:index]
-  end
+  get '*path' => 'angular#index'
 
 end

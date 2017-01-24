@@ -58,3 +58,6 @@ group :development do
 end
 
 gem 'will_paginate-bootstrap'
+gem 'bower-rails'
+gem 'angular-rails-templates'
+gem 'angularjs-rails'

@@ -1,0 +1,36 @@
+<div class="form-group" ng-class="{'has-error' : submitted && salesOrderForm.name.$invalid}">
+    <label class="control-label col-md-3">Name <span class="required">* </span> </label>
+    <div class="col-md-4">
+        <input type="text" name="name" class="form-control" ng-model="sales_order.name" required placeholder="Name"/>
+    </div>
+    <p ng-show=" submitted && salesOrderForm.name.$invalid" class="help-block">Name is required.</p>
+</div>
+<div class="form-group" ng-class="{'has-error' : submitted && salesOrderForm.subtotal.$invalid}">
+    <label class="control-label col-md-3">Sub Total <span class="required">* </span> </label>
+    <div class="col-md-4">
+        <input type="text" name="subtotal" class="form-control" ng-model="sales_order.subtotal" required placeholder="Sub Total"/>
+    </div>
+    <p ng-show=" submitted && salesOrderForm.subtotal.$invalid" class="help-block">Sub Total is required.</p>
+</div>
+<div class="form-group">
+    <label class="control-label col-md-3">Tax </label>
+    <div class="col-md-4">
+        <input type="text" name="tax" class="form-control" ng-model="sales_order.tax" placeholder="Tax"/>
+    </div>
+    <p ng-show="submitted && salesOrderForm.tax.$invalid" class="help-block">Tax is required.</p>
+</div>
+<div class="form-group">
+    <label class="control-label col-md-3">Grand Total </label>
+    <div class="col-md-4">
+        <input type="text" name="grand_total" class="form-control" ng-model="sales_order.grand_total" placeholder="Grand Total"/>
+    </div>
+    <p ng-show="submitted && salesOrderForm.grand_total.$invalid" class="help-block">Grand Total is required.</p>
+</div>
+
+
+<div class="form-group">
+    <div class="pull-left">
+        <a class="btn btn-default" href="/"> Back</a>
+        <button type="submit" class="btn btn-primary" ng-click="submitted=true">Submit</button>
+    </div>
+</div>

@@ -1,12 +1,18 @@
 class NotesController < ApplicationController
   before_action :set_note, only: [:show, :edit, :update, :destroy]
-  layout 'customer'
-  before_filter :require_login
-
+  respond_to :html, :json
   # GET /notes
   # GET /notes.json
+  # def index
+  #   @notes = Note.search(params).sales_notes(current_user).paginate(:per_page => 5, :page => params[:page])
+  # end
+
   def index
-    @notes = Note.search(params).sales_notes(current_user).paginate(:per_page => 5, :page => params[:page])
+    @sales_orders = Note.all
+    respond_with(@sales_orders) do |format|
+      format.json { render :json => @sales_orders.as_json }
+      format.html
+    end
   end
 
   # GET /notes/1

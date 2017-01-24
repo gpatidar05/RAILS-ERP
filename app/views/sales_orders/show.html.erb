@@ -1,0 +1,54 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Customer user:</strong>
+  <%= @sales_order.customer_user_id %>
+</p>
+
+<p>
+  <strong>Contact user:</strong>
+  <%= @sales_order.contact_user_id %>
+</p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @sales_order.name %>
+</p>
+
+<p>
+  <strong>Subtotal:</strong>
+  <%= @sales_order.subtotal %>
+</p>
+
+<p>
+  <strong>Tax:</strong>
+  <%= @sales_order.tax %>
+</p>
+
+<p>
+  <strong>Grand total:</strong>
+  <%= @sales_order.grand_total %>
+</p>
+
+<p>
+  <strong>Created by:</strong>
+  <%= @sales_order.created_by_id %>
+</p>
+
+<p>
+  <strong>Updated by:</strong>
+  <%= @sales_order.updated_by_id %>
+</p>
+
+<p>
+  <strong>Created at:</strong>
+  <%= @sales_order.created_at %>
+</p>
+
+<p>
+  <strong>Updated at:</strong>
+  <%= @sales_order.updated_at %>
+</p>
+
+<%= link_to 'Edit', edit_sales_order_path(@sales_order) %> |
+<%= link_to 'Back', sales_orders_path %>

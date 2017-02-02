@@ -25,5 +25,14 @@ module ErpSystem
     config.action_view.field_error_proc = Proc.new { |html_tag, instance| 
       html_tag
     }
+    config.middleware.use Rack::Cors do
+        allow do
+            origins '*'
+            resource '*',
+            :headers => :any,
+            :expose  => ['access-token', 'expiry', 'token-type', 'uid', 'client'],
+            :methods => [:get, :post, :options, :delete, :put]
+        end
+    end
   end
 end

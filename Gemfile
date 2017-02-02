@@ -58,3 +58,4 @@ group :development do
 end
 
 gem 'will_paginate-bootstrap'
+gem 'rack-cors', :require => 'rack/cors'

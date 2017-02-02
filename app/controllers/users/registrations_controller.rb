@@ -1,4 +1,6 @@
 class Users::RegistrationsController < Devise::RegistrationsController
+  protect_from_forgery with: :null_session, only: Proc.new { |c| c.request.format.json? }
+  respond_to :html, :json
   before_action :configure_sign_up_params, only: [:create]
 # before_action :configure_account_update_params, only: [:update]
 

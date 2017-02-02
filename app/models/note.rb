@@ -19,5 +19,27 @@ class Note < ActiveRecord::Base
 	def self.sales_notes(current_user)
 		where("notes.sales_user_id = ?",current_user.id)
 	end
-    
+
+    def get_json_note_index
+        as_json(only: [:id,:subject,:decription])
+        .merge({
+        	code:"NOTE#{self.id.to_s.rjust(4, '0')}",
+        	contact:self.contact.try(:user).try(:full_name),
+            customer:self.customer.try(:user).try(:full_name),
+        	created_at:self.created_at.strftime('%d %B, %Y'),
+        	created_by:self.creator.try(:full_name),
+        	updated_at:self.updated_at.strftime('%d %B, %Y'),
+        	updated_by:self.updater.try(:full_name),
+        })
+    end 
+
+    def self.get_json_notes(notes=[])
+        notes = all if notes.blank?
+        notes_list =[]
+        notes.each do |note|
+          notes_list << note.get_json_note_index
+        end
+        return notes_list
+    end
+
 end

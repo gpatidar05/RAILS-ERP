@@ -1,4 +1,6 @@
 class Users::UnlocksController < Devise::UnlocksController
+  protect_from_forgery with: :exception
+  respond_to :html, :json
   # GET /resource/unlock/new
   # def new
   #   super

@@ -34,4 +34,73 @@ class Contact < ActiveRecord::Base
 	def self.sales_contacts(current_user)
 		where("contacts.sales_user_id = ?",current_user.id)
 	end
+
+    def get_json_contact_show
+        as_json(only: [:id,:salutation,:phone_mobile,:phone_work,:designation,:department,
+        	:decription, :primary_street, :primary_city, :primary_state, :primary_country,
+        	:primary_postal_code, :alternative_street, :alternative_city, :alternative_state,
+        	:alternative_country, :alternative_postal_code ])
+        .merge({
+        	code:"CUS#{self.customer_id.to_s.rjust(4, '0')}-CON#{self.id.to_s.rjust(4, '0')}",
+        	first_name:self.user.first_name,
+        	last_name:self.user.last_name,
+        	middle_name:self.user.middle_name,
+        	customer:self.customer.user.full_name,
+        	email:self.customer.user.email,
+        	created_at:self.created_at.strftime('%d %B, %Y'),
+        	created_by:self.creator.try(:full_name),
+        	updated_at:self.updated_at.strftime('%d %B, %Y'),
+        	updated_by:self.updater.try(:full_name),
+        	notes:Note.get_json_notes(self.notes),
+        	})
+    end  
+
+    def get_json_contact_index
+        as_json(only: [:id,:phone_mobile,:primary_country,:designation])
+        .merge({
+        	code:"CUS#{self.customer_id.to_s.rjust(4, '0')}-CON#{self.id.to_s.rjust(4, '0')}",
+        	customer:self.customer.user.full_name,
+        	name:self.user.full_name,
+        	created_at:self.created_at.strftime('%d %B, %Y'),
+        	})
+    end 
+
+    def self.get_json_contacts
+        contacts_list =[]
+        Contact.all.each do |contact|
+          contacts_list << contact.get_json_contact_index
+        end
+        return contacts_list
+    end
+
+    def get_json_contact_edit
+        as_json(only: [])
+        .merge({
+            id: self.user.id,
+            email: self.user.email,
+            first_name: self.user.first_name,
+            middle_name: self.user.middle_name,
+            last_name: self.user.last_name,
+            contact_attributes:{
+                id: self.id,
+                customer_id: self.customer.id,
+                salutation: self.salutation,
+                phone_mobile: self.phone_mobile,
+                phone_work: self.phone_work,
+                designation: self.designation,
+                department: self.department,
+                primary_street: self.primary_street,
+                primary_city: self.primary_city,
+                primary_state: self.primary_state,
+                primary_country: self.primary_country,
+                primary_postal_code: self.primary_postal_code,
+                alternative_street: self.alternative_street,
+                alternative_city: self.alternative_city,
+                alternative_state: self.alternative_state,
+                alternative_country: self.alternative_country,
+                alternative_postal_code: self.alternative_postal_code,
+                decription: self.decription,
+            }
+        })
+    end 
 end

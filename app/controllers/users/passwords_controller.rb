@@ -1,4 +1,6 @@
 class Users::PasswordsController < Devise::PasswordsController
+  protect_from_forgery with: :null_session, only: Proc.new { |c| c.request.format.json? }
+  respond_to :html, :json
   # GET /resource/password/new
   # def new
   #   super

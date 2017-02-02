@@ -1,7 +1,4 @@
 class User < ActiveRecord::Base
-    # Include default devise modules. Others available are:
-    # :lockable, :timeoutable and :omniauthable
-
     #Has One Relationship
     has_one :customer, dependent: :destroy
     has_one :contact, dependent: :destroy
@@ -21,8 +18,8 @@ class User < ActiveRecord::Base
     accepts_nested_attributes_for :contact
 
     #validations
-    validates :first_name, :role, presence: true
-    validates :last_name, presence: true, unless: ->(user){user.Customer?}
+    # validates :first_name, :role, presence: true
+    # validates :last_name, presence: true, unless: ->(user){user.Customer?}
 
     #constants
     ROLES = %w(Admin Sales Customer Contact Supplier)
@@ -73,4 +70,36 @@ class User < ActiveRecord::Base
         super
     end
 
+    def self.get_json_customers_dropdown(users)
+        list = []
+        users.each do |user|
+            list << as_json(only: [])
+            .merge({name:user.full_name,
+                customer_id:user.customer.id,
+            })
+        end
+        return list
+    end 
+
+    def self.get_json_contacts_dropdown(users)
+        list = []
+        users.each do |user|
+            list << as_json(only: [])
+            .merge({name:user.full_name,
+                contact_id:user.contact.id,
+            })
+        end
+        return list
+    end
+
+    def self.get_json_staff_dropdown(users)
+        list = []
+        users.each do |user|
+            list << as_json(only: [])
+            .merge({name:user.full_name,
+                id:user.id,
+            })
+        end
+        return list
+    end 
 end

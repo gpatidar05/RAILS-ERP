@@ -1,17 +1,28 @@
 class CustomersController < ApplicationController
-  before_action :set_customer, only: [:show, :edit, :destroy]
-  before_filter :require_login
-  layout 'customer'
-
+  before_action :set_customer, except: [:index, :create, :new, :update, :get_customers]
+  respond_to :html, :json
+  protect_from_forgery
+  
   # GET /customers
   # GET /customers.json
   def index
-    @customers = Customer.search(params).sales_customers(current_user).paginate(:per_page => 5, :page => params[:page])
+    puts "======="
+    puts request.headers["user_token"]
+    puts "======="
+    @customers = Customer.search(params).get_json_customers
+    respond_with(@customers) do |format|
+      format.json { render :json => @customers.as_json }
+      format.html
+    end
   end
 
   # GET /customers/1
   # GET /customers/1.json
   def show
+    respond_with(@customer) do |format|
+      format.json { render :json => @customer.get_json_customer_show.as_json }
+      format.html
+    end     
   end
 
   # GET /customers/new
@@ -21,63 +32,65 @@ class CustomersController < ApplicationController
   end
 
   # GET /customers/1/edit
-  def edit
-    @user = User.find(@customer.user.id)
+  def edit_form
+    respond_with(@customer) do |format|
+      format.json { render :json => @customer.get_json_customer_edit.as_json }
+      format.html
+    end   
   end
 
   # POST /customers
   # POST /customers.json
   def create
     @user = User.new(customer_params)
-    @user.customer.sales_user_id = current_user.id
-    respond_to do |format|
-      if @user.save
-        format.html { redirect_to customer_path(@user.customer), notice: 'Customer was successfully created.' }
-        format.json { render :show, status: :created, location: @user }
-      else
-        format.html { render :new }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
-      end
+    @user.customer.sales_user_id = User.find_by_email(params[:token]).id
+    if @user.save
+      render json: @user.as_json, status: :ok
+    else
+      render json: {user: @user.errors.as_json, status: :fail}
     end
-  end
+  end 
 
   # PATCH/PUT /customers/1
   # PATCH/PUT /customers/1.json
   def update
     @user = User.find(params[:id])
-    respond_to do |format|
-      if @user.update_attributes(customer_params)
-        format.html { redirect_to customer_path(@user.customer), notice: 'Customer was successfully updated.' }
-        format.json { render :show, status: :ok, location: @user }
-      else
-        format.html { render :edit }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
-      end
+    if @user.update_attributes(update_customer_params)
+      render json: @user.as_json, status: :ok 
+    else
+      render json: {sales_order: @user.errors, status: :unprocessable_entity}
     end
   end
 
   # DELETE /customers/1
   # DELETE /customers/1.json
   def destroy
-    @user = @customer.user
     @customer.destroy
-    respond_to do |format|
-      format.html { redirect_to customers_url, notice: 'Customer was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    render json: {status: :ok}
+  end
+
+  def get_customers
+    @users = User.sales_customers(User.find_by_email(params[:token]))
+    respond_with(@users) do |format|
+      format.json { render :json => User.get_json_customers_dropdown(@users) }
+      format.html
+    end  
   end
 
   private
-
     # Use callbacks to share common setup or constraints between actions.
     def set_customer
       @customer = Customer.find(params[:id])
-      @user = User.find(@customer.user.id)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
+    def update_customer_params
+      params.permit(:id,:password, :role, :first_name, :last_name, :email, customer_attributes:[:id, :user_id, :phone, :c_type, :street, :city, :state, :country, :postal_code, :decription, :created_at,:discount_percent, :credit_limit, :tax_reference, :payment_terms, :customer_currency,:created_at, :created_by_id, :updated_at, :updated_by_id])
+    end
+
     def customer_params
-      params[:user][:role] = 'Customer'
-      params.require(:user).permit(:id,:password, :role, :first_name, :last_name, :email, customer_attributes:[:id, :user_id, :phone, :c_type, :street, :city, :state, :country, :postal_code, :decription, :created_at,:discount_percent, :credit_limit, :tax_reference, :payment_terms, :customer_currency,:created_at, :created_by_id, :updated_at, :updated_by_id])
+      params[:customer][:role] = 'Customer'
+      params[:customer][:password] = '12345678'
+      params.require(:customer).permit(:id,:password, :role, :first_name, :last_name, :email, customer_attributes:[:id, :user_id, :phone, :c_type, :street, :city, :state, :country, :postal_code, :decription, :created_at,:discount_percent, :credit_limit, :tax_reference, :payment_terms, :customer_currency,:created_at, :created_by_id, :updated_at, :updated_by_id])
     end
 end

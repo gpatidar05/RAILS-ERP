@@ -1,4 +1,6 @@
 class Users::ConfirmationsController < Devise::ConfirmationsController
+  protect_from_forgery with: :exception
+  respond_to :html, :json
   # GET /resource/confirmation/new
   # def new
   #   super

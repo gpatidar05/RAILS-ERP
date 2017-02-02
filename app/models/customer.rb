@@ -34,5 +34,63 @@ class Customer < ActiveRecord::Base
 		where("customers.sales_user_id = ?",current_user.id)
 	end
 
+    def get_json_customer_show
+        as_json(only: [:id,:phone,:c_type,:street,:city,:state,:country,:postal_code,
+        	:decription,:discount_percent,:credit_limit,:tax_reference,:payment_terms,
+        	:customer_currency])
+        .merge({
+        	code:"CUS#{self.id.to_s.rjust(4, '0')}",
+        	name:self.user.full_name,
+        	email:self.user.email,
+        	created_at:self.created_at.strftime('%d %B, %Y'),
+        	created_by:self.creator.try(:full_name),
+        	updated_at:self.updated_at.strftime('%d %B, %Y'),
+        	updated_by:self.updater.try(:full_name),
+        	notes:Note.get_json_notes(self.notes),
+        	})
+    end  
+
+    def get_json_customer_index
+        as_json(only: [:id,:phone,:c_type,:country])
+        .merge({name:self.user.full_name,
+        	created_at:self.created_at.strftime('%d %B, %Y'),
+        	created_by:self.creator.try(:full_name),
+        	})
+    end 
+
+    def self.get_json_customers
+        customers_list =[]
+        Customer.all.each do |customer|
+          customers_list << customer.get_json_customer_index
+        end
+        return customers_list
+    end
+
+    def get_json_customer_edit
+        as_json(only: [])
+        .merge({
+            code:"CUS#{self.id.to_s.rjust(4, '0')}",
+            id: self.user.id,
+            email: self.user.email,
+            first_name: self.user.first_name,
+            last_name: self.user.last_name,
+            customer_attributes:{
+                id: self.id,
+                phone: self.phone,
+                c_type: self.c_type,
+                street: self.street,
+                city: self.city,
+                state: self.state,
+                country: self.country,
+                postal_code: self.postal_code,
+                decription: self.decription,
+                discount_percent: self.discount_percent,
+                credit_limit: self.credit_limit,
+                tax_reference: self.tax_reference,
+                payment_terms: self.payment_terms,
+                customer_currency: self.customer_currency,
+                created_at: self.created_at.strftime('%d %B, %Y'),
+            }
+        })
+    end 
 end
-#created_by

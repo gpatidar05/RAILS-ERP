@@ -1,17 +1,24 @@
 class NotesController < ApplicationController
-  before_action :set_note, only: [:show, :edit, :update, :destroy]
-  layout 'customer'
-  before_filter :require_login
-
+  before_action :set_note, except: [:index, :create, :new]
+  respond_to :html, :json
+  protect_from_forgery
   # GET /notes
   # GET /notes.json
   def index
-    @notes = Note.search(params).sales_notes(current_user).paginate(:per_page => 5, :page => params[:page])
+    @notes = Note.search(params).get_json_notes
+    respond_with(@notes) do |format|
+      format.json { render :json => @notes.as_json }
+      format.html
+    end
   end
 
   # GET /notes/1
   # GET /notes/1.json
   def show
+    respond_with(@note) do |format|
+      format.json { render :json => @note.get_json_note_index.as_json }
+      format.html
+    end     
   end
 
   # GET /notes/new
@@ -27,29 +34,20 @@ class NotesController < ApplicationController
   # POST /notes.json
   def create
     @note = Note.new(note_params)
-    @note.sales_user_id = current_user.id
-    respond_to do |format|
-      if @note.save
-        format.html { redirect_to @note, notice: 'Note was successfully created.' }
-        format.json { render :show, status: :created, location: @note }
-      else
-        format.html { render :new }
-        format.json { render json: @note.errors, status: :unprocessable_entity }
-      end
+    if @note.save
+      render json: @note.as_json, status: :ok
+    else
+      render json: {note: @note.errors, status: :no_content}
     end
-  end
+  end    
 
   # PATCH/PUT /notes/1
   # PATCH/PUT /notes/1.json
   def update
-    respond_to do |format|
-      if @note.update(note_params)
-        format.html { redirect_to @note, notice: 'Note was successfully updated.' }
-        format.json { render :show, status: :ok, location: @note }
-      else
-        format.html { render :edit }
-        format.json { render json: @note.errors, status: :unprocessable_entity }
-      end
+    if @note.update_attributes(note_params)
+      render json: @note.as_json, status: :ok 
+    else
+      render json: {sales_order: @note.errors, status: :unprocessable_entity}
     end
   end
 
@@ -71,6 +69,6 @@ class NotesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def note_params
-      params.require(:note).permit(:subject, :decription, :contact_id, :customer_id, :created_by_id, :updated_by_id, :created_at, :updated_at)
+      params.require(:note).permit(:id,:subject, :decription, :contact_id, :customer_id, :created_by_id, :updated_by_id, :created_at, :updated_at)
     end
 end

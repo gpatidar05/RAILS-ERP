@@ -35,6 +35,7 @@ class Customer < ActiveRecord::Base
 	end
 
     def get_json_customer_show
+        customer_since = self.customer_since.present? ? self.customer_since.strftime('%d %B, %Y') : self.customer_since 
         as_json(only: [:id,:phone,:c_type,:street,:city,:state,:country,:postal_code,
         	:decription,:discount_percent,:credit_limit,:tax_reference,:payment_terms,
         	:customer_currency])
@@ -46,7 +47,9 @@ class Customer < ActiveRecord::Base
         	created_by:self.creator.try(:full_name),
         	updated_at:self.updated_at.strftime('%d %B, %Y'),
         	updated_by:self.updater.try(:full_name),
-        	notes:Note.get_json_notes(self.notes),
+        	notes:Note.get_json_notes(false,self.notes),
+            contacts:Contact.get_json_contacts(false,self.contacts),
+            customer_since: customer_since,
         	})
     end  
 
@@ -67,6 +70,8 @@ class Customer < ActiveRecord::Base
     end
 
     def get_json_customer_edit
+        created_at = self.created_at.present? ? self.created_at.strftime('%d %B, %Y') : self.created_at
+        customer_since = self.customer_since.present? ? self.customer_since.strftime('%d %B, %Y') : self.customer_since 
         as_json(only: [])
         .merge({
             code:"CUS#{self.id.to_s.rjust(4, '0')}",
@@ -89,7 +94,8 @@ class Customer < ActiveRecord::Base
                 tax_reference: self.tax_reference,
                 payment_terms: self.payment_terms,
                 customer_currency: self.customer_currency,
-                created_at: self.created_at.strftime('%d %B, %Y'),
+                created_at: created_at,
+                customer_since:self.customer_since,
             }
         })
     end 

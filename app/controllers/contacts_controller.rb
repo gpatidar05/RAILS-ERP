@@ -1,7 +1,7 @@
 class ContactsController < ApplicationController
   before_action :set_contact, except: [:index, :create, :new, :update, :get_contacts]
   respond_to :html, :json
-  protect_from_forgery
+  skip_before_filter :verify_authenticity_token
 
   # GET /contacts
   # GET /contacts.json
@@ -40,7 +40,7 @@ class ContactsController < ApplicationController
   # POST /contacts.json
   def create
     @user = User.new(contact_params)
-    @user.contact.sales_user_id = User.find_by_email(params[:token]).id
+    @user.contact.sales_user_id = current_user.id
     if @user.save
       render json: @user.as_json, status: :ok
     else
@@ -70,7 +70,7 @@ class ContactsController < ApplicationController
   end
 
   def get_contacts
-    @users = User.sales_contacts(User.find_by_email(params[:token]))
+    @users = User.sales_contacts(current_user)
     respond_with(@users) do |format|
       format.json { render :json => User.get_json_contacts_dropdown(@users) }
       format.html

@@ -1,14 +1,11 @@
 class CustomersController < ApplicationController
   before_action :set_customer, except: [:index, :create, :new, :update, :get_customers]
   respond_to :html, :json
-  protect_from_forgery
-  
+  skip_before_filter :verify_authenticity_token
+
   # GET /customers
   # GET /customers.json
   def index
-    puts "======="
-    puts request.headers["user_token"]
-    puts "======="
     @customers = Customer.search(params).get_json_customers
     respond_with(@customers) do |format|
       format.json { render :json => @customers.as_json }
@@ -33,6 +30,7 @@ class CustomersController < ApplicationController
 
   # GET /customers/1/edit
   def edit_form
+    puts 'current_user',current_user.full_name
     respond_with(@customer) do |format|
       format.json { render :json => @customer.get_json_customer_edit.as_json }
       format.html
@@ -43,10 +41,11 @@ class CustomersController < ApplicationController
   # POST /customers.json
   def create
     @user = User.new(customer_params)
-    @user.customer.sales_user_id = User.find_by_email(params[:token]).id
+    @user.customer.sales_user_id = current_user.id
     if @user.save
       render json: @user.as_json, status: :ok
     else
+      puts @user.errors.as_json
       render json: {user: @user.errors.as_json, status: :fail}
     end
   end 
@@ -70,7 +69,7 @@ class CustomersController < ApplicationController
   end
 
   def get_customers
-    @users = User.sales_customers(User.find_by_email(params[:token]))
+    @users = User.sales_customers(current_user)
     respond_with(@users) do |format|
       format.json { render :json => User.get_json_customers_dropdown(@users) }
       format.html
@@ -85,12 +84,12 @@ class CustomersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def update_customer_params
-      params.permit(:id,:password, :role, :first_name, :last_name, :email, customer_attributes:[:id, :user_id, :phone, :c_type, :street, :city, :state, :country, :postal_code, :decription, :created_at,:discount_percent, :credit_limit, :tax_reference, :payment_terms, :customer_currency,:created_at, :created_by_id, :updated_at, :updated_by_id])
+      params.permit(:id,:password, :role, :first_name, :last_name, :email, customer_attributes:[:id, :customer_since, :user_id, :phone, :c_type, :street, :city, :state, :country, :postal_code, :decription, :created_at,:discount_percent, :credit_limit, :tax_reference, :payment_terms, :customer_currency,:created_at, :created_by_id, :updated_at, :updated_by_id])
     end
 
     def customer_params
       params[:customer][:role] = 'Customer'
       params[:customer][:password] = '12345678'
-      params.require(:customer).permit(:id,:password, :role, :first_name, :last_name, :email, customer_attributes:[:id, :user_id, :phone, :c_type, :street, :city, :state, :country, :postal_code, :decription, :created_at,:discount_percent, :credit_limit, :tax_reference, :payment_terms, :customer_currency,:created_at, :created_by_id, :updated_at, :updated_by_id])
+      params.require(:customer).permit(:id,:password, :role, :first_name, :last_name, :email, customer_attributes:[:id, :customer_since, :user_id, :phone, :c_type, :street, :city, :state, :country, :postal_code, :decription, :created_at,:discount_percent, :credit_limit, :tax_reference, :payment_terms, :customer_currency,:created_at, :created_by_id, :updated_at, :updated_by_id])
     end
 end

@@ -33,8 +33,8 @@ class Note < ActiveRecord::Base
         })
     end 
 
-    def self.get_json_notes(notes=[])
-        notes = all if notes.blank?
+    def self.get_json_notes(is_notes_index=true, notes=[])
+        notes = all if is_notes_index.present?
         notes_list =[]
         notes.each do |note|
           notes_list << note.get_json_note_index

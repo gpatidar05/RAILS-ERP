@@ -51,7 +51,7 @@ class Contact < ActiveRecord::Base
         	created_by:self.creator.try(:full_name),
         	updated_at:self.updated_at.strftime('%d %B, %Y'),
         	updated_by:self.updater.try(:full_name),
-        	notes:Note.get_json_notes(self.notes),
+        	notes:Note.get_json_notes(false,self.notes),
         	})
     end  
 
@@ -64,10 +64,11 @@ class Contact < ActiveRecord::Base
         	created_at:self.created_at.strftime('%d %B, %Y'),
         	})
     end 
-
-    def self.get_json_contacts
+       
+    def self.get_json_contacts(is_contacts_index=true, contacts=[])
+        contacts = all if is_contacts_index.present?
         contacts_list =[]
-        Contact.all.each do |contact|
+        contacts.each do |contact|
           contacts_list << contact.get_json_contact_index
         end
         return contacts_list

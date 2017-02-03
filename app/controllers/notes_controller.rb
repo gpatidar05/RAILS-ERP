@@ -1,7 +1,8 @@
 class NotesController < ApplicationController
   before_action :set_note, except: [:index, :create, :new]
   respond_to :html, :json
-  protect_from_forgery
+  skip_before_filter :verify_authenticity_token
+
   # GET /notes
   # GET /notes.json
   def index

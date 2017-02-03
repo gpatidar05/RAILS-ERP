@@ -1,5 +1,5 @@
 class CustomersController < ApplicationController
-  before_action :set_customer, except: [:index, :create, :new, :update, :get_customers]
+  before_action :set_customer, except: [:delete_all, :index, :create, :new, :update, :get_customers]
   respond_to :html, :json
   skip_before_filter :verify_authenticity_token
 
@@ -45,10 +45,10 @@ class CustomersController < ApplicationController
     if @user.save
       render json: @user.as_json, status: :ok
     else
-      puts @user.errors.as_json
-      render json: {user: @user.errors.as_json, status: :fail}
+      render json: {user: @user.errors, status: :no_content}
     end
   end 
+
 
   # PATCH/PUT /customers/1
   # PATCH/PUT /customers/1.json
@@ -74,6 +74,15 @@ class CustomersController < ApplicationController
       format.json { render :json => User.get_json_customers_dropdown(@users) }
       format.html
     end  
+  end
+
+  def delete_all
+      ids = JSON.parse(params[:ids])
+      ids.each do |id|
+        @customer = Customer.find(id.to_i)
+        @customer.destroy
+      end
+      render json: {status: :ok}
   end
 
   private

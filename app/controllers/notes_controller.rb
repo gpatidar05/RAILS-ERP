@@ -1,5 +1,5 @@
 class NotesController < ApplicationController
-  before_action :set_note, except: [:index, :create, :new]
+  before_action :set_note, except: [:delete_all, :index, :create, :new]
   respond_to :html, :json
   skip_before_filter :verify_authenticity_token
 
@@ -60,6 +60,15 @@ class NotesController < ApplicationController
       format.html { redirect_to notes_url, notice: 'Note was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def delete_all
+      ids = JSON.parse(params[:ids])
+      ids.each do |id|
+        @note = Note.find(id.to_i)
+        @note.destroy
+      end
+      render json: {status: :ok}
   end
 
   private

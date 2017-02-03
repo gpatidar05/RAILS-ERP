@@ -1,5 +1,5 @@
 class ContactsController < ApplicationController
-  before_action :set_contact, except: [:index, :create, :new, :update, :get_contacts]
+  before_action :set_contact, except: [:delete_all, :index, :create, :new, :update, :get_contacts]
   respond_to :html, :json
   skip_before_filter :verify_authenticity_token
 
@@ -75,6 +75,15 @@ class ContactsController < ApplicationController
       format.json { render :json => User.get_json_contacts_dropdown(@users) }
       format.html
     end  
+  end
+
+  def delete_all
+      ids = JSON.parse(params[:ids])
+      ids.each do |id|
+        @contact = Contact.find(id.to_i)
+        @contact.destroy
+      end
+      render json: {status: :ok}
   end
 
   private

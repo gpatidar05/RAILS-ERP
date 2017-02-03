@@ -18,15 +18,22 @@ Rails.application.routes.draw do
       collection do
         get 'edit_form'
         get 'get_customers'
+        get 'delete_all'
       end
     end
 
-    resources :notes
+
+    resources :notes, except: [] do
+      collection do
+        get 'delete_all'
+      end
+    end
 
     resources :contacts, except: [] do
       collection do
         get 'edit_form'
         get 'get_contacts'
+        get 'delete_all'
       end
     end
 end

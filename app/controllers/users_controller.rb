@@ -1,17 +1,17 @@
 class UsersController < ApplicationController
   skip_before_filter :verify_authenticity_token
   before_filter :ensure_login_params_exist, only: :create
-  before_filter :login_required, only: :destroy
   respond_to :html, :json
 
   def create
     user = User.find_by_email(params[:user][:email])
+    return render status: 200, json: { error: "Invalid Credentials" } if user.blank?
+    return render status: 200, json: { error: "Please confirm your email address to continue" } unless user.confirmed?
     if user &&  user.valid_password?(params[:user][:password])
-      # Device method to crete session and current_user
       sign_in(:user, user)
       return render status: 200, json: user.as_json
     end
-    return render status: 422, json: { error: "Invalid Credentials" }
+    return render status: 200, json: { error: "Invalid Credentials" }
   end
 
   def get_users
@@ -22,7 +22,25 @@ class UsersController < ApplicationController
     end  
   end
 
-  def destroy
+  def check_email
+    user = User.find_by_email(params[:email])
+    if user.present?
+      render status: 200, json: {data: true}
+    else
+      render status: 200, json: {data: false}
+    end
+  end
+
+  def email_confirmation
+    user = User.confirm_by_token(params[:confirmation_token])
+    if user.errors.blank?
+      return render status: 200, json: {data: true}
+    else
+      return render status: 200, json: { error: user.errors.full_messages.first }
+    end
+  end
+
+  def logout
     Devise.sign_out_all_scopes ? sign_out : sign_out(:user)
     render status: 200, json: { message: "Logged Out Successfully" }
   end

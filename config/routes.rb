@@ -3,6 +3,9 @@ Rails.application.routes.draw do
     resources :users, except: [] do
       collection do
         get 'get_users'
+        get 'check_email'
+        get 'logout'
+        get 'email_confirmation'
       end
     end
 
@@ -21,7 +24,6 @@ Rails.application.routes.draw do
         get 'delete_all'
       end
     end
-
 
     resources :notes, except: [] do
       collection do

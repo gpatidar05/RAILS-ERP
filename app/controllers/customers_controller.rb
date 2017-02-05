@@ -43,9 +43,9 @@ class CustomersController < ApplicationController
     @user = User.new(customer_params)
     @user.customer.sales_user_id = current_user.id
     if @user.save
-      render json: @user.as_json, status: :ok
+      render status: 200, json: { customer_id: @user.customer.id}
     else
-      render json: {user: @user.errors, status: :no_content}
+      render status: 200, :json => { message: @user.errors.full_messages.first }
     end
   end 
 
@@ -55,9 +55,9 @@ class CustomersController < ApplicationController
   def update
     @user = User.find(params[:id])
     if @user.update_attributes(update_customer_params)
-      render json: @user.as_json, status: :ok 
+      render status: 200, json: { customer_id: @user.customer.id}
     else
-      render json: {sales_order: @user.errors, status: :unprocessable_entity}
+      render status: 200, :json => { message: @user.errors.full_messages.first }
     end
   end
 

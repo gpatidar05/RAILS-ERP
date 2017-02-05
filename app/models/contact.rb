@@ -46,7 +46,7 @@ class Contact < ActiveRecord::Base
         	last_name:self.user.last_name,
         	middle_name:self.user.middle_name,
         	customer:self.customer.user.full_name,
-        	email:self.customer.user.email,
+        	email:self.user.email,
         	created_at:self.created_at.strftime('%d %B, %Y'),
         	created_by:self.creator.try(:full_name),
         	updated_at:self.updated_at.strftime('%d %B, %Y'),

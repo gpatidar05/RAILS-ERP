@@ -36,9 +36,9 @@ class NotesController < ApplicationController
   def create
     @note = Note.new(note_params)
     if @note.save
-      render json: @note.as_json, status: :ok
+      render status: 200, json: { note_id: @note.id}
     else
-      render json: {note: @note.errors, status: :no_content}
+      render status: 200, :json => { message: @note.errors.full_messages.first }
     end
   end    
 
@@ -46,9 +46,9 @@ class NotesController < ApplicationController
   # PATCH/PUT /notes/1.json
   def update
     if @note.update_attributes(note_params)
-      render json: @note.as_json, status: :ok 
+      render status: 200, json: { note_id: @note.id}
     else
-      render json: {sales_order: @note.errors, status: :unprocessable_entity}
+      render status: 200, :json => { message: @note.errors.full_messages.first }
     end
   end
 

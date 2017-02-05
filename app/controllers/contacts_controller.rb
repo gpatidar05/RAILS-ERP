@@ -42,9 +42,9 @@ class ContactsController < ApplicationController
     @user = User.new(contact_params)
     @user.contact.sales_user_id = current_user.id
     if @user.save
-      render json: @user.as_json, status: :ok
+      render status: 200, json: { contact_id: @user.contact.id}
     else
-      render json: {user: @user.errors, status: :no_content}
+      render status: 200, :json => { message: @user.errors.full_messages.first }
     end
   end   
 
@@ -53,9 +53,9 @@ class ContactsController < ApplicationController
   def update
     @user = User.find(params[:id])
     if @user.update_attributes(update_contact_params)
-      render json: @user.as_json, status: :ok 
+      render status: 200, json: { contact_id: @user.contact.id}
     else
-      render json: {sales_order: @user.errors, status: :unprocessable_entity}
+      render status: 200, :json => { message: @user.errors.full_messages.first }
     end
   end
 

@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
     has_one :supplier, dependent: :destroy
 
     #Has Many Relationship
+    has_many :accounts
     has_many :emails, dependent: :destroy
     has_many :sales_orders, dependent: :destroy
     has_many :purchase_orders, dependent: :destroy
@@ -16,6 +17,8 @@ class User < ActiveRecord::Base
     #Html Form Nested Attributes
     accepts_nested_attributes_for :customer
     accepts_nested_attributes_for :contact
+
+    after_create :create_default_accounts
 
     #validations
     # validates :first_name, :role, presence: true
@@ -70,6 +73,14 @@ class User < ActiveRecord::Base
         super
     end
 
+    def refresh_orders
+        self.accounts.each {|account|
+            next if account.state.blank?
+            next unless account.integration.logged_in? rescue false
+            SalesOrder.refresh_for_account(account)
+        }
+    end
+
     def self.get_json_customers_dropdown(users)
         list = []
         users.each do |user|
@@ -102,4 +113,14 @@ class User < ActiveRecord::Base
         end
         return list
     end 
+
+    private
+
+        def create_default_accounts
+            return false unless self.Sales?
+            Marketplace.all.each { |marketplace|
+                Account.create(:user_id => self.id, :title => marketplace.name, :marketplace_id => marketplace.id)
+            }
+        end
+
 end

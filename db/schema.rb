@@ -11,10 +11,33 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170203042313) do
+ActiveRecord::Schema.define(version: 20170205131930) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "accounts", force: :cascade do |t|
+    t.string   "title"
+    t.integer  "user_id"
+    t.integer  "marketplace_id"
+    t.string   "auto_renew"
+    t.text     "relisting_pricing"
+    t.text     "state"
+    t.string   "api_uid"
+    t.boolean  "has_api"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
+
+  create_table "buyers", force: :cascade do |t|
+    t.string   "email"
+    t.string   "uid"
+    t.integer  "marketplace_id"
+    t.string   "name"
+    t.string   "phone_number"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
 
   create_table "categories", force: :cascade do |t|
     t.string   "name"
@@ -117,6 +140,17 @@ ActiveRecord::Schema.define(version: 20170203042313) do
     t.datetime "updated_at",           null: false
   end
 
+  create_table "marketplaces", force: :cascade do |t|
+    t.string   "name"
+    t.string   "url"
+    t.text     "settings"
+    t.boolean  "disabled"
+    t.string   "api_uid"
+    t.boolean  "has_api"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "notes", force: :cascade do |t|
     t.string   "subject"
     t.string   "decription"
@@ -127,6 +161,27 @@ ActiveRecord::Schema.define(version: 20170203042313) do
     t.integer  "contact_id"
     t.integer  "customer_id"
     t.integer  "sales_user_id"
+  end
+
+  create_table "order_shipping_details", force: :cascade do |t|
+    t.decimal  "price",              precision: 16, scale: 4
+    t.string   "name"
+    t.string   "phone"
+    t.string   "city"
+    t.string   "state"
+    t.string   "country"
+    t.string   "postal_code"
+    t.string   "address_line_1"
+    t.string   "address_line_2"
+    t.string   "carrier"
+    t.string   "tracking_code"
+    t.string   "tracking_url"
+    t.text     "notes"
+    t.text     "available_carriers"
+    t.integer  "buyer_id"
+    t.decimal  "real_price",         precision: 16, scale: 2
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
   end
 
   create_table "purchase_order_items", force: :cascade do |t|
@@ -155,6 +210,15 @@ ActiveRecord::Schema.define(version: 20170203042313) do
     t.datetime "updated_at",       null: false
   end
 
+  create_table "sales_order_items", force: :cascade do |t|
+    t.integer  "sales_order_id"
+    t.decimal  "item_price",     precision: 16, scale: 4
+    t.integer  "quantity"
+    t.string   "uid"
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+  end
+
   create_table "sales_orders", force: :cascade do |t|
     t.integer  "customer_user_id"
     t.integer  "contact_user_id"
@@ -164,8 +228,27 @@ ActiveRecord::Schema.define(version: 20170203042313) do
     t.decimal  "grand_total"
     t.integer  "created_by_id"
     t.integer  "updated_by_id"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.datetime "created_at",                                        null: false
+    t.datetime "updated_at",                                        null: false
+    t.integer  "account_id"
+    t.string   "uid"
+    t.integer  "buyer_id"
+    t.integer  "order_shipping_detail_id"
+    t.string   "payment_status"
+    t.datetime "paid_at"
+    t.datetime "refunded_at"
+    t.boolean  "shipped"
+    t.datetime "shipped_at"
+    t.boolean  "cancelled"
+    t.datetime "cancelled_at"
+    t.string   "cancel_reason"
+    t.text     "notes"
+    t.string   "payment_method"
+    t.datetime "create_timestamp"
+    t.datetime "update_timestamp"
+    t.decimal  "discount",                 precision: 16, scale: 4
+    t.decimal  "marketplace_fee",          precision: 10, scale: 2
+    t.decimal  "processing_fee",           precision: 10, scale: 2
   end
 
   create_table "suppliers", force: :cascade do |t|

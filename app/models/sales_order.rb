@@ -1,7 +1,7 @@
 class SalesOrder < ActiveRecord::Base
 
-    belongs_to :customer, class_name: "User", foreign_key: "customer_user_id"
-    belongs_to :contact, class_name: "User", foreign_key: "contact_user_id"
+    belongs_to :customer, class_name: "Customer", foreign_key: "customer_user_id"
+    belongs_to :contact, class_name: "Contact", foreign_key: "contact_user_id"
   	belongs_to :account
   	belongs_to :buyer
   	belongs_to :order_shipping_detail
@@ -10,7 +10,83 @@ class SalesOrder < ActiveRecord::Base
 
     track_who_does_it
 
+	def self.search(params,current_user_id,is_paid)
+	  	search = where("sales_orders.sales_user_id = ?",current_user_id)
+		search = where("sales_orders.payment_status = ?","paid") if is_paid
+	  	search = where("sales_orders.sales_user_id = ?",current_user_id)
+		search = search.where('sales_orders.id = ?',params[:code].gsub(/\D/,'')) if params[:code].present?
+		search = search.where('sales_orders.uid = ?',params[:uid]) if params[:uid].present?
+		search = search.where('sales_orders.name = ?',params[:name]) if params[:name].present?
+		search = search.where('sales_orders.grand_total = ?',params[:grand_total]) if params[:grand_total].present?
+		search = search.where('sales_orders.customer_user_id = ?',params[:customer_user_id]) if params[:customer_user_id].present?
+		search = search.where('sales_orders.status = ?',params[:status]) if params[:status].present?
+	  	search = search.where('DATE(sales_orders.created_at) = ?', params[:created_at].to_date) if params[:created_at].present?
+	  	search = search.where('DATE(sales_orders.create_timestamp) = ?', params[:create_timestamp].to_date) if params[:create_timestamp].present?
+	  	return search
+	end
+
+    def get_json_sales_order_index
+    	create_timestamp = self.create_timestamp.present? ? self.create_timestamp.strftime('%d %B, %Y') : self.create_timestamp
+        as_json(only: [:id,:uid,:name,:grand_total,:status])
+        .merge({code:"SO-#{self.id.to_s.rjust(4, '0')}",
+        	customer: self.customer.try(:user).try(:full_name),
+        	created_at:self.created_at.strftime('%d %B, %Y'),
+        	create_timestamp: create_timestamp,
+        })
+    end 
+
+    def self.get_json_sales_orders
+        sales_orders_list =[]
+        SalesOrder.all.each do |sales_order|
+          sales_orders_list << sales_order.get_json_sales_order_index
+        end
+        return sales_orders_list
+    end
+
+    def get_json_sales_order_show
+    	create_timestamp = self.create_timestamp.present? ? self.create_timestamp.strftime('%d %B, %Y') : self.create_timestamp
+    	update_timestamp = self.update_timestamp.present? ? self.update_timestamp.strftime('%d %B, %Y') : self.update_timestamp
+    	cancelled_at = self.cancelled_at.present? ? self.cancelled_at.strftime('%d %B, %Y') : self.cancelled_at
+    	paid_at = self.paid_at.present? ? self.paid_at.strftime('%d %B, %Y') : self.paid_at
+    	refunded_at = self.refunded_at.present? ? self.refunded_at.strftime('%d %B, %Y') : self.refunded_at
+    	shipped_at = self.shipped_at.present? ? self.shipped_at.strftime('%d %B, %Y') : self.shipped_at
+
+		as_json(only: [:id,:uid,:name,:status,:cancel_reason,:payment_method,:subtotal,
+			:tax,:discount,:grand_total,:buyer_id,:shipped,:marketplace_fee,:processing_fee])
+        .merge({code:"SO-#{self.id.to_s.rjust(4, '0')}",
+        	customer: self.customer.try(:user).try(:full_name),
+        	contact: self.contact.try(:user).try(:full_name),
+        	create_timestamp: create_timestamp,
+        	update_timestamp: update_timestamp,
+        	cancelled_at: cancelled_at,
+        	paid_at: paid_at,
+        	refunded_at: refunded_at,
+        	buyer_name: self.buyer.name,
+        	buyer_email: self.buyer.email,
+        	buyer_phone_number: self.buyer.phone_number,
+        	shipping_name: self.order_shipping_detail.name,
+        	shipping_price: self.order_shipping_detail.price,
+        	shipping_address_line_1: self.order_shipping_detail.address_line_1,
+        	shipping_city: self.order_shipping_detail.city,
+        	shipping_state: self.order_shipping_detail.state,
+        	shipping_country: self.order_shipping_detail.country,
+        	shipping_postal_code: self.order_shipping_detail.postal_code,
+        	shipping_phone: self.order_shipping_detail.phone,
+        	shipping_tracking_code: self.order_shipping_detail.tracking_code,
+        	shipping_notes: self.order_shipping_detail.notes,
+        	shipped_at: shipped_at,
+        	items: SalesOrderItem.get_json_sales_order_items(false,self.sales_order_items)
+        })
+    end
+
+    def get_json_sales_order_edit
+		as_json(only: [:id, :customer_user_id, :contact_user_id])
+        .merge({code:"SO-#{self.id.to_s.rjust(4, '0')}"})
+    end
+
+
     def self.refresh_for_account(account, date_from = 127.days.ago.to_date, date_to = DateTime.now.to_date)
+	    return false unless account.integration.logged_in?
 	    orders = account.integration.get_orders(date_from.to_datetime, date_to.to_datetime)
 	    puts orders
 	    orders.each { |order|
@@ -41,7 +117,8 @@ class SalesOrder < ActiveRecord::Base
 		        	order_entry.update_attributes({
 			                :buyer_id => buyer.try(:id),
 			                :order_shipping_detail_id => shipping_detail.try(:id),
-			                :update_timestamp => order[:last_update_at]
+			                :update_timestamp => order[:last_update_at],
+	                        :status => order[:custom_status]
 		            	}.merge({ 
 			                :grand_total => order[:totals][:grandtotal],
 			                :subtotal => order[:totals][:subtotal],
@@ -68,9 +145,11 @@ class SalesOrder < ActiveRecord::Base
 			        shipping_detail = OrderShippingDetail.create!(order[:shipping].merge(:buyer_id => buyer.try(:id))) unless order[:shipping].blank?
 			        # create Order record
 			        order_entry = account.sales_orders.create!({
+			        		:sales_user_id => account.user.id,
 	                        :buyer_id => buyer.try(:id),
 	                        :order_shipping_detail_id => shipping_detail.try(:id),
 	                        :uid => order[:id],
+	                        :status => order[:custom_status],
 	                        :create_timestamp => order[:created_at],
 	                        :update_timestamp => order[:last_update_at],
 	                        :grand_total => order[:totals][:grandtotal],

@@ -1,5 +1,5 @@
 module Integrations
-  class Item
+  class Item1
 
     ATTRIBUTES = %w(local_id integration_id price image_urls title description)
     attr_accessor *ATTRIBUTES

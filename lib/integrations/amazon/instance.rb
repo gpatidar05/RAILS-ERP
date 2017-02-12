@@ -14,7 +14,8 @@
 
 
 
-
+# new_clarabyte
+# 9681-8867-7426
 
 # Seller account identifiers for Urban Geek
 # Seller ID:  A2TV91R20V27O2
@@ -23,7 +24,7 @@
 # A1AM78C64UM0Y8 (Amazon.com.mx)
 # Seller-Developer Authorization
 # MWS Auth Token: amzn.mws.a4ad0572-4ebd-0a59-adfc-da3da2b8decc
-
+#---\n:merchant_id: A2TV91R20V27O2\n:auth_token: amzn.mws.a4ad0572-4ebd-0a59-adfc-da3da2b8decc\n"
 
 
 module Integrations::Amazon
@@ -46,8 +47,8 @@ module Integrations::Amazon
           aws_access_key_id: AWS_ACCESS_KEY_ID,
           aws_secret_access_key: AWS_SECRET_ACCESS_KEY,
       }
-      options[:auth_token] = @state[:auth_token] unless @state[:auth_token].blank?
-      options[:merchant_id] = @state[:merchant_id] || MERCHANT_ID
+      options[:auth_token] = @state['auth_token'] unless @state['auth_token'].blank?
+      options[:merchant_id] = @state['merchant_id'] || MERCHANT_ID
       @client_orders = MWS.orders(options)
       @client_products = MWS.products(options)
       @client_feeds = MWS.feeds(options)
@@ -59,7 +60,7 @@ module Integrations::Amazon
     end
 
     def logged_in?
-      @state[:auth_token] && @state[:merchant_id]
+      @state['auth_token'] && @state['merchant_id']
     rescue
       false
     end

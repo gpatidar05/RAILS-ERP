@@ -7,8 +7,6 @@ class User < ActiveRecord::Base
     #Has Many Relationship
     has_many :accounts
     has_many :emails, dependent: :destroy
-    has_many :sales_orders, dependent: :destroy
-    has_many :purchase_orders, dependent: :destroy
 
     #Devise Setting
     devise :multi_email_authenticatable, :registerable, :multi_email_confirmable,
@@ -17,6 +15,7 @@ class User < ActiveRecord::Base
     #Html Form Nested Attributes
     accepts_nested_attributes_for :customer
     accepts_nested_attributes_for :contact
+    accepts_nested_attributes_for :supplier
 
     after_create :create_default_accounts
 

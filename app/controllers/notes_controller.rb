@@ -6,7 +6,7 @@ class NotesController < ApplicationController
   # GET /notes
   # GET /notes.json
   def index
-    @notes = Note.search(params).get_json_notes
+    @notes = Note.search(params,current_user.id).get_json_notes
     respond_with(@notes) do |format|
       format.json { render :json => @notes.as_json }
       format.html
@@ -35,6 +35,7 @@ class NotesController < ApplicationController
   # POST /notes.json
   def create
     @note = Note.new(note_params)
+    @note.sales_user_id = current_user.id
     if @note.save
       render status: 200, json: { note_id: @note.id}
     else

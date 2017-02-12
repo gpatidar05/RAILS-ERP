@@ -4,6 +4,7 @@ class Contact < ActiveRecord::Base
     belongs_to :customer
 
     has_many :notes
+    has_many :sales_orders, dependent: :destroy
 
 	validates :customer_id,:salutation,:phone_mobile,:phone_work,:designation,:department, presence: true
     track_who_does_it
@@ -11,8 +12,8 @@ class Contact < ActiveRecord::Base
     #constants
     SALUTATION = %w(Mr. Ms. Mrs. Prof. Dr.)
 
-	def self.search(params)
-	  search = all
+	def self.search(params,current_user_id)
+	  search = where("contacts.sales_user_id = ?",current_user_id)
 	  if params[:code].present? 
 	  	 code = params[:code].split("-CON")
 	  	 if code.last.present?
@@ -24,7 +25,7 @@ class Contact < ActiveRecord::Base
 	  search = search.joins(:user).where("lower(users.middle_name) LIKE ?" ,"%#{params[:middle_name].downcase}%") if params[:middle_name].present?
 	  search = search.joins(:user).where("lower(users.last_name) LIKE ?" ,"%#{params[:last_name].downcase}%") if params[:last_name].present?
 	  search = search.where('contacts.phone_mobile = ?', params[:mobile]) if params[:mobile].present?
-	  search = search.where('(contacts.primary_country = ?) OR( contacts.alternative_country = ?)', params[:address_country],params[:address_country]) if params[:address_country].present?
+	  search = search.where('(contacts.primary_country = ?) OR( contacts.alternative_country = ?)', params[:primary_country],params[:primary_country]) if params[:primary_country].present?
 	  search = search.where('contacts.designation = ?', params[:designation]) if params[:designation].present?
 	  search = search.where('contacts.customer_id = ?', params[:customer_id]) if params[:customer_id].present?
 	  search = search.where('DATE(contacts.created_at) = ?', params[:created_at].to_date) if params[:created_at].present?

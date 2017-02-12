@@ -7,8 +7,8 @@ class Note < ActiveRecord::Base
 
     track_who_does_it
 
-	def self.search(params)
-	  search = all
+	def self.search(params,current_user_id)
+      search = where("notes.sales_user_id = ?",current_user_id)
 	  search = search.where("notes.id = ?",params[:code].gsub(/\D/,'')) if params[:code].present?
 	  search = search.where('notes.subject = ?',params[:subject]) if params[:subject].present?
 	  search = search.where('notes.customer_id = ?',params[:customer_id]) if params[:customer_id].present?
@@ -21,7 +21,7 @@ class Note < ActiveRecord::Base
 	end
 
     def get_json_note_index
-        as_json(only: [:id,:subject,:decription])
+        as_json(only: [:id,:subject,:decription,:customer_id,:contact_id])
         .merge({
         	code:"NOTE#{self.id.to_s.rjust(4, '0')}",
         	contact:self.contact.try(:user).try(:full_name),

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170205131930) do
+ActiveRecord::Schema.define(version: 20170212144136) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,8 +25,9 @@ ActiveRecord::Schema.define(version: 20170205131930) do
     t.text     "state"
     t.string   "api_uid"
     t.boolean  "has_api"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+    t.boolean  "is_connected",      default: false
   end
 
   create_table "buyers", force: :cascade do |t|
@@ -47,8 +48,10 @@ ActiveRecord::Schema.define(version: 20170205131930) do
     t.string   "description"
     t.integer  "created_by_id"
     t.integer  "updated_by_id"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+    t.integer  "sales_user_id"
+    t.boolean  "is_active",     default: true
   end
 
   create_table "contacts", force: :cascade do |t|
@@ -71,11 +74,12 @@ ActiveRecord::Schema.define(version: 20170205131930) do
     t.string   "alternative_postal_code"
     t.integer  "created_by_id"
     t.integer  "updated_by_id"
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
     t.text     "decription"
     t.string   "company"
     t.integer  "sales_user_id"
+    t.boolean  "is_active",               default: true
   end
 
   create_table "customers", force: :cascade do |t|
@@ -90,8 +94,8 @@ ActiveRecord::Schema.define(version: 20170205131930) do
     t.string   "decription"
     t.integer  "created_by_id"
     t.integer  "updated_by_id"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
     t.decimal  "discount_percent"
     t.decimal  "credit_limit"
     t.string   "tax_reference"
@@ -99,6 +103,7 @@ ActiveRecord::Schema.define(version: 20170205131930) do
     t.string   "customer_currency"
     t.integer  "sales_user_id"
     t.date     "customer_since"
+    t.boolean  "is_active",         default: true
   end
 
   create_table "emails", force: :cascade do |t|
@@ -136,8 +141,10 @@ ActiveRecord::Schema.define(version: 20170205131930) do
     t.string   "selling_description"
     t.integer  "created_by_id"
     t.integer  "updated_by_id"
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+    t.integer  "sales_user_id"
+    t.boolean  "is_active",            default: true
   end
 
   create_table "marketplaces", force: :cascade do |t|
@@ -156,11 +163,12 @@ ActiveRecord::Schema.define(version: 20170205131930) do
     t.string   "decription"
     t.integer  "created_by_id"
     t.integer  "updated_by_id"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
     t.integer  "contact_id"
     t.integer  "customer_id"
     t.integer  "sales_user_id"
+    t.boolean  "is_active",     default: true
   end
 
   create_table "order_shipping_details", force: :cascade do |t|
@@ -206,8 +214,10 @@ ActiveRecord::Schema.define(version: 20170205131930) do
     t.integer  "supplier_user_id"
     t.integer  "created_by_id"
     t.integer  "updated_by_id"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.integer  "sales_user_id"
+    t.boolean  "is_active",        default: true
   end
 
   create_table "sales_order_items", force: :cascade do |t|
@@ -228,8 +238,8 @@ ActiveRecord::Schema.define(version: 20170205131930) do
     t.decimal  "grand_total"
     t.integer  "created_by_id"
     t.integer  "updated_by_id"
-    t.datetime "created_at",                                        null: false
-    t.datetime "updated_at",                                        null: false
+    t.datetime "created_at",                                                       null: false
+    t.datetime "updated_at",                                                       null: false
     t.integer  "account_id"
     t.string   "uid"
     t.integer  "buyer_id"
@@ -249,6 +259,9 @@ ActiveRecord::Schema.define(version: 20170205131930) do
     t.decimal  "discount",                 precision: 16, scale: 4
     t.decimal  "marketplace_fee",          precision: 10, scale: 2
     t.decimal  "processing_fee",           precision: 10, scale: 2
+    t.string   "status"
+    t.integer  "sales_user_id"
+    t.boolean  "is_active",                                         default: true
   end
 
   create_table "suppliers", force: :cascade do |t|
@@ -262,8 +275,11 @@ ActiveRecord::Schema.define(version: 20170205131930) do
     t.string   "postal_code"
     t.integer  "created_by_id"
     t.integer  "updated_by_id"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+    t.integer  "sales_user_id"
+    t.datetime "supplier_since"
+    t.boolean  "is_active",         default: true
   end
 
   create_table "users", force: :cascade do |t|
@@ -307,8 +323,9 @@ ActiveRecord::Schema.define(version: 20170205131930) do
     t.integer  "rack_to"
     t.integer  "created_by_id"
     t.integer  "updated_by_id"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+    t.boolean  "is_active",     default: true
   end
 
 end

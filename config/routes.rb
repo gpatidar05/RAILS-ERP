@@ -16,7 +16,6 @@ Rails.application.routes.draw do
     devise_scope :user do
       root :to => 'devise/sessions#new'
     end
-
     resources :customers, except: [] do
       collection do
         get 'edit_form'
@@ -24,18 +23,60 @@ Rails.application.routes.draw do
         get 'delete_all'
       end
     end
-
     resources :notes, except: [] do
       collection do
         get 'delete_all'
       end
     end
-
     resources :contacts, except: [] do
       collection do
         get 'edit_form'
         get 'get_contacts'
         get 'delete_all'
+      end
+    end
+    resources :sales_orders, except: [] do
+      collection do
+        get 'edit_form'
+        get 'delete_all'
+        get 'refresh'
+      end
+    end
+    resources :sales_order_invoices, except: [] do
+      collection do
+        get 'delete_all'
+        get 'refresh'
+      end
+    end
+    resources :categories, except: [] do
+      collection do
+        get 'delete_all'
+        get 'get_categories'
+      end
+    end
+    resources :items, except: [] do
+      collection do
+        get 'delete_all'
+      end
+    end
+    resources :suppliers, except: [] do
+      collection do
+        get 'edit_form'
+        get 'delete_all'
+        get 'get_suppliers'
+      end
+    end
+    resources :purchase_orders, except: [] do
+      collection do
+        get 'edit_form'
+        get 'delete_all'
+      end
+    end
+    resources :accounts, except: [] do
+      collection do
+        get 'disconnect_account'
+        get 'connect_account'
+        get 'get_accounts'
       end
     end
 end

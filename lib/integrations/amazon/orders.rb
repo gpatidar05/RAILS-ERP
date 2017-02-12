@@ -4,8 +4,9 @@ module Integrations
 
       # http://docs.developer.amazonservices.com/en_US/orders/2013-09-01/Orders_ListOrders.html
       def get_orders(date_from, date_to)
+        puts "hello"
         orders = @client_orders.list_orders(created_after: date_from.strftime('%Y-%m-%d'), created_before: date_to.strftime('%Y-%m-%d'))
-
+        puts orders.parse['Orders']
         ((orders.parse['Orders'] || {})['Order'] || []).map do |order|
           {
               id: order['AmazonOrderId'],
@@ -63,60 +64,6 @@ module Integrations
           }
         end
       end
-
-      # def update_order(order)
-      #   xml = Builder::XmlMarkup.new
-      #   xml.instruct! :xml, version: '1.0'
-      #
-      #   if order[:status] == 'cancelled'
-      #     xml.AmazonEnvelope do |envelope|
-      #       envelope.Header do |header|
-      #         header.DocumentVersion '1.01'
-      #         header.MerchantIdentifier @state[:merchant_id]
-      #       end
-      #       envelope.MessageType 'OrderAcknowledgement'
-      #       envelope.Message do |m|
-      #         m.MessageID '1'
-      #         m.OrderAcknowledgement do |oa|
-      #           oa.AmazonOrderID order[:order_id]
-      #           oa.StatusCode 'Failure'
-      #           # oa.Item do |item|
-      #           #   item.AmazonOrderItemCode ''
-      #           #   item.CancelReason order['cancel_reason']
-      #           # end
-      #         end
-      #       end
-      #     end
-      #     result = @client_feeds.submit_feed(xml.target!, 'OrderAcknowledgement', {})
-      #     # result = result.parse['FeedSubmissionInfo']['FeedSubmissionId'] rescue nil
-      #   else
-      #     xml.AmazonEnvelope do |envelope|
-      #       envelope.Header do |header|
-      #         header.DocumentVersion '1.01'
-      #         header.MerchantIdentifier @state[:merchant_id]
-      #       end
-      #       envelope.MessageType 'OrderFulfillment'
-      #       envelope.Message do |m|
-      #         m.MessageID '1'
-      #         m.OrderFulfillment do |of|
-      #           of.AmazonOrderID order[:order_id]
-      #           of.FulfillmentDate DateTime.current.to_s
-      #           of.FulfillmentData do |fd|
-      #             fd.CarrierName order[:shipping_carrier_id]
-      #             fd.ShippingMethod 'Standard'
-      #             fd.ShipperTrackingNumber order[:tracking_code]
-      #           end
-      #           # of.Item do |item|
-      #           #   item.AmazonOrderItemCode ''
-      #           #   item.Quantity ''
-      #           # end
-      #         end
-      #       end
-      #     end
-      #     result = @client_feeds.submit_feed(xml.target!, '_POST_ORDER_FULFILLMENT_DATA_', {})
-      #     # result = result.parse['FeedSubmissionInfo']['FeedSubmissionId'] rescue nil
-      #   end
-      # end
 
       # http://docs.developer.amazonservices.com/en_US/orders/2013-09-01/Orders_ListOrderItems.html
       def order_items(amazon_order_id)

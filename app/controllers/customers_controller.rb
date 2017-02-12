@@ -6,7 +6,7 @@ class CustomersController < ApplicationController
   # GET /customers
   # GET /customers.json
   def index
-    @customers = Customer.search(params).get_json_customers
+    @customers = Customer.search(params,current_user.id).get_json_customers
     respond_with(@customers) do |format|
       format.json { render :json => @customers.as_json }
       format.html

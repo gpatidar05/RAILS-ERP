@@ -6,7 +6,7 @@ class PurchaseOrdersController < ApplicationController
   # GET /purchase_orders
   # GET /purchase_orders.json
   def index
-    @purchase_orders = PurchaseOrder.search(params,current_user.id).get_json_purchase_orders
+    @purchase_orders = PurchaseOrder.search(params,current_user.id).with_active.get_json_purchase_orders
     respond_with(@purchase_orders) do |format|
       format.json { render :json => @purchase_orders.as_json }
       format.html
@@ -57,7 +57,7 @@ class PurchaseOrdersController < ApplicationController
   # DELETE /purchase_orders/1
   # DELETE /purchase_orders/1.json
   def destroy
-    @purchase_order.destroy
+    @purchase_order.update_attribute(:is_active, false)
     render json: {status: :ok}
   end
 
@@ -65,7 +65,7 @@ class PurchaseOrdersController < ApplicationController
       ids = JSON.parse(params[:ids])
       ids.each do |id|
         @purchase_order = PurchaseOrder.find(id.to_i)
-        @purchase_order.destroy
+        @purchase_order.update_attribute(:is_active, false)
       end
       render json: {status: :ok}
   end

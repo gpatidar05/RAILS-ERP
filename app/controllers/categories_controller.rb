@@ -6,7 +6,7 @@ class CategoriesController < ApplicationController
   # GET /Categories
   # GET /Categories.json
   def index
-    @categories = Category.search(params,current_user.id).get_json_categories
+    @categories = Category.search(params,current_user.id).with_active.get_json_categories
     respond_with(@categories) do |format|
       format.json { render :json => @categories.as_json }
       format.html
@@ -49,7 +49,7 @@ class CategoriesController < ApplicationController
   # DELETE /Categories/1
   # DELETE /Categories/1.json
   def destroy
-    @category.destroy
+    @category.update_attribute(:is_active, false)
     render json: {status: :ok}
   end
 
@@ -57,7 +57,7 @@ class CategoriesController < ApplicationController
       ids = JSON.parse(params[:ids])
       ids.each do |id|
         @category = Category.find(id.to_i)
-        @category.destroy
+        @category.update_attribute(:is_active, false)
       end
       render json: {status: :ok}
   end

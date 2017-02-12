@@ -10,6 +10,8 @@ class Customer < ActiveRecord::Base
 
     track_who_does_it
 
+    scope :with_active, -> { where('is_active = ?', true) }
+
     #constants
     TYPE = %w(Contractor Sales_Customer)
 

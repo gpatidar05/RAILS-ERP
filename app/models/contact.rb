@@ -7,7 +7,10 @@ class Contact < ActiveRecord::Base
     has_many :sales_orders, dependent: :destroy
 
 	validates :customer_id,:salutation,:phone_mobile,:phone_work,:designation,:department, presence: true
+    
     track_who_does_it
+
+    scope :with_active, -> { where('is_active = ?', true) }
 
     #constants
     SALUTATION = %w(Mr. Ms. Mrs. Prof. Dr.)

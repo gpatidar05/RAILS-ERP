@@ -6,7 +6,7 @@ class SuppliersController < ApplicationController
   # GET /suppliers
   # GET /suppliers.json
   def index
-    @suppliers = Supplier.search(params,current_user.id).get_json_suppliers
+    @suppliers = Supplier.search(params,current_user.id).with_active.get_json_suppliers
     respond_with(@suppliers) do |format|
       format.json { render :json => @suppliers.as_json }
       format.html
@@ -56,7 +56,7 @@ class SuppliersController < ApplicationController
   # DELETE /suppliers/1
   # DELETE /suppliers/1.json
   def destroy
-    @supplier.destroy
+    @supplier.update_attribute(:is_active, false)
     render json: {status: :ok}
   end
 
@@ -64,7 +64,7 @@ class SuppliersController < ApplicationController
       ids = JSON.parse(params[:ids])
       ids.each do |id|
         @supplier = Supplier.find(id.to_i)
-        @supplier.destroy
+        @supplier.update_attribute(:is_active, false)
       end
       render json: {status: :ok}
   end

@@ -5,6 +5,7 @@ class Supplier < ActiveRecord::Base
     has_many :items, dependent: :destroy
     has_many :purchase_orders, class_name: "PurchaseOrder", foreign_key: "supplier_user_id"
 
+    scope :with_active, -> { where('is_active = ?', true) }
 
     track_who_does_it
 

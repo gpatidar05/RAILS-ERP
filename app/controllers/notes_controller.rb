@@ -6,7 +6,7 @@ class NotesController < ApplicationController
   # GET /notes
   # GET /notes.json
   def index
-    @notes = Note.search(params,current_user.id).get_json_notes
+    @notes = Note.search(params,current_user.id).with_active.get_json_notes
     respond_with(@notes) do |format|
       format.json { render :json => @notes.as_json }
       format.html
@@ -56,7 +56,7 @@ class NotesController < ApplicationController
   # DELETE /notes/1
   # DELETE /notes/1.json
   def destroy
-    @note.destroy
+    @note.update_attribute(:is_active, false)
     respond_to do |format|
       format.html { redirect_to notes_url, notice: 'Note was successfully destroyed.' }
       format.json { head :no_content }
@@ -67,7 +67,7 @@ class NotesController < ApplicationController
       ids = JSON.parse(params[:ids])
       ids.each do |id|
         @note = Note.find(id.to_i)
-        @note.destroy
+        @note.update_attribute(:is_active, false)
       end
       render json: {status: :ok}
   end

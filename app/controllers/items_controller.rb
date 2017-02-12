@@ -6,7 +6,7 @@ class ItemsController < ApplicationController
   # GET /items
   # GET /items.json
   def index
-    @items = Item.search(params,current_user.id).get_json_items
+    @items = Item.search(params,current_user.id).with_active.get_json_items
     respond_with(@items) do |format|
       format.json { render :json => @items.as_json }
       format.html
@@ -49,7 +49,7 @@ class ItemsController < ApplicationController
   # DELETE /items/1
   # DELETE /items/1.json
   def destroy
-    @item.destroy
+    @item.update_attribute(:is_active, false)
     render json: {status: :ok}
   end
 
@@ -57,7 +57,7 @@ class ItemsController < ApplicationController
       ids = JSON.parse(params[:ids])
       ids.each do |id|
         @item = Item.find(id.to_i)
-        @item.destroy
+        @item.update_attribute(:is_active, false)
       end
       render json: {status: :ok}
   end

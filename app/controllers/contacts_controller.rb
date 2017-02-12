@@ -6,7 +6,7 @@ class ContactsController < ApplicationController
   # GET /contacts
   # GET /contacts.json
   def index
-    @contacts = Contact.search(params,current_user.id).get_json_contacts
+    @contacts = Contact.search(params,current_user.id).with_active.get_json_contacts
     respond_with(@contacts) do |format|
       format.json { render :json => @contacts.as_json }
       format.html
@@ -62,7 +62,7 @@ class ContactsController < ApplicationController
   # DELETE /contacts/1
   # DELETE /contacts/1.json
   def destroy
-    @contact.destroy
+    @contact.update_attribute(:is_active, false)
     respond_to do |format|
       format.html { redirect_to contacts_url, notice: 'Contact was successfully destroyed.' }
       format.json { head :no_content }
@@ -81,7 +81,7 @@ class ContactsController < ApplicationController
       ids = JSON.parse(params[:ids])
       ids.each do |id|
         @contact = Contact.find(id.to_i)
-        @contact.destroy
+        @contact.update_attribute(:is_active, false)
       end
       render json: {status: :ok}
   end

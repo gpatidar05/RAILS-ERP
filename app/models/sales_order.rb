@@ -10,6 +10,9 @@ class SalesOrder < ActiveRecord::Base
 
     track_who_does_it
 
+    scope :with_active, -> { where('is_active = ?', true) }
+    scope :with_invoice_active, -> { where('is_invoice_active = ?', true) }
+
 	def self.search(params,current_user_id,is_paid)
 	  	search = where("sales_orders.sales_user_id = ?",current_user_id)
 		search = where("sales_orders.payment_status = ?","paid") if is_paid

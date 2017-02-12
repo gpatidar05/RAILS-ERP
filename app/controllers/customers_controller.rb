@@ -6,7 +6,7 @@ class CustomersController < ApplicationController
   # GET /customers
   # GET /customers.json
   def index
-    @customers = Customer.search(params,current_user.id).get_json_customers
+    @customers = Customer.search(params,current_user.id).with_active.get_json_customers
     respond_with(@customers) do |format|
       format.json { render :json => @customers.as_json }
       format.html
@@ -64,7 +64,7 @@ class CustomersController < ApplicationController
   # DELETE /customers/1
   # DELETE /customers/1.json
   def destroy
-    @customer.destroy
+    @customer.update_attribute(:is_active, false)
     render json: {status: :ok}
   end
 
@@ -80,7 +80,7 @@ class CustomersController < ApplicationController
       ids = JSON.parse(params[:ids])
       ids.each do |id|
         @customer = Customer.find(id.to_i)
-        @customer.destroy
+        @customer.update_attribute(:is_active, false)
       end
       render json: {status: :ok}
   end

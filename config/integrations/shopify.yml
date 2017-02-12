@@ -1,0 +1,11 @@
+development:
+  api_key: f66d1a9b1f09896e8409f0e2c95d8118
+  secret: cc1e6ebe0dfafaf680d49f93acc12be5
+
+staging:
+
+test:
+
+production:
+
+

@@ -7,6 +7,8 @@ class Note < ActiveRecord::Base
 
     track_who_does_it
 
+    scope :with_active, -> { where('is_active = ?', true) }
+
 	def self.search(params,current_user_id)
       search = where("notes.sales_user_id = ?",current_user_id)
 	  search = search.where("notes.id = ?",params[:code].gsub(/\D/,'')) if params[:code].present?

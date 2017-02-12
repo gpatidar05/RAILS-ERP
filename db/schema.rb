@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170212144136) do
+ActiveRecord::Schema.define(version: 20170212192231) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -262,6 +262,7 @@ ActiveRecord::Schema.define(version: 20170212144136) do
     t.string   "status"
     t.integer  "sales_user_id"
     t.boolean  "is_active",                                         default: true
+    t.boolean  "is_invoice_active",                                 default: true
   end
 
   create_table "suppliers", force: :cascade do |t|

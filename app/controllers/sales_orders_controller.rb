@@ -6,7 +6,7 @@ class SalesOrdersController < ApplicationController
 	# GET /sales_orders
  	# GET /sales_orders.json
   	def index
-    	@sales_orders = SalesOrder.search(params,current_user.id,false).get_json_sales_orders
+    	@sales_orders = SalesOrder.search(params,current_user.id,false).with_active.get_json_sales_orders
     	respond_with(@sales_orders) do |format|
       		format.json { render :json => @sales_orders.as_json }
       		format.html
@@ -40,7 +40,7 @@ class SalesOrdersController < ApplicationController
     # DELETE /sales_orders/1
   	# DELETE /sales_orders/1.json
   	def destroy
-    	@sales_order.destroy
+      @sales_order.update_attribute(:is_active, false)
     	render json: {status: :ok}
   	end
 
@@ -48,7 +48,7 @@ class SalesOrdersController < ApplicationController
       	ids = JSON.parse(params[:ids])
       	ids.each do |id|
         	@sales_order = SalesOrder.find(id.to_i)
-        	@sales_order.destroy
+          @sales_order.update_attribute(:is_active, false)
       	end
       	render json: {status: :ok}
   	end

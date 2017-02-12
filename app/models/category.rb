@@ -6,6 +6,8 @@ class Category < ActiveRecord::Base
     
     track_who_does_it
 
+    scope :with_active, -> { where('is_active = ?', true) }
+
     #constants
     UNIT = %w(Each Feet Kgs)
     TAX = %w(5 10 12 15 17)

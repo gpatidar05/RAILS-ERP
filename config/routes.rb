@@ -79,4 +79,29 @@ Rails.application.routes.draw do
         get 'get_accounts'
       end
     end
+    resources :employees, except: [] do
+      collection do
+        get 'edit_form'
+        get 'delete_all'
+        get 'get_employees'
+      end
+    end
+    resources :payrolls, except: [] do
+      collection do
+        get 'delete_all'
+      end
+    end
+    resources :expenses, except: [] do
+      collection do
+        get 'delete_all'
+      end
+    end
+    resources :timeclocks, except: [] do
+      collection do
+        get 'delete_all'
+      end
+    end
+    resources :report_payrolls, only: [:index]
+    resources :report_expenses, only: [:index]
 end
+ 

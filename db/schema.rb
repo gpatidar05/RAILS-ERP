@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170212192231) do
+ActiveRecord::Schema.define(version: 20170212204818) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -118,6 +118,56 @@ ActiveRecord::Schema.define(version: 20170212192231) do
     t.datetime "updated_at",                           null: false
   end
 
+  create_table "employees", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "salutation"
+    t.datetime "date_of_birth"
+    t.string   "gender"
+    t.string   "b_group"
+    t.string   "nationality"
+    t.string   "designation"
+    t.string   "department"
+    t.string   "e_type"
+    t.string   "work_shift"
+    t.string   "reporting_person"
+    t.datetime "date_of_joining"
+    t.boolean  "allow_login"
+    t.string   "religion"
+    t.string   "marital_status"
+    t.string   "mobile"
+    t.string   "phone_office"
+    t.string   "phone_home"
+    t.string   "permanent_address_street"
+    t.string   "permanent_address_city"
+    t.string   "permanent_address_state"
+    t.integer  "permanent_address_postalcode"
+    t.string   "permanent_address_country"
+    t.string   "resident_address_street"
+    t.string   "resident_address_city"
+    t.string   "resident_address_state"
+    t.integer  "resident_address_postalcode"
+    t.string   "resident_address_country"
+    t.integer  "sales_user_id"
+    t.boolean  "is_active",                    default: true
+    t.integer  "created_by_id"
+    t.integer  "updated_by_id"
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
+  end
+
+  create_table "expenses", force: :cascade do |t|
+    t.string   "subject"
+    t.integer  "employee_id"
+    t.decimal  "amount"
+    t.string   "status"
+    t.integer  "sales_user_id"
+    t.boolean  "is_active",     default: true
+    t.integer  "created_by_id"
+    t.integer  "updated_by_id"
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+  end
+
   create_table "item_images", force: :cascade do |t|
     t.integer  "item_id"
     t.string   "image"
@@ -190,6 +240,23 @@ ActiveRecord::Schema.define(version: 20170212192231) do
     t.decimal  "real_price",         precision: 16, scale: 2
     t.datetime "created_at",                                  null: false
     t.datetime "updated_at",                                  null: false
+  end
+
+  create_table "payrolls", force: :cascade do |t|
+    t.string   "subject"
+    t.integer  "employee_id"
+    t.decimal  "base_pay"
+    t.decimal  "allowances"
+    t.decimal  "deductions"
+    t.decimal  "expenses"
+    t.decimal  "tax"
+    t.decimal  "total"
+    t.integer  "sales_user_id"
+    t.boolean  "is_active",     default: true
+    t.integer  "created_by_id"
+    t.integer  "updated_by_id"
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
   end
 
   create_table "purchase_order_items", force: :cascade do |t|
@@ -281,6 +348,19 @@ ActiveRecord::Schema.define(version: 20170212192231) do
     t.integer  "sales_user_id"
     t.datetime "supplier_since"
     t.boolean  "is_active",         default: true
+  end
+
+  create_table "timeclocks", force: :cascade do |t|
+    t.string   "subject"
+    t.integer  "employee_id"
+    t.time     "in_time"
+    t.time     "out_time"
+    t.integer  "sales_user_id"
+    t.boolean  "is_active",     default: true
+    t.integer  "created_by_id"
+    t.integer  "updated_by_id"
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
   end
 
   create_table "users", force: :cascade do |t|

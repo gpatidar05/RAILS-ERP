@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
     has_one :customer, dependent: :destroy
     has_one :contact, dependent: :destroy
     has_one :supplier, dependent: :destroy
+    has_one :employee, dependent: :destroy
 
     #Has Many Relationship
     has_many :accounts
@@ -16,6 +17,7 @@ class User < ActiveRecord::Base
     accepts_nested_attributes_for :customer
     accepts_nested_attributes_for :contact
     accepts_nested_attributes_for :supplier
+    accepts_nested_attributes_for :employee
 
     after_create :create_default_accounts
 
@@ -24,7 +26,7 @@ class User < ActiveRecord::Base
     # validates :last_name, presence: true, unless: ->(user){user.Customer?}
 
     #constants
-    ROLES = %w(Admin Sales Customer Contact Supplier)
+    ROLES = %w(Admin Sales Customer Contact Supplier Employee)
 
     #Included Module for the Create by and updated by user
     include SentientUser
@@ -52,13 +54,21 @@ class User < ActiveRecord::Base
     def Supplier?
         self.role == 'Supplier'
     end
-  
+
+    def Employee?
+        self.role == 'Employee'
+    end
+
     def self.sales_customers(current_user)
         joins(:customer).where("role IN (?)",["Customer"]).where("customers.sales_user_id = ?",current_user.id)
     end
 
     def self.sales_contacts(current_user)
         joins(:contact).where("role IN (?)",["Contact"]).where("contacts.sales_user_id = ?",current_user.id)
+    end
+
+    def self.sales_employees(current_user)
+        joins(:employee).where("role IN (?)",["Employee"]).where("employees.sales_user_id = ?",current_user.id)
     end
 
     def self.sales_staff_users(current_user)
@@ -112,6 +122,17 @@ class User < ActiveRecord::Base
         end
         return list
     end 
+
+    def self.get_json_employees_dropdown(employees)
+        list = []
+        employees.each do |user|
+            list << as_json(only: [])
+            .merge({name:user.first_name,
+                employee_id:user.employee.id,
+            })
+        end
+        return list
+    end
 
     private
 

@@ -97,6 +97,22 @@ class SalesOrder < ActiveRecord::Base
 	    }
     end
 
+
+    def self.sales_sales_orders(current_user)
+        where("sales_orders.sales_user_id = ?",current_user.id)
+    end
+
+    def self.get_json_sales_orders_dropdown(sales_orders)
+        list = []
+        sales_orders.each do |sales_order|
+            list << as_json(only: [])
+            .merge({name:"SO-#{sales_order.id.to_s.rjust(4, '0')}",
+                sales_order_id:sales_order.id,
+            })
+        end
+        return list
+    end
+
     private
 		def self.process_external_order(account, order)
 		    if order_entry = account.sales_orders.find_by(:uid => order[:id])

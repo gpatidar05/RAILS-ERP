@@ -1,5 +1,5 @@
 class SalesOrdersController < ApplicationController
-  	before_action :set_sales_order, except: [:refresh ,:delete_all, :index]
+  	before_action :set_sales_order, except: [:get_sales_orders, :refresh ,:delete_all, :index]
   	respond_to :html, :json
   	skip_before_filter :verify_authenticity_token
 
@@ -55,6 +55,14 @@ class SalesOrdersController < ApplicationController
 
     def refresh
       current_user.refresh_orders
+    end
+
+    def get_sales_orders
+      @SalesOrders = SalesOrder.sales_sales_orders(current_user)
+      respond_with(@SalesOrders) do |format|
+        format.json { render :json => SalesOrder.get_json_sales_orders_dropdown(@SalesOrders) }
+        format.html
+      end  
     end
 
   	private

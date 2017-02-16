@@ -40,6 +40,7 @@ Rails.application.routes.draw do
         get 'edit_form'
         get 'delete_all'
         get 'refresh'
+        get 'get_sales_orders'
       end
     end
     resources :sales_order_invoices, except: [] do

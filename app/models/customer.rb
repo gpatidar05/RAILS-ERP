@@ -16,21 +16,26 @@ class Customer < ActiveRecord::Base
     TYPE = %w(Contractor Sales_Customer)
 
 	def self.search(params,current_user_id)
-      c_type = JSON.parse(params[:c_type]) if params[:c_type].present?
-	  search = where("customers.sales_user_id = ?",current_user_id)
-	  search = search.where("customers.id = ?",params[:code].gsub(/\D/,'')) if params[:code].present?
-	  if params[:name].present?
-	    name = params[:name].downcase
-	    search = search.joins(:user)
-	      .where("(((lower(users.first_name) || ' ' || lower(users.last_name)) LIKE ?) "\
-	             'OR (lower(users.first_name) LIKE ?) OR (lower(users.last_name) LIKE ?))',\
-	             "%#{name}%", "%#{name}%", "%#{name}%")
-	  end
-	  search = search.where('customers.phone = ?',params[:phone]) if params[:phone].present?
-	  search = search.where('customers.country = ?',params[:country]) if params[:country].present?
-	  search = search.where('customers.c_type IN (?)',c_type) if c_type.present?
-	  search = search.where('customers.created_by_id = ?',params[:created_by_id]) if params[:created_by_id].present?
-	  search = search.where('DATE(customers.created_at) = ?', params[:created_at].to_date) if params[:created_at].present?
+       search = where("customers.sales_user_id = ?",current_user_id)
+       if  params[:search].present?
+           search = search.where('customers.phone = ? OR customers.country = ? OR customers.c_type =?' ,
+            params[:search],params[:search],params[:search])
+       else
+          c_type = JSON.parse(params[:c_type]) if params[:c_type].present?
+          search = search.where("customers.id = ?",params[:code].gsub(/\D/,'')) if params[:code].present?
+          if params[:name].present?
+            name = params[:name].downcase
+            search = search.joins(:user)
+              .where("(((lower(users.first_name) || ' ' || lower(users.last_name)) LIKE ?) "\
+                     'OR (lower(users.first_name) LIKE ?) OR (lower(users.last_name) LIKE ?))',\
+                     "%#{name}%", "%#{name}%", "%#{name}%")
+          end
+          search = search.where('customers.phone = ?',params[:phone]) if params[:phone].present?
+          search = search.where('customers.country = ?',params[:country]) if params[:country].present?
+          search = search.where('customers.c_type IN (?)',c_type) if c_type.present?
+          search = search.where('customers.created_by_id = ?',params[:created_by_id]) if params[:created_by_id].present?
+          search = search.where('DATE(customers.created_at) = ?', params[:created_at].to_date) if params[:created_at].present?
+      end
 	  return search
 	end
 

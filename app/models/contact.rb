@@ -17,22 +17,30 @@ class Contact < ActiveRecord::Base
 
 	def self.search(params,current_user_id)
 	  search = where("contacts.sales_user_id = ?",current_user_id)
-	  if params[:code].present? 
-	  	 code = params[:code].split("-CON")
-	  	 if code.last.present?
-	  	 	code = code.last.gsub(/\D/,'')
-	  	 	search = search.where('contacts.id = ?', code)
-	  	 end
+      if  params[:search].present?
+            search = search.joins(:user).where('contacts.phone_mobile LIKE :search 
+                OR contacts.primary_country LIKE :search
+                OR users.first_name LIKE :search
+                OR users.middle_name LIKE :search
+                OR users.last_name LIKE :search', search: "%#{search}%")
+      else
+    	  if params[:code].present? 
+    	  	 code = params[:code].split("-CON")
+    	  	 if code.last.present?
+    	  	 	code = code.last.gsub(/\D/,'')
+    	  	 	search = search.where('contacts.id = ?', code)
+    	  	 end
+    	  end
+    	  search = search.joins(:user).where("lower(users.first_name) LIKE ?" ,"%#{params[:first_name].downcase}%") if params[:first_name].present?
+    	  search = search.joins(:user).where("lower(users.middle_name) LIKE ?" ,"%#{params[:middle_name].downcase}%") if params[:middle_name].present?
+    	  search = search.joins(:user).where("lower(users.last_name) LIKE ?" ,"%#{params[:last_name].downcase}%") if params[:last_name].present?
+    	  search = search.where('contacts.phone_mobile = ?', params[:mobile]) if params[:mobile].present?
+    	  search = search.where('(contacts.primary_country = ?) OR( contacts.alternative_country = ?)', params[:primary_country],params[:primary_country]) if params[:primary_country].present?
+    	  search = search.where('contacts.designation = ?', params[:designation]) if params[:designation].present?
+    	  search = search.where('contacts.customer_id = ?', params[:customer_id]) if params[:customer_id].present?
+    	  search = search.where('DATE(contacts.created_at) = ?', params[:created_at].to_date) if params[:created_at].present?
 	  end
-	  search = search.joins(:user).where("lower(users.first_name) LIKE ?" ,"%#{params[:first_name].downcase}%") if params[:first_name].present?
-	  search = search.joins(:user).where("lower(users.middle_name) LIKE ?" ,"%#{params[:middle_name].downcase}%") if params[:middle_name].present?
-	  search = search.joins(:user).where("lower(users.last_name) LIKE ?" ,"%#{params[:last_name].downcase}%") if params[:last_name].present?
-	  search = search.where('contacts.phone_mobile = ?', params[:mobile]) if params[:mobile].present?
-	  search = search.where('(contacts.primary_country = ?) OR( contacts.alternative_country = ?)', params[:primary_country],params[:primary_country]) if params[:primary_country].present?
-	  search = search.where('contacts.designation = ?', params[:designation]) if params[:designation].present?
-	  search = search.where('contacts.customer_id = ?', params[:customer_id]) if params[:customer_id].present?
-	  search = search.where('DATE(contacts.created_at) = ?', params[:created_at].to_date) if params[:created_at].present?
-	  return search
+      return search
 	end
 
 	def self.sales_contacts(current_user)

@@ -14,14 +14,21 @@ class Category < ActiveRecord::Base
 
     def self.search(params,current_user_id)
       search = where("categories.sales_user_id = ?",current_user_id)
-      search = search.where("categories.id = ?",params[:code].gsub(/\D/,'')) if params[:code].present?
-      search = search.where('categories.name = ?',params[:name]) if params[:name].present?
-      search = search.where('categories.unit = ?',params[:unit]) if params[:unit].present?
-      search = search.where('categories.tax = ?',params[:tax]) if params[:tax].present?
-      search = search.where('categories.manufacturer = ?',params[:manufacturer]) if params[:manufacturer].present?
-      search = search.where('categories.description = ?',params[:description]) if params[:description].present?
-      search = search.where('DATE(categories.created_at) = ?', params[:created_at].to_date) if params[:created_at].present?
-      search = search.where('categories.created_by_id = ?',params[:created_by_id]) if params[:created_by_id].present?
+      if  params[:search].present?
+        search = search.where('categories.name = ? OR categories.unit = ?
+          OR categories.tax = ? OR categories.manufacturer = ? OR
+          categories.description = ?',
+          params[:search],params[:search],params[:search],params[:search],params[:search])
+      else
+        search = search.where("categories.id = ?",params[:code].gsub(/\D/,'')) if params[:code].present?
+        search = search.where('categories.name = ?',params[:name]) if params[:name].present?
+        search = search.where('categories.unit = ?',params[:unit]) if params[:unit].present?
+        search = search.where('categories.tax = ?',params[:tax]) if params[:tax].present?
+        search = search.where('categories.manufacturer = ?',params[:manufacturer]) if params[:manufacturer].present?
+        search = search.where('categories.description = ?',params[:description]) if params[:description].present?
+        search = search.where('DATE(categories.created_at) = ?', params[:created_at].to_date) if params[:created_at].present?
+        search = search.where('categories.created_by_id = ?',params[:created_by_id]) if params[:created_by_id].present?
+      end
       return search
     end
 

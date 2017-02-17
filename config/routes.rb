@@ -47,6 +47,8 @@ Rails.application.routes.draw do
       collection do
         get 'delete_all'
         get 'refresh'
+        get 'edit_form'
+        post 'create_invoice'
       end
     end
     resources :categories, except: [] do

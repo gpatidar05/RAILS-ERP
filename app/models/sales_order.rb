@@ -78,13 +78,29 @@ class SalesOrder < ActiveRecord::Base
         	shipping_tracking_code: self.order_shipping_detail.tracking_code,
         	shipping_notes: self.order_shipping_detail.notes,
         	shipped_at: shipped_at,
-        	items: SalesOrderItem.get_json_sales_order_items(false,self.sales_order_items)
+        	items: SalesOrderItem.get_json_sales_order_items(false,self.sales_order_items),
+        	invoices: Invoice.where(sales_order_id:self.id).get_json_invoices
         })
     end
 
     def get_json_sales_order_edit
 		as_json(only: [:id, :customer_user_id, :contact_user_id])
         .merge({code:"SO-#{self.id.to_s.rjust(4, '0')}"})
+    end
+
+    def create_invoice
+    	invoice_attributes = self.attributes
+    	buyer_attributes = self.buyer.attributes
+    	order_shipping_detail_attributes = self.order_shipping_detail.attributes
+    	buyer_attributes['id'] = nil
+    	order_shipping_detail_attributes['id'] = nil
+    	invoice_attributes['id'] = nil
+    	buyer = Buyer.create(buyer_attributes)
+    	order_shipping_detail = OrderShippingDetail.create(order_shipping_detail_attributes)
+    	invoice_attributes['buyer_id'] = buyer.id
+    	invoice_attributes['order_shipping_detail_id'] = order_shipping_detail.id
+    	invoice = Invoice.create(invoice_attributes)
+    	return invoice
     end
 
 

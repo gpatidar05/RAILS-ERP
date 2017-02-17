@@ -30,11 +30,16 @@ class Invoice < ActiveRecord::Base
 
     def get_json_invoices
         create_timestamp = self.create_timestamp.present? ? self.create_timestamp.strftime('%d %B, %Y') : self.create_timestamp
-        as_json(only: [:id,:uid,:name,:grand_total,:status])
+        as_json(only: [:id,:uid,:name,:grand_total,:status,:subtotal,
+            :tax])
         .merge({code:"INV-#{self.id.to_s.rjust(4, '0')}",
             customer: self.customer.try(:user).try(:full_name),
             created_at:self.created_at.strftime('%d %B, %Y'),
             create_timestamp: create_timestamp,
+            order_code:"SO-#{self.sales_order_id.to_s.rjust(4, '0')}",
+            created_by:self.creator.try(:full_name),
+            updated_at:self.updated_at.strftime('%d %B, %Y'),
+            updated_by:self.updater.try(:full_name),
         })
     end 
 
@@ -89,7 +94,39 @@ class Invoice < ActiveRecord::Base
     end
 
     def get_json_invoice_edit
-        as_json(only: [:id, :customer_user_id, :contact_user_id])
-        .merge({code:"INV-#{self.id.to_s.rjust(4, '0')}"})
+        as_json(only: [:id,:customer_user_id,:contact_user_id,:sales_order_id,:name,:subtotal,
+            :tax,:grand_total,:account_id,:uid,:buyer_id,:order_shipping_detail_id,
+            :payment_status,:paid_at,:refunded_at,:shipped,:shipped_at,:cancelled,
+            :cancelled_at,:cancel_reason,:notes,:payment_method,:create_timestamp,
+            :update_timestamp,:discount,:marketplace_fee,:processing_fee,:status,
+            :profit_share_deductions, :net, :acquisition_cost])
+        .merge({code:"INV-#{self.id.to_s.rjust(4, '0')}",
+            order_shipping_detail_attributes:{
+                id:self.order_shipping_detail.try(:id),
+                price:self.order_shipping_detail.try(:price),
+                name:self.order_shipping_detail.try(:name),
+                phone:self.order_shipping_detail.try(:phone),
+                city:self.order_shipping_detail.try(:city),
+                state:self.order_shipping_detail.try(:state),
+                country:self.order_shipping_detail.try(:country),
+                postal_code:self.order_shipping_detail.try(:postal_code),
+                address_line_1:self.order_shipping_detail.try(:address_line_1),
+                address_line_2:self.order_shipping_detail.try(:address_line_2),
+                carrier:self.order_shipping_detail.try(:carrier),
+                tracking_code:self.order_shipping_detail.try(:tracking_code),
+                tracking_url:self.order_shipping_detail.try(:tracking_url),
+                notes:self.order_shipping_detail.try(:notes),
+                available_carriers:self.order_shipping_detail.try(:available_carriers),
+                buyer_id:self.order_shipping_detail.try(:buyer_id),
+                real_price:self.order_shipping_detail.try(:real_price),
+            },
+            buyer_attributes:{
+                id:self.buyer.try(:id),
+                email:self.buyer.try(:email),
+                uid:self.buyer.try(:uid),
+                name:self.buyer.try(:name),
+                phone_number:self.buyer.try(:phone_number),
+            },
+        })
     end
 end

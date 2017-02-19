@@ -1,12 +1,16 @@
 class EmployeesController < ApplicationController
-  before_action :set_employee, except: [:get_employees, :delete_all, :index, :create, :update]
+  before_action :set_employee, except: [:upload_photo, :get_employees, :delete_all, :index, :create, :update]
   respond_to :html, :json
   skip_before_filter :verify_authenticity_token
 
   # GET /employees
   # GET /employees.json
   def index
-    @employees = Employee.search(params,current_user.id).with_active.get_json_employees
+    if params[:search_text].present?
+      @employees = Employee.search_box(params[:search_text],current_user.id).with_active.get_json_employees
+    else
+      @employees = Employee.search(params,current_user.id).with_active.get_json_employees
+    end
     respond_with(@employees) do |format|
       format.json { render :json => @employees.as_json }
       format.html
@@ -77,6 +81,13 @@ class EmployeesController < ApplicationController
     end  
   end
 
+  def upload_photo
+    uploader = AvatarUploader.new
+    File.read(params[:file].tempfile.path) do |file|
+      something = uploader.store!(file)
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_employee
@@ -85,8 +96,10 @@ class EmployeesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def employee_params
+      params = ActionController::Parameters.new(JSON.parse(request.POST[:employee]))
       params[:employee][:role] = 'Employee'
       params[:employee][:password] = '12345678'
+      params[:employee][:employee_attributes][:photo] = request.POST['file']
       params.require(:employee).permit(:id,:email,:role,:password,:password_confirmation,:first_name,:last_name,:middle_name,
         employee_attributes:[:id, :salutation, :date_of_birth, :gender, :b_group, :nationality, :designation,
  			:department, :e_type, :work_shift, :reporting_person, :date_of_joining,
@@ -94,9 +107,11 @@ class EmployeesController < ApplicationController
    			:permanent_address_street, :permanent_address_city, :permanent_address_state,
     		:permanent_address_postalcode, :permanent_address_country,
      		:resident_address_street, :resident_address_city, :resident_address_state,
-      		:resident_address_postalcode, :resident_address_country])
+      		:resident_address_postalcode, :resident_address_country,:photo])
     end
     def update_employee_params
+      params = ActionController::Parameters.new(JSON.parse(request.POST[:employee]))
+      params[:employee_attributes][:photo] = request.POST['file']
       params.permit(:id,:email,:first_name,:last_name,:middle_name,:password_confirmation,
         employee_attributes:[:id, :salutation, :date_of_birth, :gender, :b_group, :nationality, :designation,
  			:department, :e_type, :work_shift, :reporting_person, :date_of_joining,
@@ -104,6 +119,6 @@ class EmployeesController < ApplicationController
    			:permanent_address_street, :permanent_address_city, :permanent_address_state,
     		:permanent_address_postalcode, :permanent_address_country,
      		:resident_address_street, :resident_address_city, :resident_address_state,
-      		:resident_address_postalcode, :resident_address_country])
+      		:resident_address_postalcode, :resident_address_country,:photo])
     end
 end

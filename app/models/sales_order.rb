@@ -13,6 +13,22 @@ class SalesOrder < ActiveRecord::Base
     scope :with_active, -> { where('is_active = ?', true) }
     scope :with_invoice_active, -> { where('is_invoice_active = ?', true) }
 
+    def self.search_box(search_text,current_user_id)
+	  search = where("sales_orders.sales_user_id = ?",current_user_id)
+      if !/\A\d+\z/.match(search_text)
+        code = search_text.gsub(/\D/,'')
+        if code.present?
+            search = search.where(id: code.to_i)
+        else
+            search = search.where("payment_status LIKE :search OR name LIKE :search
+            	OR status LIKE :search", search: "%#{search_text}%")
+        end
+      else
+        search = search.where("uid :search OR grand_total :search", search: "%#{search_text}%")
+      end
+      return search
+    end
+
 	def self.search(params,current_user_id,is_paid)
 	  	search = where("sales_orders.sales_user_id = ?",current_user_id)
 		search = where("sales_orders.payment_status = ?","paid") if is_paid
@@ -79,7 +95,7 @@ class SalesOrder < ActiveRecord::Base
         	shipping_notes: self.order_shipping_detail.notes,
         	shipped_at: shipped_at,
         	items: SalesOrderItem.get_json_sales_order_items(false,self.sales_order_items),
-        	invoices: Invoice.where(sales_order_id:self.id).get_json_invoices
+        	invoices: Invoice.where(sales_order_id:self.id).with_active.get_json_invoices
         })
     end
 
@@ -115,7 +131,7 @@ class SalesOrder < ActiveRecord::Base
 
 
     def self.sales_sales_orders(current_user)
-        where("sales_orders.sales_user_id = ?",current_user.id)
+        where("sales_orders.sales_user_id = ? AND sales_orders.is_active = ?",current_user.id,true)
     end
 
     def self.get_json_sales_orders_dropdown(sales_orders)

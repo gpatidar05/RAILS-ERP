@@ -6,7 +6,11 @@ class ContactsController < ApplicationController
   # GET /contacts
   # GET /contacts.json
   def index
-    @contacts = Contact.search(params,current_user.id).with_active.get_json_contacts
+    if params[:search_text].present?
+      @contacts = Contact.search_box(params[:search_text],current_user.id).with_active.get_json_contacts
+    else
+      @contacts = Contact.search(params,current_user.id).with_active.get_json_contacts
+    end
     respond_with(@contacts) do |format|
       format.json { render :json => @contacts.as_json }
       format.html

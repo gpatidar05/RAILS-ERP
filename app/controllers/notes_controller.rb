@@ -6,7 +6,11 @@ class NotesController < ApplicationController
   # GET /notes
   # GET /notes.json
   def index
-    @notes = Note.search(params,current_user.id).with_active.get_json_notes
+    if params[:search_text].present?
+      @notes = Note.search_box(params[:search_text],current_user.id).with_active.get_json_notes
+    else
+      @notes = Note.search(params,current_user.id).with_active.get_json_notes
+    end
     respond_with(@notes) do |format|
       format.json { render :json => @notes.as_json }
       format.html

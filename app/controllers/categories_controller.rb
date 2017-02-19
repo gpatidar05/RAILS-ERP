@@ -6,7 +6,11 @@ class CategoriesController < ApplicationController
   # GET /Categories
   # GET /Categories.json
   def index
-    @categories = Category.search(params,current_user.id).with_active.get_json_categories
+    if params[:search_text].present?
+      @categories = Category.search_box(params[:search_text],current_user.id).with_active.get_json_categories
+    else
+      @categories = Category.search(params,current_user.id).with_active.get_json_categories
+    end
     respond_with(@categories) do |format|
       format.json { render :json => @categories.as_json }
       format.html

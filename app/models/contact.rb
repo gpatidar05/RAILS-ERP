@@ -15,36 +15,45 @@ class Contact < ActiveRecord::Base
     #constants
     SALUTATION = %w(Mr. Ms. Mrs. Prof. Dr.)
 
+    def self.search_box(search_text,current_user_id)
+      search = where("contacts.sales_user_id = ?",current_user_id)
+      if !/\A\d+\z/.match(search_text)
+        code = search_text.gsub(/\D/,'')
+        if code.present?
+            search = search.where(id: code.to_i)
+        else
+            search = search.where("phone_mobile LIKE :search OR primary_country LIKE :search
+                OR designation LIKE :search ", search: "%#{search_text}%")
+        end
+      else
+        search = search.where("id :search", search: "%#{search_text}%")
+      end
+      return search
+    end
+
 	def self.search(params,current_user_id)
 	  search = where("contacts.sales_user_id = ?",current_user_id)
-      if  params[:search].present?
-            search = search.joins(:user).where('contacts.phone_mobile LIKE :search 
-                OR contacts.primary_country LIKE :search
-                OR users.first_name LIKE :search
-                OR users.middle_name LIKE :search
-                OR users.last_name LIKE :search', search: "%#{search}%")
-      else
-    	  if params[:code].present? 
-    	  	 code = params[:code].split("-CON")
-    	  	 if code.last.present?
-    	  	 	code = code.last.gsub(/\D/,'')
-    	  	 	search = search.where('contacts.id = ?', code)
-    	  	 end
-    	  end
-    	  search = search.joins(:user).where("lower(users.first_name) LIKE ?" ,"%#{params[:first_name].downcase}%") if params[:first_name].present?
-    	  search = search.joins(:user).where("lower(users.middle_name) LIKE ?" ,"%#{params[:middle_name].downcase}%") if params[:middle_name].present?
-    	  search = search.joins(:user).where("lower(users.last_name) LIKE ?" ,"%#{params[:last_name].downcase}%") if params[:last_name].present?
-    	  search = search.where('contacts.phone_mobile = ?', params[:mobile]) if params[:mobile].present?
-    	  search = search.where('(contacts.primary_country = ?) OR( contacts.alternative_country = ?)', params[:primary_country],params[:primary_country]) if params[:primary_country].present?
-    	  search = search.where('contacts.designation = ?', params[:designation]) if params[:designation].present?
-    	  search = search.where('contacts.customer_id = ?', params[:customer_id]) if params[:customer_id].present?
-    	  search = search.where('DATE(contacts.created_at) = ?', params[:created_at].to_date) if params[:created_at].present?
-	  end
+	    if params[:code].present? 
+	  	    code = params[:code].split("-CON")
+	  	    if code.last.present?
+	  	 	  code = code.last.gsub(/\D/,'')
+	  	 	  search = search.where('contacts.id = ?', code)
+	  	    end
+	    end
+    	search = search.joins(:user).where("lower(users.first_name) LIKE ?" ,"%#{params[:first_name].downcase}%") if params[:first_name].present?
+    	search = search.joins(:user).where("lower(users.middle_name) LIKE ?" ,"%#{params[:middle_name].downcase}%") if params[:middle_name].present?
+    	search = search.joins(:user).where("lower(users.last_name) LIKE ?" ,"%#{params[:last_name].downcase}%") if params[:last_name].present?
+    	search = search.where('contacts.phone_mobile = ?', params[:mobile]) if params[:mobile].present?
+    	search = search.where('(contacts.primary_country = ?) OR( contacts.alternative_country = ?)', params[:primary_country],params[:primary_country]) if params[:primary_country].present?
+    	search = search.where('contacts.designation = ?', params[:designation]) if params[:designation].present?
+    	search = search.where('contacts.customer_id = ?', params[:customer_id]) if params[:customer_id].present?
+    	search = search.where('DATE(contacts.created_at) = ?', params[:created_at].to_date) if params[:created_at].present?
+
       return search
 	end
 
 	def self.sales_contacts(current_user)
-		where("contacts.sales_user_id = ?",current_user.id)
+		where("contacts.sales_user_id = ? AND contacts.is_active = ?",current_user.id,true)
 	end
 
     def get_json_contact_show
@@ -63,7 +72,7 @@ class Contact < ActiveRecord::Base
         	created_by:self.creator.try(:full_name),
         	updated_at:self.updated_at.strftime('%d %B, %Y'),
         	updated_by:self.updater.try(:full_name),
-        	notes:Note.get_json_notes(false,self.notes),
+        	notes:Note.with_active.get_json_notes(false,self.notes),
         	})
     end  
 

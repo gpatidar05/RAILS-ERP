@@ -6,7 +6,11 @@ class ItemsController < ApplicationController
   # GET /items
   # GET /items.json
   def index
-    @items = Item.search(params,current_user.id).with_active.get_json_items
+    if params[:search_text].present?
+      @items = Item.search_box(params[:search_text],current_user.id).with_active.get_json_items
+    else
+      @items = Item.search(params,current_user.id).with_active.get_json_items
+    end
     respond_with(@items) do |format|
       format.json { render :json => @items.as_json }
       format.html

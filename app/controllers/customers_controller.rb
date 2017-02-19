@@ -6,7 +6,11 @@ class CustomersController < ApplicationController
   # GET /customers
   # GET /customers.json
   def index
-    @customers = Customer.search(params,current_user.id).with_active.get_json_customers
+    if params[:search_text].present?
+      @customers = Customer.search_box(params[:search_text],current_user.id).with_active.get_json_customers
+    else
+      @customers = Customer.search(params,current_user.id).with_active.get_json_customers
+    end
     respond_with(@customers) do |format|
       format.json { render :json => @customers.as_json }
       format.html

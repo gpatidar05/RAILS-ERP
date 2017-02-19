@@ -87,6 +87,7 @@ Rails.application.routes.draw do
         get 'edit_form'
         get 'delete_all'
         get 'get_employees'
+        post 'upload_photo'
       end
     end
     resources :payrolls, except: [] do

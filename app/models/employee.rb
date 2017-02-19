@@ -1,5 +1,6 @@
 class Employee < ActiveRecord::Base
- 
+    mount_uploader :photo, AvatarUploader
+
     belongs_to :user
     
     has_many :timeclocks, dependent: :destroy
@@ -9,6 +10,22 @@ class Employee < ActiveRecord::Base
     track_who_does_it
 
     scope :with_active, -> { where('is_active = ?', true) }
+
+    def self.search_box(search_text,current_user_id)
+      search = where("employees.sales_user_id = ?",current_user_id)
+      if !/\A\d+\z/.match(search_text)
+        code = search_text.gsub(/\D/,'')
+        if code.present?
+            search = search.where(id: code.to_i)
+        else
+            search = search.where("marital_status LIKE :search OR designation LIKE :search
+                OR department LIKE :search ", search: "%#{search_text}%")
+        end
+      else
+        search = search.where(id :search_text.to_i)
+      end
+      return search
+    end
 
     def self.search(params,current_user_id)
       search = where("employees.sales_user_id = ?",current_user_id)
@@ -29,6 +46,7 @@ class Employee < ActiveRecord::Base
     end
 
     def get_json_employee
+        has_photo = self.photo.url.present? ? true : false
         date_of_birth = self.date_of_birth.present? ? self.date_of_birth.strftime('%d %B, %Y') : self.date_of_birth
         date_of_joining = self.date_of_joining.present? ? self.date_of_joining.strftime('%d %B, %Y') : self.date_of_joining
         as_json(only: [:id, :salutation,:gender, :b_group, :nationality, :designation,
@@ -50,6 +68,11 @@ class Employee < ActiveRecord::Base
         	created_by:self.creator.try(:full_name),
         	updated_at:self.updated_at.strftime('%d %B, %Y'),
         	updated_by:self.updater.try(:full_name),
+            photo:"https://ror-erp.herokuapp.com#{self.photo.url}",
+            timeclocks: self.timeclocks.with_active.get_json_timeclocks,
+            expenses: self.expenses.with_active.get_json_expenses,
+            payrolls: self.payrolls.with_active.get_json_payrolls,
+            has_photo:has_photo,
         })
     end 
 

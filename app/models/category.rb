@@ -12,14 +12,25 @@ class Category < ActiveRecord::Base
     UNIT = %w(Each Feet Kgs)
     TAX = %w(5 10 12 15 17)
 
-    def self.search(params,current_user_id)
+    def self.search_box(search_text,current_user_id)
       search = where("categories.sales_user_id = ?",current_user_id)
-      if  params[:search].present?
-        search = search.where('categories.name = ? OR categories.unit = ?
-          OR categories.tax = ? OR categories.manufacturer = ? OR
-          categories.description = ?',
-          params[:search],params[:search],params[:search],params[:search],params[:search])
+      if !/\A\d+\z/.match(search_text)
+        code = search_text.gsub(/\D/,'')
+        if code.present?
+            search = search.where(id: code.to_i)
+        else
+            search = search.where("name LIKE :search OR manufacturer LIKE :search
+                OR description LIKE :search ", search: "%#{search_text}%")
+        end
       else
+        search = search.where("id :search OR unit :search
+                OR tax :search ", search: "%#{search_text}%")
+      end
+      return search
+    end
+
+    def self.search(params,current_user_id)
+        search = where("categories.sales_user_id = ?",current_user_id)
         search = search.where("categories.id = ?",params[:code].gsub(/\D/,'')) if params[:code].present?
         search = search.where('categories.name = ?',params[:name]) if params[:name].present?
         search = search.where('categories.unit = ?',params[:unit]) if params[:unit].present?
@@ -28,8 +39,7 @@ class Category < ActiveRecord::Base
         search = search.where('categories.description = ?',params[:description]) if params[:description].present?
         search = search.where('DATE(categories.created_at) = ?', params[:created_at].to_date) if params[:created_at].present?
         search = search.where('categories.created_by_id = ?',params[:created_by_id]) if params[:created_by_id].present?
-      end
-      return search
+        return search
     end
 
 
@@ -41,7 +51,7 @@ class Category < ActiveRecord::Base
         	created_by:self.creator.try(:full_name),
         	updated_at:self.updated_at.strftime('%d %B, %Y'),
         	updated_by:self.updater.try(:full_name),
-          items: self.items.get_json_items
+            items: self.items.with_active.get_json_items
         })
     end 
 
@@ -54,7 +64,7 @@ class Category < ActiveRecord::Base
     end
 
     def self.sales_categories(current_user)
-        where("categories.sales_user_id = ?",current_user.id)
+        where("categories.sales_user_id = ? AND categories.is_active = ?",current_user.id,true)
     end
 
     def self.get_json_categories_dropdown(categories)

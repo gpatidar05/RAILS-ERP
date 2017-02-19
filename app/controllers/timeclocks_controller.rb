@@ -6,7 +6,11 @@ class TimeclocksController < ApplicationController
   # GET /timeclocks
   # GET /timeclocks.json
   def index
-    @timeclocks = Timeclock.search(params,current_user.id).with_active.get_json_timeclocks
+    if params[:search_text].present?
+      @timeclocks = Timeclock.search_box(params[:search_text],current_user.id).with_active.get_json_timeclocks
+    else
+      @timeclocks = Timeclock.search(params,current_user.id).with_active.get_json_timeclocks
+    end
     respond_with(@timeclocks) do |format|
       format.json { render :json => @timeclocks.as_json }
       format.html

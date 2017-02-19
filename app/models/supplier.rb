@@ -12,6 +12,22 @@ class Supplier < ActiveRecord::Base
     #constants
     CURRENCY = %w(USD CAD AUD)
 
+    def self.search_box(search_text,current_user_id)
+      search = where("suppliers.sales_user_id = ?",current_user_id)
+      if !/\A\d+\z/.match(search_text)
+        code = search_text.gsub(/\D/,'')
+        if code.present?
+            search = search.where(id: code.to_i)
+        else
+            search = search.where("phone LIKE :search OR supplier_currency LIKE :search
+                ", search: "%#{search_text}%")
+        end
+      else
+        search = search.where("id :search", search: "%#{search_text}%")
+      end
+      return search
+    end
+
     def self.search(params,current_user_id)
       search = where("suppliers.sales_user_id = ?",current_user_id)
       search = search.where("suppliers.id = ?",params[:code].gsub(/\D/,'')) if params[:code].present?
@@ -35,7 +51,7 @@ class Supplier < ActiveRecord::Base
         	created_by:self.creator.try(:full_name),
         	updated_at:self.updated_at.strftime('%d %B, %Y'),
         	updated_by:self.updater.try(:full_name),
-            purchase_orders: self.purchase_orders.get_json_purchase_orders,
+            purchase_orders: self.purchase_orders.with_active.get_json_purchase_orders,
         })
     end 
 
@@ -68,7 +84,7 @@ class Supplier < ActiveRecord::Base
     end 
 
     def self.sales_suppliers(current_user)
-        where("suppliers.sales_user_id = ?",current_user.id)
+        where("suppliers.sales_user_id = ? AND suppliers.is_active = ?",current_user.id,true)
     end
 
     def self.get_json_suppliers_dropdown(suppliers)

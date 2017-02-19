@@ -60,15 +60,15 @@ class User < ActiveRecord::Base
     end
 
     def self.sales_customers(current_user)
-        joins(:customer).where("role IN (?)",["Customer"]).where("customers.sales_user_id = ?",current_user.id)
+        joins(:customer).where("role IN (?)",["Customer"]).where("customers.sales_user_id = ? AND customers.is_active = ?",current_user.id,true)
     end
 
     def self.sales_contacts(current_user)
-        joins(:contact).where("role IN (?)",["Contact"]).where("contacts.sales_user_id = ?",current_user.id)
+        joins(:contact).where("role IN (?)",["Contact"]).where("contacts.sales_user_id = ? AND contacts.is_active = ?",current_user.id,true)
     end
 
     def self.sales_employees(current_user)
-        joins(:employee).where("role IN (?)",["Employee"]).where("employees.sales_user_id = ?",current_user.id)
+        joins(:employee).where("role IN (?)",["Employee"]).where("employees.sales_user_id = ? AND employees.is_active = ?",current_user.id,true)
     end
 
     def self.sales_staff_users(current_user)

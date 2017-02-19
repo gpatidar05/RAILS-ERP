@@ -15,32 +15,43 @@ class Customer < ActiveRecord::Base
     #constants
     TYPE = %w(Contractor Sales_Customer)
 
-	def self.search(params,current_user_id)
+    def self.search_box(search_text,current_user_id)
        search = where("customers.sales_user_id = ?",current_user_id)
-       if  params[:search].present?
-           search = search.where('customers.phone = ? OR customers.country = ? OR customers.c_type =?' ,
-            params[:search],params[:search],params[:search])
-       else
-          c_type = JSON.parse(params[:c_type]) if params[:c_type].present?
-          search = search.where("customers.id = ?",params[:code].gsub(/\D/,'')) if params[:code].present?
-          if params[:name].present?
+      if !/\A\d+\z/.match(search_text)
+        code = search_text.gsub(/\D/,'')
+        if code.present?
+            search = search.where(id: code.to_i)
+        else
+            search = search.where("c_type LIKE :search OR phone LIKE :search
+                OR country LIKE :search ", search: "%#{search_text}%")
+        end
+      else
+        search = search.where("id :search", search: "%#{search_text}%")
+      end
+      return search
+    end
+
+	def self.search(params,current_user_id)
+        search = where("customers.sales_user_id = ?",current_user_id)
+        c_type = JSON.parse(params[:c_type]) if params[:c_type].present?
+        search = search.where("customers.id = ?",params[:code].gsub(/\D/,'')) if params[:code].present?
+        if params[:name].present?
             name = params[:name].downcase
             search = search.joins(:user)
               .where("(((lower(users.first_name) || ' ' || lower(users.last_name)) LIKE ?) "\
                      'OR (lower(users.first_name) LIKE ?) OR (lower(users.last_name) LIKE ?))',\
                      "%#{name}%", "%#{name}%", "%#{name}%")
-          end
-          search = search.where('customers.phone = ?',params[:phone]) if params[:phone].present?
-          search = search.where('customers.country = ?',params[:country]) if params[:country].present?
-          search = search.where('customers.c_type IN (?)',c_type) if c_type.present?
-          search = search.where('customers.created_by_id = ?',params[:created_by_id]) if params[:created_by_id].present?
-          search = search.where('DATE(customers.created_at) = ?', params[:created_at].to_date) if params[:created_at].present?
-      end
-	  return search
+        end
+        search = search.where('customers.phone = ?',params[:phone]) if params[:phone].present?
+        search = search.where('customers.country = ?',params[:country]) if params[:country].present?
+        search = search.where('customers.c_type IN (?)',c_type) if c_type.present?
+        search = search.where('customers.created_by_id = ?',params[:created_by_id]) if params[:created_by_id].present?
+        search = search.where('DATE(customers.created_at) = ?', params[:created_at].to_date) if params[:created_at].present?
+	    return search
 	end
 
 	def self.sales_customers(current_user)
-		where("customers.sales_user_id = ?",current_user.id)
+		where("customers.sales_user_id = ? AND customers.is_active = ?",current_user.id,true)
 	end
 
     def get_json_customer_show
@@ -56,8 +67,8 @@ class Customer < ActiveRecord::Base
         	created_by:self.creator.try(:full_name),
         	updated_at:self.updated_at.strftime('%d %B, %Y'),
         	updated_by:self.updater.try(:full_name),
-        	notes:Note.get_json_notes(false,self.notes),
-            contacts:Contact.get_json_contacts(false,self.contacts),
+        	notes:Note.with_active.get_json_notes(false,self.notes),
+            contacts:Contact.with_active.get_json_contacts(false,self.contacts),
             customer_since: customer_since,
         	})
     end  

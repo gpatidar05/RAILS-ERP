@@ -9,6 +9,21 @@ class PurchaseOrder < ActiveRecord::Base
 
     scope :with_active, -> { where('is_active = ?', true) }
 
+    def self.search_box(search_text,current_user_id)
+      search = where("purchase_orders.sales_user_id = ?",current_user_id)
+      if !/\A\d+\z/.match(search_text)
+        code = search_text.gsub(/\D/,'')
+        if code.present?
+            search = search.where(id: code.to_i)
+        else
+            search = search.where("subject LIKE :search", search: "%#{search_text}%")
+        end
+      else
+        search = search.where("total_price :search OR id :search", search: "%#{search_text}%")
+      end
+      return search
+    end
+    
     def self.search(params,current_user_id)
       search = where("purchase_orders.sales_user_id = ?",current_user_id)
       search = search.where("purchase_orders.id = ?",params[:code].gsub(/\D/,'')) if params[:code].present?
@@ -23,7 +38,7 @@ class PurchaseOrder < ActiveRecord::Base
         as_json(only: [:id,:subject,:total_price,:sub_total,:tax,:grand_total,
         	:description,:supplier_user_id])
         .merge({
-        	code:"ITEM#{self.id.to_s.rjust(4, '0')}",
+        	code:"PO#{self.id.to_s.rjust(4, '0')}",
           supplier: self.supplier.try(:user).try(:full_name),
         	created_at:self.created_at.strftime('%d %B, %Y'),
         	created_by:self.creator.try(:full_name),

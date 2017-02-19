@@ -4,12 +4,26 @@ class Item < ActiveRecord::Base
     belongs_to :supplier
 
     has_many :purchase_orders
-    has_many :purchase_order_items
     has_many :item_images, dependent: :destroy
 
     track_who_does_it
 
     scope :with_active, -> { where('is_active = ?', true) }
+
+    def self.search_box(search_text,current_user_id)
+      search = where("items.sales_user_id = ?",current_user_id)
+      if !/\A\d+\z/.match(search_text)
+        code = search_text.gsub(/\D/,'')
+        if code.present?
+            search = search.where(id: code.to_i)
+        else
+            search = search.where("name LIKE :search", search: "%#{search_text}%")
+        end
+      else
+        search = search.where("category_id :search OR supplier_id :search", search: "%#{search_text}%")
+      end
+      return search
+    end
 
     def self.search(params,current_user_id)
       search = where("items.sales_user_id = ?",current_user_id)
@@ -21,6 +35,7 @@ class Item < ActiveRecord::Base
     end
 
     def get_json_item
+        purchase_order_ids= PurchaseOrderItem.where(item_id:self.id).pluck(:purchase_order_id)
         as_json(only: [:id,:name,:unit,:selling_price,:purchase_price,:item_description,
           :purchase_description, :selling_description, :tax, :item_in_stock,
           :max_level, :min_level,:category_id,:supplier_id])
@@ -32,6 +47,7 @@ class Item < ActiveRecord::Base
         	created_by:self.creator.try(:full_name),
         	updated_at:self.updated_at.strftime('%d %B, %Y'),
         	updated_by:self.updater.try(:full_name),
+          purchase_orders: PurchaseOrder.with_active.where("id IN (?)",purchase_order_ids).get_json_purchase_orders,
         })
     end 
 

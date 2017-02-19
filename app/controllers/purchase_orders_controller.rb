@@ -6,7 +6,11 @@ class PurchaseOrdersController < ApplicationController
   # GET /purchase_orders
   # GET /purchase_orders.json
   def index
-    @purchase_orders = PurchaseOrder.search(params,current_user.id).with_active.get_json_purchase_orders
+    if params[:search_text].present?
+      @purchase_orders = PurchaseOrder.search_box(params[:search_text],current_user.id).with_active.get_json_purchase_orders
+    else
+      @purchase_orders = PurchaseOrder.search(params,current_user.id).with_active.get_json_purchase_orders
+    end
     respond_with(@purchase_orders) do |format|
       format.json { render :json => @purchase_orders.as_json }
       format.html

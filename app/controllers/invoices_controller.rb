@@ -6,10 +6,14 @@ class InvoicesController < ApplicationController
 	# GET /invoices
  	# GET /invoices.json
   	def index
-    	@invoices = Invoice.search(params,current_user.id,false).with_active.get_json_invoices
-    	respond_with(@invoices) do |format|
-      		format.json { render :json => @invoices.as_json }
-      		format.html
+      if params[:search_text].present?
+        @invoices = Invoice.search_box(params[:search_text],current_user.id).get_json_invoices.get_json_expenses
+      else
+        @invoices = Invoice.search(params,current_user.id,false).with_active.get_json_invoices
+      end
+      	respond_with(@invoices) do |format|
+        		format.json { render :json => @invoices.as_json }
+        		format.html
     	end
   	end
 

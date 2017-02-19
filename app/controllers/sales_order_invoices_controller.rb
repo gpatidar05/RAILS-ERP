@@ -4,7 +4,11 @@ class SalesOrderInvoicesController < ApplicationController
   	skip_before_filter :verify_authenticity_token
 
   	def index
-    	@invoices = Invoice.search(params,current_user.id,true).with_active.get_json_invoices
+      if params[:search_text].present?
+          @invoices = Invoice.search_box(params[:search_text],current_user.id).with_active.get_json_invoices
+      else
+          @invoices = Invoice.search(params,current_user.id,true).with_active.get_json_invoices
+      end
     	respond_with(@invoices) do |format|
       		format.json { render :json => @invoices.as_json }
       		format.html
@@ -55,7 +59,7 @@ class SalesOrderInvoicesController < ApplicationController
       	ids = JSON.parse(params[:ids])
       	ids.each do |id|
         	@invoice = Invoice.find(id.to_i)
-          @invoice.update_attribute(:is_invoice_active, false)
+          @invoice.update_attribute(:is_active, false)
       	end
       	render json: {status: :ok}
   	end

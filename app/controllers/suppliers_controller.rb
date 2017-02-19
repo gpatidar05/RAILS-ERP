@@ -6,7 +6,11 @@ class SuppliersController < ApplicationController
   # GET /suppliers
   # GET /suppliers.json
   def index
-    @suppliers = Supplier.search(params,current_user.id).with_active.get_json_suppliers
+    if params[:search_text].present?
+      @suppliers = Supplier.search_box(params[:search_text],current_user.id).with_active.get_json_suppliers
+    else
+      @suppliers = Supplier.search(params,current_user.id).with_active.get_json_suppliers
+    end
     respond_with(@suppliers) do |format|
       format.json { render :json => @suppliers.as_json }
       format.html

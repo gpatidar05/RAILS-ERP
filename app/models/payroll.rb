@@ -6,6 +6,21 @@ class Payroll < ActiveRecord::Base
     
     scope :with_active, -> { where('is_active = ?', true) }
 
+    def self.search_box(search_text,current_user_id)
+      search = where("payrolls.sales_user_id = ?",current_user_id)
+      if !/\A\d+\z/.match(search_text)
+        code = search_text.gsub(/\D/,'')
+        if code.present?
+            search = search.where(id: code.to_i)
+        else
+            search = search.where("subject LIKE :search", search: "%#{search_text}%")
+        end
+      else
+        search = search.where("employee_id :search OR id :search", search: "%#{search_text}%")
+      end
+      return search
+    end
+
     def self.search(params,current_user_id)
       search = where("payrolls.sales_user_id = ?",current_user_id)
       search = search.where("payrolls.id = ?",params[:code].gsub(/\D/,'')) if params[:code].present?

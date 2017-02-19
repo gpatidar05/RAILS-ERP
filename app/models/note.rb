@@ -9,6 +9,21 @@ class Note < ActiveRecord::Base
 
     scope :with_active, -> { where('is_active = ?', true) }
 
+    def self.search_box(search_text,current_user_id)
+      search = where("notes.sales_user_id = ?",current_user_id)
+      if !/\A\d+\z/.match(search_text)
+        code = search_text.gsub(/\D/,'')
+        if code.present?
+            search = search.where(id: code.to_i)
+        else
+            search = search.where("subject LIKE :search", search: "%#{search_text}%")
+        end
+      else
+        search = search.where("customer_id :search OR contact_id :search", search: "%#{search_text}%")
+      end
+      return search
+    end
+    
 	def self.search(params,current_user_id)
       search = where("notes.sales_user_id = ?",current_user_id)
 	  search = search.where("notes.id = ?",params[:code].gsub(/\D/,'')) if params[:code].present?
@@ -19,7 +34,7 @@ class Note < ActiveRecord::Base
 	end
 
 	def self.sales_notes(current_user)
-		where("notes.sales_user_id = ?",current_user.id)
+		where("notes.sales_user_id = ? AND notes.is_active = ?",current_user.id,true)
 	end
 
     def get_json_note_index

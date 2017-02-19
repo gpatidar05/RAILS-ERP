@@ -6,7 +6,11 @@ class PayrollsController < ApplicationController
   # GET /payrolls
   # GET /payrolls.json
   def index
-    @payrolls = Payroll.search(params,current_user.id).with_active.get_json_payrolls
+    if params[:search_text].present?
+      @payrolls = Payroll.search_box(params[:search_text],current_user.id).with_active.get_json_payrolls
+    else
+      @payrolls = Payroll.search(params,current_user.id).with_active.get_json_payrolls
+    end
     respond_with(@payrolls) do |format|
       format.json { render :json => @payrolls.as_json }
       format.html

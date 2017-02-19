@@ -107,5 +107,11 @@ Rails.application.routes.draw do
     end
     resources :report_payrolls, only: [:index]
     resources :report_expenses, only: [:index]
+
+    # default integration custom actions paths
+    match '/integration/:account_id/connect' => 'integration_custom_actions#auth_connect', as: :connect_integration, :via => [:get, :post]
+    match '/integration/:account_id/:action' => 'integration_custom_actions#action_missing', as: :integration_custom_action_for_account, :via => [:get, :post]
+    match '/integration/:action' => 'integration_custom_actions#action_missing', as: :integration_custom_action, :via => [:get, :post]
+
 end
  

@@ -1,5 +1,5 @@
 class ItemsController < ApplicationController
-  before_action :set_item, except: [:delete_all, :index, :create, :update]
+  before_action :set_item, except: [:get_items, :delete_all, :index, :create, :update]
   respond_to :html, :json
   skip_before_filter :verify_authenticity_token
 
@@ -64,6 +64,14 @@ class ItemsController < ApplicationController
         @item.update_attribute(:is_active, false)
       end
       render json: {status: :ok}
+  end
+
+  def get_items
+    @items = Item.sales_items(current_user)
+    respond_with(@items) do |format|
+      format.json { render :json => Item.get_json_items_dropdown(@items) }
+      format.html
+    end  
   end
 
   private

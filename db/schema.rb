@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170218081334) do
+ActiveRecord::Schema.define(version: 20170220194042) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -238,6 +238,52 @@ ActiveRecord::Schema.define(version: 20170218081334) do
     t.boolean  "is_active",            default: true
   end
 
+  create_table "kb_categories", force: :cascade do |t|
+    t.string   "name"
+    t.string   "description"
+    t.integer  "sales_user_id"
+    t.boolean  "is_active",     default: true
+    t.integer  "created_by_id"
+    t.integer  "updated_by_id"
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+  end
+
+  create_table "knowledge_bases", force: :cascade do |t|
+    t.string   "title"
+    t.integer  "kb_category_id"
+    t.string   "status"
+    t.integer  "revision"
+    t.text     "body"
+    t.text     "resolution"
+    t.integer  "author_id"
+    t.integer  "approver_id"
+    t.integer  "sales_user_id"
+    t.boolean  "is_active",      default: true
+    t.integer  "created_by_id"
+    t.integer  "updated_by_id"
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+  end
+
+  create_table "manufacturings", force: :cascade do |t|
+    t.string   "subject"
+    t.string   "description"
+    t.string   "status"
+    t.string   "m_type"
+    t.integer  "quantity"
+    t.integer  "item_id"
+    t.integer  "sales_order_id"
+    t.date     "start_date"
+    t.date     "expected_completion_date"
+    t.integer  "sales_user_id"
+    t.boolean  "is_active",                default: true
+    t.integer  "created_by_id"
+    t.integer  "updated_by_id"
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+  end
+
   create_table "marketplaces", force: :cascade do |t|
     t.string   "name"
     t.string   "url"
@@ -247,6 +293,20 @@ ActiveRecord::Schema.define(version: 20170218081334) do
     t.boolean  "has_api"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "materials", force: :cascade do |t|
+    t.string   "name"
+    t.string   "description"
+    t.string   "unit"
+    t.integer  "quantity"
+    t.decimal  "price"
+    t.integer  "sales_user_id"
+    t.boolean  "is_active",     default: true
+    t.integer  "created_by_id"
+    t.integer  "updated_by_id"
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
   end
 
   create_table "notes", force: :cascade do |t|
@@ -439,7 +499,6 @@ ActiveRecord::Schema.define(version: 20170218081334) do
   create_table "warehouse_locations", force: :cascade do |t|
     t.string   "subject"
     t.integer  "row_no"
-    t.string   "warehouse"
     t.string   "status"
     t.string   "description"
     t.integer  "rack_from"
@@ -449,6 +508,26 @@ ActiveRecord::Schema.define(version: 20170218081334) do
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
     t.boolean  "is_active",     default: true
+    t.integer  "warehouse_id"
+    t.integer  "sales_user_id"
+    t.string   "asset"
+    t.string   "sku"
+  end
+
+  create_table "warehouses", force: :cascade do |t|
+    t.string   "subject"
+    t.string   "city"
+    t.string   "province"
+    t.string   "country"
+    t.string   "description"
+    t.integer  "postalcode"
+    t.string   "street"
+    t.integer  "sales_user_id"
+    t.boolean  "is_active",     default: true
+    t.integer  "created_by_id"
+    t.integer  "updated_by_id"
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
   end
 
 end

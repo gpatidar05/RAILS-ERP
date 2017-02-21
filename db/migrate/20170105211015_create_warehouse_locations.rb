@@ -15,7 +15,3 @@ class CreateWarehouseLocations < ActiveRecord::Migration
         end
     end
 end
-#Need to make warehouse id
-
-
-Item

@@ -58,4 +58,20 @@ class Item < ActiveRecord::Base
         end
         return items_list
     end
+
+    def self.sales_items(current_user)
+        where("items.sales_user_id = ? AND items.is_active = ?",current_user.id,true)
+    end
+
+    def self.get_json_items_dropdown(items)
+        list = []
+        items.each do |items|
+            list << as_json(only: [])
+            .merge({name:items.name,
+                items_id:items.id,
+            })
+        end
+        return list
+    end
+    
 end

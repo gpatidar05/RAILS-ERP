@@ -30,18 +30,13 @@ class Employee < ActiveRecord::Base
     def self.search(params,current_user_id)
       search = where("employees.sales_user_id = ?",current_user_id)
       search = search.where("employees.id = ?",params[:code].gsub(/\D/,'')) if params[:code].present?
-      if params[:name].present?
-        name = params[:name].downcase
-        search = search.joins(:user)
-          .where("(((lower(users.first_name) || ' ' || lower(users.last_name)) LIKE ?) "\
-                 'OR (lower(users.first_name) LIKE ?) OR (lower(users.last_name) LIKE ?))',\
-                 "%#{name}%", "%#{name}%", "%#{name}%")
-      end
       search = search.where('employees.designation = ?',params[:designation]) if params[:designation].present?
       search = search.where('employees.department = ?',params[:department]) if params[:department].present?
       search = search.where('employees.marital_status = ?',params[:marital_status]) if params[:marital_status].present?
       search = search.where('employees.created_by_id = ?',params[:created_by]) if params[:created_by].present?
       search = search.where('DATE(employees.created_at) = ?', params[:created_at].to_date) if params[:created_at].present?
+      search = search.joins(:user).where("lower(users.first_name) LIKE ?" ,"%#{params[:first_name].downcase}%") if params[:first_name].present?
+      search = search.joins(:user).where("lower(users.last_name) LIKE ?" ,"%#{params[:last_name].downcase}%") if params[:last_name].present?
       return search
     end
 

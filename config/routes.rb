@@ -120,6 +120,19 @@ Rails.application.routes.draw do
         get 'get_warehouse_locations'
       end
     end
+    resources :manufacturings, except: [] do
+      collection do
+        get 'delete_all'
+        get 'get_manufacturings'
+      end
+    end
+    resources :materials, except: [] do
+      collection do
+        get 'delete_all'
+        get 'get_materials'
+      end
+    end
+
     # default integration custom actions paths
     match '/integration/:account_id/connect' => 'integration_custom_actions#auth_connect', as: :connect_integration, :via => [:get, :post]
     match '/integration/:account_id/:action' => 'integration_custom_actions#action_missing', as: :integration_custom_action_for_account, :via => [:get, :post]

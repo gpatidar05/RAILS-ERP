@@ -7,6 +7,7 @@ class SalesOrder < ActiveRecord::Base
   	belongs_to :order_shipping_detail
   	
   	has_many :sales_order_items, :dependent => :destroy
+    has_many :manufacturinga
 
     track_who_does_it
 

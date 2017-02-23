@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170220194042) do
+ActiveRecord::Schema.define(version: 20170223185702) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -266,6 +266,25 @@ ActiveRecord::Schema.define(version: 20170220194042) do
     t.datetime "updated_at",                    null: false
   end
 
+  create_table "manufacturing_histories", force: :cascade do |t|
+    t.string   "subject"
+    t.string   "description"
+    t.string   "status"
+    t.string   "m_type"
+    t.integer  "quantity"
+    t.integer  "item_id"
+    t.integer  "sales_order_id"
+    t.date     "start_date"
+    t.date     "expected_completion_date"
+    t.integer  "manufacturing_id"
+    t.integer  "sales_user_id"
+    t.boolean  "is_active",                default: true
+    t.integer  "created_by_id"
+    t.integer  "updated_by_id"
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+  end
+
   create_table "manufacturings", force: :cascade do |t|
     t.string   "subject"
     t.string   "description"
@@ -302,11 +321,12 @@ ActiveRecord::Schema.define(version: 20170220194042) do
     t.integer  "quantity"
     t.decimal  "price"
     t.integer  "sales_user_id"
-    t.boolean  "is_active",     default: true
+    t.boolean  "is_active",        default: true
     t.integer  "created_by_id"
     t.integer  "updated_by_id"
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.integer  "manufacturing_id"
   end
 
   create_table "notes", force: :cascade do |t|
@@ -386,6 +406,14 @@ ActiveRecord::Schema.define(version: 20170220194042) do
     t.datetime "updated_at",                      null: false
     t.integer  "sales_user_id"
     t.boolean  "is_active",        default: true
+  end
+
+  create_table "qa_check_lists", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "manufacturing_id"
+    t.boolean  "passed"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
   end
 
   create_table "sales_order_items", force: :cascade do |t|

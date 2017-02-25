@@ -132,7 +132,19 @@ Rails.application.routes.draw do
         get 'get_materials'
       end
     end
-
+    resources :kb_categories, except: [] do
+      collection do
+        get 'delete_all'
+        get 'get_kb_categories'
+      end
+    end
+    resources :knowledge_bases, except: [] do
+      collection do
+        get 'delete_all'
+        get 'get_knowledge_bases'
+      end
+    end
+    
     # default integration custom actions paths
     match '/integration/:account_id/connect' => 'integration_custom_actions#auth_connect', as: :connect_integration, :via => [:get, :post]
     match '/integration/:account_id/:action' => 'integration_custom_actions#action_missing', as: :integration_custom_action_for_account, :via => [:get, :post]

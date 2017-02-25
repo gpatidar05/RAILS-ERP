@@ -7,6 +7,9 @@ class Employee < ActiveRecord::Base
     has_many :expenses, dependent: :destroy
     has_many :payrolls, dependent: :destroy
 
+    has_many :knowledge_bases, class_name: "KnowledgeBase", foreign_key: "author_id"
+    has_many :knowledge_bases, class_name: "KnowledgeBase", foreign_key: "approver_id"
+
     track_who_does_it
 
     scope :with_active, -> { where('is_active = ?', true) }

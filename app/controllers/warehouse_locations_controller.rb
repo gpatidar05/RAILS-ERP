@@ -1,5 +1,5 @@
 class WarehouseLocationsController < ApplicationController
-  before_action :set_warehouse_location, except: [:get_warehouse_locations, :delete_all, :index, :create, :update, :get_customers]
+  before_action :set_warehouse_location, except: [:add_item, :get_warehouse_locations, :delete_all, :index, :create, :update, :get_customers]
   respond_to :html, :json
   skip_before_filter :verify_authenticity_token
 
@@ -38,6 +38,14 @@ class WarehouseLocationsController < ApplicationController
     end
   end 
 
+  def add_item
+    @warehouse_location_item = WarehouseLocationItem.new(warehouse_location_item_params)
+    if @warehouse_location_item.save
+      render status: 200, json: { warehouse_location_item_id: @warehouse_location_item.id}
+    else
+      render status: 200, :json => { message: @warehouse_location_item.errors.full_messages.first }
+    end
+  end
 
   # PATCH/PUT /warehouse_locations/1
   # PATCH/PUT /warehouse_locations/1.json
@@ -84,4 +92,9 @@ class WarehouseLocationsController < ApplicationController
     def warehouse_location_params
       params.require(:warehouse_location).permit(:id, :asset, :sku, :subject, :row_no, :warehouse_id, :status, :description, :rack_from, :rack_to)
     end
+
+    def warehouse_location_item_params
+      params.require(:warehouse_location_item).permit(:warehouse_location_id, :item_id)
+    end
+
 end

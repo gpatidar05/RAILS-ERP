@@ -44,6 +44,7 @@ class PurchaseOrder < ActiveRecord::Base
         	created_by:self.creator.try(:full_name),
         	updated_at:self.updated_at.strftime('%d %B, %Y'),
         	updated_by:self.updater.try(:full_name),
+          purchase_order_items:self.purchase_order_items.get_json_item_purchase_orders,
         })
     end 
 

@@ -4,6 +4,7 @@ class Item < ActiveRecord::Base
     belongs_to :supplier
 
     has_many :purchase_orders
+    has_many :warehouse_location
     has_many :item_images, dependent: :destroy
 
     track_who_does_it
@@ -36,6 +37,7 @@ class Item < ActiveRecord::Base
 
     def get_json_item
         purchase_order_ids= PurchaseOrderItem.where(item_id:self.id).pluck(:purchase_order_id)
+        warehouse_location_item_ids= WarehouseLocationItem.where(item_id:self.id).pluck(:warehouse_location_id)
         as_json(only: [:id,:name,:unit,:selling_price,:purchase_price,:item_description,
           :purchase_description, :selling_description, :tax, :item_in_stock,
           :max_level, :min_level,:category_id,:supplier_id])
@@ -48,6 +50,7 @@ class Item < ActiveRecord::Base
         	updated_at:self.updated_at.strftime('%d %B, %Y'),
         	updated_by:self.updater.try(:full_name),
           purchase_orders: PurchaseOrder.with_active.where("id IN (?)",purchase_order_ids).get_json_purchase_orders,
+          warehouse_locations: WarehouseLocation.with_active.where("id IN (?)",warehouse_location_item_ids).get_json_warehouse_locations,         
         })
     end 
 
@@ -65,10 +68,12 @@ class Item < ActiveRecord::Base
 
     def self.get_json_items_dropdown(items)
         list = []
-        items.each do |items|
+        items.each do |item|
             list << as_json(only: [])
-            .merge({name:items.name,
-                items_id:items.id,
+            .merge({name:item.name,
+                items_id:item.id,
+                unit:item.unit,
+                item_in_stock:item.item_in_stock,
             })
         end
         return list

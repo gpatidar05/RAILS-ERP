@@ -1,5 +1,5 @@
 class PurchaseOrdersController < ApplicationController
-  before_action :set_purchase_order, except: [:delete_all, :index, :create, :update]
+  before_action :set_purchase_order, except: [:add_item, :delete_all, :index, :create, :update]
   respond_to :html, :json
   skip_before_filter :verify_authenticity_token
 
@@ -36,7 +36,16 @@ class PurchaseOrdersController < ApplicationController
     else
       render status: 200, :json => { message: @purchase_order.errors.full_messages.first }
     end
-  end 
+  end
+
+  def add_item
+    @item_purchase_order = PurchaseOrderItem.new(item_purchase_order_params)
+    if @item_purchase_order.save
+      render status: 200, json: { item_purchase_order_id: @item_purchase_order.id}
+    else
+      render status: 200, :json => { message: @item_purchase_order.errors.full_messages.first }
+    end
+  end
 
 
   # GET /purchase_orders/edit_form/1.json
@@ -84,5 +93,9 @@ class PurchaseOrdersController < ApplicationController
     def purchase_order_params
       params.require(:purchase_order).permit(:id,:subject,:total_price,:sub_total,
       	:tax,:grand_total,:description,:supplier_user_id)
+    end
+
+    def item_purchase_order_params
+      params.require(:purchase_order_item).permit(:purchase_order_id,:unit_price,:total,:quantity,:item_id)
     end
 end

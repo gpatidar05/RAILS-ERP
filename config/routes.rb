@@ -74,6 +74,7 @@ Rails.application.routes.draw do
       collection do
         get 'edit_form'
         get 'delete_all'
+        post 'add_item'
       end
     end
     resources :accounts, except: [] do
@@ -108,6 +109,7 @@ Rails.application.routes.draw do
     end
     resources :report_payrolls, only: [:index]
     resources :report_expenses, only: [:index]
+    resources :report_sales, only: [:index]
     resources :warehouses, except: [] do
       collection do
         get 'delete_all'
@@ -118,6 +120,7 @@ Rails.application.routes.draw do
       collection do
         get 'delete_all'
         get 'get_warehouse_locations'
+        post 'add_item'
       end
     end
     resources :manufacturings, except: [] do

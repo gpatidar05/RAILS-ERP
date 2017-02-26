@@ -1,6 +1,7 @@
 class WarehouseLocation < ActiveRecord::Base
 
     belongs_to :warehouse
+    has_many :warehouse_location_items
 
     track_who_does_it
 
@@ -47,6 +48,7 @@ class WarehouseLocation < ActiveRecord::Base
         	created_by:self.creator.try(:full_name),
         	updated_at:self.updated_at.strftime('%d %B, %Y'),
         	updated_by:self.updater.try(:full_name),
+            warehouse_location_items:self.warehouse_location_items.get_json_warehouse_location_items,
         })
     end 
 

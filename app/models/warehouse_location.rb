@@ -14,8 +14,8 @@ class WarehouseLocation < ActiveRecord::Base
         if code.present?
             search = search.where(id: code.to_i)
         else
-            search = search.where("subject LIKE :search OR status LIKE :search
-                OR description LIKE :search", search: "%#{search_text}%")
+            search = search.where("lower(subject) LIKE :search OR lower(status) LIKE :search
+                OR lower(description) LIKE :search", search: "%#{search_text.downcase}%")
         end
       else
         search = search.where("row_no = ? OR rack_from = ? OR rack_to = ?", search_text, search_text, search_text)
@@ -24,6 +24,9 @@ class WarehouseLocation < ActiveRecord::Base
     end
 
     def self.search(params,current_user_id)
+        if params[:item_id].present?
+            warehouse_location_item_ids= WarehouseLocationItem.where(item_id:params[:item_id]).pluck(:warehouse_location_id)
+        end
         search = where("warehouse_locations.sales_user_id = ?",current_user_id)
         status = JSON.parse(params[:status]) if params[:status].present?
         search = search.where("warehouse_locations.id = ?",params[:code].gsub(/\D/,'')) if params[:code].present?
@@ -36,6 +39,7 @@ class WarehouseLocation < ActiveRecord::Base
         search = search.where('warehouse_locations.rack_to = ?',params[:rack_to]) if params[:rack_to].present?
         search = search.where('DATE(warehouse_locations.created_at) = ?', params[:created_at].to_date) if params[:created_at].present?
         search = search.where('warehouse_locations.created_by_id = ?',params[:created_by_id]) if params[:created_by_id].present?
+        search = search.where('warehouse_locations.id IN (?)',warehouse_location_item_ids) if params[:item_id].present?
         return search
     end
 

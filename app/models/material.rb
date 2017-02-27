@@ -38,7 +38,7 @@ class Material < ActiveRecord::Base
     def get_json_material
         as_json(only: [:id, :manufacturing_id, :name, :description, :unit, :quantity, :price])
         .merge({
-        	code:"WHL#{self.id.to_s.rjust(4, '0')}",
+        	code:"MAT#{self.id.to_s.rjust(4, '0')}",
         	created_at:self.created_at.strftime('%d %B, %Y'),
         	created_by:self.creator.try(:full_name),
         	updated_at:self.updated_at.strftime('%d %B, %Y'),

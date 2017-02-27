@@ -6,6 +6,7 @@ class Item < ActiveRecord::Base
     has_many :purchase_orders
     has_many :warehouse_location
     has_many :item_images, dependent: :destroy
+    has_many :manufacturings
 
     track_who_does_it
 

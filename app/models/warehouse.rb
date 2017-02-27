@@ -13,9 +13,9 @@ class Warehouse < ActiveRecord::Base
         if code.present?
             search = search.where(id: code.to_i)
         else
-            search = search.where("subject LIKE :search OR city LIKE :search
-                OR province LIKE :search OR country LIKE :search
-                OR description LIKE :search OR street LIKE :search ", search: "%#{search_text}%")
+            search = search.where("lower(subject) LIKE :search OR lower(city) LIKE :search
+                OR lower(province) LIKE :search OR lower(country) LIKE :search
+                OR lower(description) LIKE :search OR lower(street) LIKE :search ", search: "%#{search_text.downcase}%")
         end
       else
         search = search.where("postalcode = ?", search_text)

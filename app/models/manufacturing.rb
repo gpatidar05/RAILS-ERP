@@ -3,6 +3,7 @@ class Manufacturing < ActiveRecord::Base
     has_many :materials
     has_many :qa_check_lists
     belongs_to :sales_order
+    belongs_to :item
     has_many :manufacturing_histories
     
     track_who_does_it
@@ -12,7 +13,7 @@ class Manufacturing < ActiveRecord::Base
     after_save :create_manufacturing_history
 
     def create_manufacturing_history
-        if self.status_changed?
+        if self.status_changed? and ['Failed','Failed & Restarted'].include? self.status
             manufacturing_history = ManufacturingHistory.new(self.dup.attributes)
             manufacturing_history.manufacturing_id = self.id
             manufacturing_history.save()
@@ -57,6 +58,7 @@ class Manufacturing < ActiveRecord::Base
         .merge({
         	code:"MFG#{self.id.to_s.rjust(4, '0')}",
             sales_order:sales_order_code,
+            item:self.item.try(:name),
         	created_at:self.created_at.strftime('%d %B, %Y'),
         	created_by:self.creator.try(:full_name),
         	updated_at:self.updated_at.strftime('%d %B, %Y'),

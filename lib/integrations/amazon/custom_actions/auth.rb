@@ -9,13 +9,18 @@ module Integrations
           else
             @state[:merchant_id]  = params[:merchant_id]
             @state[:auth_token]  = params[:auth_token]
+            account = Account.find(params[:id])
+            account.is_connected = true
+            account.save()
             redirect_url = integration_custom_action_url('auth_success_callback')
-            redirect_to redirect_url
+            # redirect_to redirect_url
+            render status: 200, json: { url: redirect_url}
           end
         end
 
         def auth_success_callback
-          redirect_to redirect_url_on_success
+          redirect_to "https://angular-rails-erp.herokuapp.com/order-management/connected-accounts"
+          # redirect_to "http://localhost:3000/order-management/connected-accounts"
         end
 
       end

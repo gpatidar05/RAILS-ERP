@@ -6,6 +6,20 @@ class AccountsController < ApplicationController
     render status: 200, json: { accounts: @account}
   end
 
+  def get_marketplaces
+    @marketplace = Marketplace.all
+    render status: 200, json: { marketplace: @marketplace}
+  end
+
+  def create
+    @account = Account.new(account_params)
+    if @account.save
+      render status: 200, json: { account_id: @account.id}
+    else
+      render status: 200, :json => { message: @account.errors.full_messages.first }
+    end
+  end 
+
   def update
     @account = current_user.accounts.find(params[:id])
     if @account.update_attributes(update_account_params)
@@ -45,5 +59,13 @@ class AccountsController < ApplicationController
 
     def connect_state
     	params.permit(:merchant_id,:auth_token)
+    end
+
+    def account_params
+      params = ActionController::Parameters.new(JSON.parse(request.POST[:marketplace]))
+      params[:user_id] = current_user.id
+      params[:title] = params[:name]
+      params[:marketplace_id] = params[:id]
+      params.permit(:user_id, :title ,:marketplace_id)
     end
 end

@@ -6,6 +6,8 @@ class Account < ActiveRecord::Base
   
   serialize :state
 
+  validates :user_id, :title, :marketplace_id, presence: true
+
   def state
     @state ||= HashWithCallbacks.new(self[:state] || {}, :changed => -> (changed_values) {
       self.update_attribute(:state, @state.to_h)

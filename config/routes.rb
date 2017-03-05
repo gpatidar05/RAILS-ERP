@@ -82,6 +82,7 @@ Rails.application.routes.draw do
         get 'disconnect_account'
         get 'connect_account'
         get 'get_accounts'
+        get 'get_marketplaces'
       end
     end
     resources :employees, except: [] do

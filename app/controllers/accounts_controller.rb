@@ -20,6 +20,14 @@ class AccountsController < ApplicationController
     end
   end 
 
+  def show
+    @account = current_user.accounts.find(params[:id])
+    respond_with(@account) do |format|
+      format.json { render :json => @account.as_json }
+      format.html
+    end     
+  end
+
   def update
     @account = current_user.accounts.find(params[:id])
     if @account.update_attributes(update_account_params)
@@ -54,7 +62,7 @@ class AccountsController < ApplicationController
 
   private
     def update_account_params
-        params.permit(:auto_renew, relisting_pricing:[:unit, :operator, :value], sale_events_attributes:[:start_date, :end_date, :id, :discount_percent, :item_category_id, :_destroy])
+        params.require(:account).permit(:auto_renew, relisting_pricing:[:unit, :operator, :value], sale_events_attributes:[:start_date, :end_date, :id, :discount_percent, :item_category_id, :_destroy])
     end
 
     def connect_state

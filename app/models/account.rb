@@ -5,6 +5,7 @@ class Account < ActiveRecord::Base
   has_many :sales_orders
   
   serialize :state
+  serialize :relisting_pricing
 
   validates :user_id, :title, :marketplace_id, presence: true
 

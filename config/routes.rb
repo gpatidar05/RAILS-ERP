@@ -128,6 +128,7 @@ Rails.application.routes.draw do
       collection do
         get 'delete_all'
         get 'get_manufacturings'
+        post 'add_material'
       end
     end
     resources :materials, except: [] do

@@ -5,7 +5,8 @@ class Manufacturing < ActiveRecord::Base
     belongs_to :sales_order
     belongs_to :item
     has_many :manufacturing_histories
-    
+    has_many :manufacturing_materials
+
     track_who_does_it
 
     scope :with_active, -> { where('is_active = ?', true) }
@@ -66,6 +67,7 @@ class Manufacturing < ActiveRecord::Base
             materials:self.materials.with_active.get_json_materials,
             qa_check_list:self.qa_check_lists,
             manufacturing_histories:self.manufacturing_histories.get_json_manufacturing_histories,
+            manufacturing_materials:self.manufacturing_materials.get_json_manufacturing_materials,
         })
     end 
 

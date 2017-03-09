@@ -1,5 +1,5 @@
 class ManufacturingsController < ApplicationController
-  before_action :set_manufacturing, except: [:get_manufacturings, :delete_all, :index, :create, :update]
+  before_action :set_manufacturing, except: [:add_material, :get_manufacturings, :delete_all, :index, :create, :update]
   respond_to :html, :json
   skip_before_filter :verify_authenticity_token
 
@@ -85,6 +85,15 @@ class ManufacturingsController < ApplicationController
     end  
   end
 
+  def add_material
+    @manufacturing_material = ManufacturingMaterial.new(manufacturing_material_params)
+    if @manufacturing_material.save
+      render status: 200, json: { manufacturing_material_id: @manufacturing_material.id}
+    else
+      render status: 200, :json => { message: @manufacturing_material.errors.full_messages.first }
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_manufacturing
@@ -95,6 +104,10 @@ class ManufacturingsController < ApplicationController
     def manufacturing_params
       params.require(:manufacturing).permit(:id, :subject, :description, :status,
        :m_type, :quantity, :item_id, :sales_order_id, :start_date, :expected_completion_date)
+    end
+
+    def manufacturing_material_params
+      params.require(:manufacturing_material).permit(:id, :manufacturing_id, :material_id, :quantity, :total, :unit_price)
     end
 end
 

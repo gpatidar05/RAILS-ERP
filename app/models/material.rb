@@ -1,6 +1,7 @@
 class Material < ActiveRecord::Base
 
     belongs_to :manufacturing
+    has_many :manufacturing_materials
 
     track_who_does_it
 
@@ -63,8 +64,9 @@ class Material < ActiveRecord::Base
         list = []
         materials.each do |material|
             list << as_json(only: [])
-            .merge({name:material.subject,
+            .merge({name:material.name,
                 material_id:material.id,
+                unit:material.unit,
             })
         end
         return list

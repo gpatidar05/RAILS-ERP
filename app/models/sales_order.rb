@@ -47,11 +47,13 @@ class SalesOrder < ActiveRecord::Base
 
     def get_json_sales_order_index
     	create_timestamp = self.create_timestamp.present? ? self.create_timestamp.strftime('%d %B, %Y') : self.create_timestamp
-        as_json(only: [:id,:uid,:name,:grand_total,:status])
+        is_deleted = self.is_active ? 'NO' : 'YES'
+        as_json(only: [:id,:uid,:name,:grand_total,:status,:is_active])
         .merge({code:"SO-#{self.id.to_s.rjust(4, '0')}",
         	customer: self.customer.try(:user).try(:full_name),
         	created_at:self.created_at.strftime('%d %B, %Y'),
         	create_timestamp: create_timestamp,
+            is_deleted: is_deleted,
         })
     end 
 
@@ -72,7 +74,7 @@ class SalesOrder < ActiveRecord::Base
     	shipped_at = self.shipped_at.present? ? self.shipped_at.strftime('%d %B, %Y') : self.shipped_at
 
 		as_json(only: [:id,:uid,:name,:status,:cancel_reason,:payment_method,:subtotal,
-			:tax,:discount,:grand_total,:buyer_id,:shipped,:marketplace_fee,:processing_fee])
+			:tax,:discount,:grand_total,:buyer_id,:shipped,:marketplace_fee,:processing_fee,:is_active])
         .merge({code:"SO-#{self.id.to_s.rjust(4, '0')}",
         	customer: self.customer.try(:user).try(:full_name),
         	contact: self.contact.try(:user).try(:full_name),

@@ -5,9 +5,9 @@ class SalesOrderInvoicesController < ApplicationController
 
   	def index
       if params[:search_text].present?
-          @invoices = Invoice.search_box(params[:search_text],current_user.id).with_active.get_json_invoices
+          @invoices = Invoice.search_box(params[:search_text],current_user.id).get_json_invoices
       else
-          @invoices = Invoice.search(params,current_user.id,true).with_active.get_json_invoices
+          @invoices = Invoice.search(params,current_user.id,true).get_json_invoices
       end
     	respond_with(@invoices) do |format|
       		format.json { render :json => @invoices.as_json }

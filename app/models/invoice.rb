@@ -46,8 +46,9 @@ class Invoice < ActiveRecord::Base
 
     def get_json_invoices
         create_timestamp = self.create_timestamp.present? ? self.create_timestamp.strftime('%d %B, %Y') : self.create_timestamp
+        is_deleted = self.is_active ? 'NO' : 'YES'
         as_json(only: [:id,:uid,:name,:grand_total,:status,:subtotal,
-            :tax])
+            :tax,:is_active])
         .merge({code:"INV-#{self.id.to_s.rjust(4, '0')}",
             customer: self.customer.try(:user).try(:full_name),
             created_at:self.created_at.strftime('%d %B, %Y'),
@@ -56,6 +57,7 @@ class Invoice < ActiveRecord::Base
             created_by:self.creator.try(:full_name),
             updated_at:self.updated_at.strftime('%d %B, %Y'),
             updated_by:self.updater.try(:full_name),
+            is_deleted: is_deleted,
         })
     end 
 
@@ -77,7 +79,7 @@ class Invoice < ActiveRecord::Base
 
         as_json(only: [:id,:uid,:name,:status,:cancel_reason,:payment_method,:subtotal,
             :tax,:discount,:grand_total,:buyer_id,:shipped,:marketplace_fee,:processing_fee,
-            :profit_share_deductions, :net, :acquisition_cost])
+            :profit_share_deductions, :net, :acquisition_cost,:is_active])
         .merge({code:"INV-#{self.id.to_s.rjust(4, '0')}",
             customer: self.customer.try(:user).try(:full_name),
             contact: self.contact.try(:user).try(:full_name),

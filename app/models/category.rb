@@ -1,6 +1,7 @@
 class Category < ActiveRecord::Base
 
     has_many :items, dependent: :destroy
+    has_many :sale_events
 
     validates :name, :unit, :tax, :manufacturer, :description, presence: true
     

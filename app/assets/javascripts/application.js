@@ -13,7 +13,3 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
-//= require bootstrap.js
-//= require jquery.min.js
-//= require npm.js
-//= require main.js

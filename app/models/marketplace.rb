@@ -1,4 +1,5 @@
 class Marketplace < ActiveRecord::Base
-  has_many :accounts
+  #Has Many Relationship
   has_many :buyers
+  has_many :accounts
 end

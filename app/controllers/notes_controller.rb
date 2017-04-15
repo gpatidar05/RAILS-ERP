@@ -1,89 +1,56 @@
 class NotesController < ApplicationController
-  before_action :set_note, except: [:delete_all, :index, :create, :new]
-  respond_to :html, :json
-  skip_before_filter :verify_authenticity_token
+  before_action :set_note, only: [:show, :update]
+  before_action :set_delete_all_note, only: [:delete_all]
 
-  # GET /notes
-  # GET /notes.json
   def index
     if params[:search_text].present?
-      @notes = Note.search_box(params[:search_text],current_user.id).with_active.get_json_notes
+      notes = Note.search_box(params[:search_text],current_user.id).with_active.get_json_notes
     else
-      @notes = Note.search(params,current_user.id).with_active.get_json_notes
+      notes = Note.search(params,current_user.id).with_active.get_json_notes
     end
-    respond_with(@notes) do |format|
-      format.json { render :json => @notes.as_json }
-      format.html
-    end
+    render status: 200, json: notes.as_json
   end
 
-  # GET /notes/1
-  # GET /notes/1.json
   def show
-    respond_with(@note) do |format|
-      format.json { render :json => @note.get_json_note_index.as_json }
-      format.html
-    end     
+    render status: 200, json: @note.get_json_note_index.as_json   
   end
 
-  # GET /notes/new
-  def new
-    @note = Note.new
-  end
-
-  # GET /notes/1/edit
-  def edit
-  end
-
-  # POST /notes
-  # POST /notes.json
   def create
-    @note = Note.new(note_params)
-    @note.sales_user_id = current_user.id
-    if @note.save
-      render status: 200, json: { note_id: @note.id}
+    note = Note.new(note_params)
+    note.sales_user_id = current_user.id
+    if note.save
+      render status: 200, json: { note_id: note.id}
     else
-      render status: 200, :json => { message: @note.errors.full_messages.first }
+      render status: 200, json: { message: note.errors.full_messages.first }
     end
   end    
 
-  # PATCH/PUT /notes/1
-  # PATCH/PUT /notes/1.json
   def update
     if @note.update_attributes(note_params)
       render status: 200, json: { note_id: @note.id}
     else
-      render status: 200, :json => { message: @note.errors.full_messages.first }
-    end
-  end
-
-  # DELETE /notes/1
-  # DELETE /notes/1.json
-  def destroy
-    @note.update_attribute(:is_active, false)
-    respond_to do |format|
-      format.html { redirect_to notes_url, notice: 'Note was successfully destroyed.' }
-      format.json { head :no_content }
+      render status: 200, json: { message: @note.errors.full_messages.first }
     end
   end
 
   def delete_all
-      ids = JSON.parse(params[:ids])
-      ids.each do |id|
-        @note = Note.find(id.to_i)
-        @note.update_attribute(:is_active, false)
-      end
-      render json: {status: :ok}
+    @note_ids.each do |id|
+      note = Note.find(id.to_i)
+      note.update_attribute(:is_active, false)
+    end
+    render json: {status: :ok}
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_note
       @note = Note.find(params[:id])
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
+    def set_delete_all_note
+      @note_ids = JSON.parse(params[:ids])
+    end
+
     def note_params
-      params.require(:note).permit(:id,:subject, :decription, :contact_id, :customer_id, :created_by_id, :updated_by_id, :created_at, :updated_at)
+      params.require(:note).permit(:id, :subject, :decription, :contact_id, :customer_id, :created_by_id, :updated_by_id, :created_at, :updated_at)
     end
 end

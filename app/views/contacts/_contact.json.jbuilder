@@ -1,2 +1,0 @@
-json.extract! contact, :id, :user_id, :customer_id, :phone_mobile, :phone_work, :designation, :salutation, :department, :primary_street, :primary_city, :primary_state, :primary_country, :primary_postal_code, :alternative_street, :alternative_city, :alternative_state, :alternative_country, :alternative_postal_code, :created_at, :updated_at
-json.url contact_url(contact, format: :json)

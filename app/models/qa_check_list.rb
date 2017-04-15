@@ -1,5 +1,4 @@
 class QaCheckList < ActiveRecord::Base
-
-    belongs_to :manufacturing
-    
+  #Belongs To Relationship
+  belongs_to :manufacturing
 end

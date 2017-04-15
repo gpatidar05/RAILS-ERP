@@ -63,5 +63,4 @@ group :development do
   gem 'spring'
 end
 
-gem 'will_paginate-bootstrap'
 gem 'rack-cors', :require => 'rack/cors'

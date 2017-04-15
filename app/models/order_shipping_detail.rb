@@ -1,4 +1,7 @@
 class OrderShippingDetail < ActiveRecord::Base
-  	has_one :sales_orders
-  	belongs_to :buyer
+  #Belongs To Relationship
+  belongs_to :buyer
+  
+  #Has One Relationship
+  has_one :sales_orders
 end

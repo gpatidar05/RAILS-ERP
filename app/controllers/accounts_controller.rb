@@ -1,35 +1,28 @@
 class AccountsController < ApplicationController
-  respond_to :html, :json
+  before_action :set_account, only: [:show, :update, :disconnect_account, :connect_account]
 
   def get_accounts
-    @account = current_user.accounts
-    render status: 200, json: { accounts: @account}
+    render status: 200, json: { accounts: current_user.accounts }
   end
 
   def get_marketplaces
-    @marketplace = Marketplace.all
-    render status: 200, json: { marketplace: @marketplace}
+    render status: 200, json: { marketplace: Marketplace.all }
   end
 
   def create
-    @account = Account.new(account_params)
-    if @account.save
-      render status: 200, json: { account_id: @account.id}
+    account = Account.new(account_params)
+    if account.save
+      render status: 200, json: { account_id: account.id }
     else
-      render status: 200, :json => { message: @account.errors.full_messages.first }
+      render status: 200, json: { message: account.errors.full_messages.first }
     end
   end 
 
   def show
-    @account = current_user.accounts.find(params[:id])
-    respond_with(@account) do |format|
-      format.json { render :json => @account.get_json_account }
-      format.html
-    end     
+    render status: 200, json: @account.get_json_account    
   end
 
   def update
-    @account = current_user.accounts.find(params[:id])
     if @account.update_attributes(update_account_params)
       if params[:sale_events_attributes].present?
         params[:sale_events_attributes].each do |sale_events|
@@ -42,42 +35,39 @@ class AccountsController < ApplicationController
           end
         end
       end
-      render status: 200, json: { account_id: @account.id}
+      render status: 200, json: { account_id: @account.id }
     else
-      render status: 200, :json => { message: @account.errors.full_messages.first }
+      render status: 200, json: { message: @account.errors.full_messages.first }
     end
   end
 
   def disconnect_account
-    @account = current_user.accounts.find(params[:id])
-    if @account.update_attribute(:state, nil)
-      @account.is_connected = false
-      @account.save()
-      render status: 200, json: { account_id: @account.id}
+    if @account.update_attributes(state: nil, is_connected: false)
+      render status: 200, json: { account_id: @account.id }
     else
-      render status: 200, :json => { message: @account.errors.full_messages.first }
+      render status: 200, json: { message: @account.errors.full_messages.first }
     end
   end
 
-
   def connect_account
-    @account = current_user.accounts.find(params[:id])
-    if @account.update_attribute(:state, connect_state)
-      @account.is_connected = true
-      @account.save()
-      render status: 200, json: { account_id: @account.id}
+    if @account.update_attributes(state: connect_state, is_connected: true)
+      render status: 200, json: { account_id: @account.id }
     else
-      render status: 200, :json => { message: @account.errors.full_messages.first }
+      render status: 200, json: { message: @account.errors.full_messages.first }
     end
   end
 
   private
+    def set_contact
+      @account = current_user.accounts.find(params[:id])
+    end
+
     def update_account_params
         params.require(:account).permit(:auto_renew, relisting_pricing:[:unit, :operator, :value])
     end
 
     def connect_state
-    	params.permit(:merchant_id,:auth_token)
+      params.permit(:merchant_id, :auth_token)
     end
 
     def account_params

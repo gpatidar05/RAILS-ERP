@@ -1,7 +1,5 @@
 class UsersController < ApplicationController
-  skip_before_filter :verify_authenticity_token
   before_filter :ensure_login_params_exist, only: :create
-  respond_to :html, :json
 
   def create
     user = User.find_by_email(params[:user][:email])
@@ -15,11 +13,8 @@ class UsersController < ApplicationController
   end
 
   def get_users
-    @users = User.sales_staff_users(current_user)
-    respond_with(@users) do |format|
-      format.json { render :json => User.get_json_staff_dropdown(@users) }
-      format.html
-    end  
+    users = User.sales_staff_users(current_user)
+    render status: 200, json: User.get_json_staff_dropdown(users)
   end
 
   def check_email
@@ -46,9 +41,8 @@ class UsersController < ApplicationController
   end
 
   private
-
-  def ensure_login_params_exist
-    return if !params[:user][:email].blank? and !params[:user][:password].blank?
-    render status: 422, json: { error: "Missing Login params"}
-  end
+    def ensure_login_params_exist
+      return if !params[:user][:email].blank? and !params[:user][:password].blank?
+      render status: 422, json: { error: "Missing Login params"}
+    end
 end

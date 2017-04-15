@@ -1,82 +1,60 @@
 class SalesOrdersController < ApplicationController
-  	before_action :set_sales_order, except: [:get_sales_orders, :refresh ,:delete_all, :index]
-  	respond_to :html, :json
-  	skip_before_filter :verify_authenticity_token
+    before_action :set_sales_order, only: [:show, :edit_form, :update]
+    before_action :set_delete_all_sales_order, only: [:delete_all]
 
-	# GET /sales_orders
- 	# GET /sales_orders.json
-  	def index
+    def index
       if params[:search_text].present?
-        @sales_orders = SalesOrder.search_box(params[:search_text],current_user.id).get_json_sales_orders
+        sales_orders = SalesOrder.search_box(params[:search_text],current_user.id).get_json_sales_orders
       else
-        @sales_orders = SalesOrder.search(params,current_user.id,false).get_json_sales_orders
+        sales_orders = SalesOrder.search(params,current_user.id,false).get_json_sales_orders
       end
-    	respond_with(@sales_orders) do |format|
-      		format.json { render :json => @sales_orders.as_json }
-      		format.html
-    	end
-  	end
+      render status: 200, json: sales_orders.as_json
+    end
 
-  	# GET /sales_orders/1
-  	# GET /sales_orders/1.json
-  	def show
-    	respond_with(@sales_order) do |format|
-      	format.json { render :json => @sales_order.get_json_sales_order_show.as_json }
-      	format.html
-    	end     
-  	end
+    def show
+      render status: 200, json: @sales_order.get_json_sales_order_show.as_json  
+    end
 
     def edit_form
-      respond_with(@sales_order) do |format|
-        format.json { render :json => @sales_order.get_json_sales_order_edit.as_json }
-        format.html
-      end   
+      render status: 200, json: @sales_order.get_json_sales_order_edit.as_json  
     end
 
     def update
       if @sales_order.update_attributes(sales_order_params)
         render status: 200, json: { sales_order_id: @sales_order.id}
       else
-        render status: 200, :json => { message: @sales_order.errors.full_messages.first }
+        render status: 200, json: { message: @sales_order.errors.full_messages.first }
       end
     end
 
-    # DELETE /sales_orders/1
-  	# DELETE /sales_orders/1.json
-  	def destroy
-      @sales_order.update_attribute(:is_active, false)
-    	render json: {status: :ok}
-  	end
-
-  	def delete_all
-      	ids = JSON.parse(params[:ids])
-      	ids.each do |id|
-        	@sales_order = SalesOrder.find(id.to_i)
-          @sales_order.update_attribute(:is_active, false)
-      	end
-      	render json: {status: :ok}
-  	end
+    def delete_all
+      @sales_order_ids.each do |id|
+        sales_order = SalesOrder.find(id.to_i)
+        sales_order.update_attribute(:is_active, false)
+      end
+      render json: {status: :ok}
+    end
 
     def refresh
       current_user.refresh_orders
+      render json: {status: :ok}
     end
 
     def get_sales_orders
-      @SalesOrders = SalesOrder.sales_sales_orders(current_user)
-      respond_with(@SalesOrders) do |format|
-        format.json { render :json => SalesOrder.get_json_sales_orders_dropdown(@SalesOrders) }
-        format.html
-      end  
+      salesOrders = SalesOrder.sales_sales_orders(current_user)
+      render status: 200, json: SalesOrder.get_json_sales_orders_dropdown(salesOrders)
     end
 
-  	private
-    	# Use callbacks to share common setup or constraints between actions.
-    	def set_sales_order
-      		@sales_order = SalesOrder.find(params[:id])
-    	end
+    private
+      def set_sales_order
+          @sales_order = SalesOrder.find(params[:id])
+      end
+
+      def set_delete_all_sales_order
+          @sales_order_ids = JSON.parse(params[:ids])
+      end
 
       def sales_order_params
         params.require(:sales_order).permit(:id, :customer_user_id, :contact_user_id)
       end
-
 end

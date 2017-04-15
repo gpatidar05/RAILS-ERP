@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
 
-    resources :users, except: [] do
+    resources :users do
       collection do
         get 'get_users'
         get 'check_email'
@@ -16,26 +16,26 @@ Rails.application.routes.draw do
     devise_scope :user do
       root :to => 'devise/sessions#new'
     end
-    resources :customers, except: [] do
+    resources :customers do
       collection do
         get 'edit_form'
         get 'get_customers'
         get 'delete_all'
       end
     end
-    resources :notes, except: [] do
+    resources :notes do
       collection do
         get 'delete_all'
       end
     end
-    resources :contacts, except: [] do
+    resources :contacts do
       collection do
         get 'edit_form'
         get 'get_contacts'
         get 'delete_all'
       end
     end
-    resources :sales_orders, except: [] do
+    resources :sales_orders do
       collection do
         get 'edit_form'
         get 'delete_all'
@@ -43,7 +43,7 @@ Rails.application.routes.draw do
         get 'get_sales_orders'
       end
     end
-    resources :sales_order_invoices, except: [] do
+    resources :sales_order_invoices do
       collection do
         get 'delete_all'
         get 'refresh'
@@ -51,33 +51,33 @@ Rails.application.routes.draw do
         post 'create_invoice'
       end
     end
-    resources :categories, except: [] do
+    resources :categories do
       collection do
         get 'delete_all'
         get 'get_categories'
       end
     end
-    resources :items, except: [] do
+    resources :items do
       collection do
         get 'delete_all'
         get 'get_items'
       end
     end
-    resources :suppliers, except: [] do
+    resources :suppliers do
       collection do
         get 'edit_form'
         get 'delete_all'
         get 'get_suppliers'
       end
     end
-    resources :purchase_orders, except: [] do
+    resources :purchase_orders do
       collection do
         get 'edit_form'
         get 'delete_all'
         post 'add_item'
       end
     end
-    resources :accounts, except: [] do
+    resources :accounts do
       collection do
         get 'disconnect_account'
         get 'connect_account'
@@ -85,7 +85,7 @@ Rails.application.routes.draw do
         get 'get_marketplaces'
       end
     end
-    resources :employees, except: [] do
+    resources :employees do
       collection do
         get 'edit_form'
         get 'delete_all'
@@ -93,17 +93,17 @@ Rails.application.routes.draw do
         post 'upload_photo'
       end
     end
-    resources :payrolls, except: [] do
+    resources :payrolls do
       collection do
         get 'delete_all'
       end
     end
-    resources :expenses, except: [] do
+    resources :expenses do
       collection do
         get 'delete_all'
       end
     end
-    resources :timeclocks, except: [] do
+    resources :timeclocks do
       collection do
         get 'delete_all'
       end
@@ -111,39 +111,39 @@ Rails.application.routes.draw do
     resources :report_payrolls, only: [:index]
     resources :report_expenses, only: [:index]
     resources :report_sales, only: [:index]
-    resources :warehouses, except: [] do
+    resources :warehouses do
       collection do
         get 'delete_all'
         get 'get_warehouses'
       end
     end
-    resources :warehouse_locations, except: [] do
+    resources :warehouse_locations do
       collection do
         get 'delete_all'
         get 'get_warehouse_locations'
         post 'add_item'
       end
     end
-    resources :manufacturings, except: [] do
+    resources :manufacturings do
       collection do
         get 'delete_all'
         get 'get_manufacturings'
         post 'add_material'
       end
     end
-    resources :materials, except: [] do
+    resources :materials do
       collection do
         get 'delete_all'
         get 'get_materials'
       end
     end
-    resources :kb_categories, except: [] do
+    resources :kb_categories do
       collection do
         get 'delete_all'
         get 'get_kb_categories'
       end
     end
-    resources :knowledge_bases, except: [] do
+    resources :knowledge_bases do
       collection do
         get 'delete_all'
         get 'get_knowledge_bases'

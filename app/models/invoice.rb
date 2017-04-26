@@ -8,6 +8,7 @@ class Invoice < ActiveRecord::Base
   
   #Has Many Relationship
   has_many :sales_order_items, :dependent => :destroy
+  has_many :ledger_entries
   
   #Html Form Nested Attributes
   accepts_nested_attributes_for :buyer

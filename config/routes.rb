@@ -161,7 +161,18 @@ Rails.application.routes.draw do
         get 'get_maintanance_schedules'
       end
     end
-
+    resources :acc_accounts do
+      collection do
+        get 'delete_all'
+        get 'get_acc_accounts'
+      end
+    end
+    resources :ledger_entries do
+      collection do
+        get 'delete_all'
+        get 'get_ledger_entries'
+      end
+    end
     # default integration custom actions paths
     match '/integration/:account_id/connect' => 'integration_custom_actions#auth_connect', as: :connect_integration, :via => [:get, :post]
     match '/integration/:account_id/:action' => 'integration_custom_actions#action_missing', as: :integration_custom_action_for_account, :via => [:get, :post]

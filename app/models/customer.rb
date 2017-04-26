@@ -6,6 +6,7 @@ class Customer < ActiveRecord::Base
   has_many :notes
   has_many :contacts, dependent: :destroy
   has_many :sales_orders, dependent: :destroy
+  has_many :ledger_entries
 
   #Validations
   validates :phone, :street, :city, :state, :country, :postal_code, :decription, presence: true

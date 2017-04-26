@@ -11,10 +11,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170425160842) do
+ActiveRecord::Schema.define(version: 20170426190001) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "acc_accounts", force: :cascade do |t|
+    t.string   "acc_code"
+    t.string   "name"
+    t.string   "type"
+    t.text     "description"
+    t.boolean  "is_active",     default: true
+    t.integer  "sales_user_id"
+    t.integer  "created_by_id"
+    t.integer  "updated_by_id"
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+  end
 
   create_table "accounts", force: :cascade do |t|
     t.string   "title"
@@ -274,6 +287,20 @@ ActiveRecord::Schema.define(version: 20170425160842) do
     t.integer  "approver_id"
     t.integer  "sales_user_id"
     t.boolean  "is_active",      default: true
+    t.integer  "created_by_id"
+    t.integer  "updated_by_id"
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+  end
+
+  create_table "ledger_entries", force: :cascade do |t|
+    t.string   "subject"
+    t.integer  "customer_id"
+    t.integer  "acc_account_id"
+    t.integer  "invoice_id"
+    t.decimal  "amount"
+    t.boolean  "is_active",      default: true
+    t.integer  "sales_user_id"
     t.integer  "created_by_id"
     t.integer  "updated_by_id"
     t.datetime "created_at",                    null: false

@@ -1,7 +1,7 @@
 class WarehouseLocation < ActiveRecord::Base
   #Belongs To Relationship
   belongs_to :warehouse
-
+  
   #Has Many Relationship
   has_many :warehouse_location_items
 

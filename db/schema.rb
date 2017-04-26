@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170315172449) do
+ActiveRecord::Schema.define(version: 20170425160842) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,6 +28,20 @@ ActiveRecord::Schema.define(version: 20170315172449) do
     t.datetime "created_at",                        null: false
     t.datetime "updated_at",                        null: false
     t.boolean  "is_connected",      default: false
+  end
+
+  create_table "assets", force: :cascade do |t|
+    t.string   "subject"
+    t.string   "status"
+    t.string   "category"
+    t.text     "description"
+    t.boolean  "is_active",     default: true
+    t.integer  "sales_user_id"
+    t.integer  "created_by_id"
+    t.integer  "updated_by_id"
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+    t.string   "location"
   end
 
   create_table "buyers", force: :cascade do |t|
@@ -264,6 +278,20 @@ ActiveRecord::Schema.define(version: 20170315172449) do
     t.integer  "updated_by_id"
     t.datetime "created_at",                    null: false
     t.datetime "updated_at",                    null: false
+  end
+
+  create_table "maintanance_schedules", force: :cascade do |t|
+    t.string   "subject"
+    t.datetime "schedule_date"
+    t.integer  "asset_id"
+    t.string   "status"
+    t.text     "description"
+    t.boolean  "is_active",     default: true
+    t.integer  "sales_user_id"
+    t.integer  "created_by_id"
+    t.integer  "updated_by_id"
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
   end
 
   create_table "manufacturing_histories", force: :cascade do |t|

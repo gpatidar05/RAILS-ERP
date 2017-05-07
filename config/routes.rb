@@ -49,6 +49,7 @@ Rails.application.routes.draw do
         get 'refresh'
         get 'edit_form'
         post 'create_invoice'
+        get 'get_sales_order_invoices'
       end
     end
     resources :categories do
@@ -173,6 +174,12 @@ Rails.application.routes.draw do
         get 'get_ledger_entries'
       end
     end
+    resources :cheque_registers do
+      collection do
+        get 'delete_all'
+      end
+    end
+
     # default integration custom actions paths
     match '/integration/:account_id/connect' => 'integration_custom_actions#auth_connect', as: :connect_integration, :via => [:get, :post]
     match '/integration/:account_id/:action' => 'integration_custom_actions#action_missing', as: :integration_custom_action_for_account, :via => [:get, :post]

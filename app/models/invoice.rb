@@ -152,4 +152,20 @@ class Invoice < ActiveRecord::Base
       },
     })
   end
+
+  def self.sales_sales_order_invoices(current_user)
+    where("invoices.sales_user_id = ? AND invoices.is_active = ?",current_user.id,true)
+  end
+
+  def self.get_json_sales_order_invoices_dropdown(sales_order_invoices)
+    list = []
+    sales_order_invoices.each do |sales_order_invoice|
+      list << as_json(only: [])
+        .merge({name:sales_order_invoice.name,
+          invoice_id:sales_order_invoice.id,
+        })
+    end
+    return list
+  end
+
 end

@@ -44,6 +44,9 @@ class LedgerEntry < ActiveRecord::Base
     as_json(only: [:id,:subject, :customer_id, :acc_account_id, :invoice_id, :amount])
     .merge({
       code:"LDE#{self.id.to_s.rjust(4, '0')}",
+      customer: self.customer.try(:user).try(:full_name),
+      acc_account: self.acc_account.try(:name),
+      invoice: self.invoice.try(:name),
       created_at:self.created_at.strftime('%d %B, %Y'),
       created_by:self.creator.try(:full_name),
       updated_at:self.updated_at.strftime('%d %B, %Y'),

@@ -3,7 +3,7 @@ class CreateAccAccounts < ActiveRecord::Migration
     create_table :acc_accounts do |t|
       t.string :acc_code
       t.string :name
-      t.string :type
+      t.string :acc_type
       t.text :description
       
       t.boolean :is_active, default: true

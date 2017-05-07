@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170426190001) do
+ActiveRecord::Schema.define(version: 20170429160154) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,7 +19,7 @@ ActiveRecord::Schema.define(version: 20170426190001) do
   create_table "acc_accounts", force: :cascade do |t|
     t.string   "acc_code"
     t.string   "name"
-    t.string   "type"
+    t.string   "acc_type"
     t.text     "description"
     t.boolean  "is_active",     default: true
     t.integer  "sales_user_id"
@@ -79,6 +79,21 @@ ActiveRecord::Schema.define(version: 20170426190001) do
     t.datetime "updated_at",                   null: false
     t.integer  "sales_user_id"
     t.boolean  "is_active",     default: true
+  end
+
+  create_table "cheque_registers", force: :cascade do |t|
+    t.string   "payee"
+    t.date     "cheque_date"
+    t.decimal  "debit"
+    t.decimal  "credit"
+    t.text     "notes"
+    t.string   "status"
+    t.boolean  "is_active",     default: true
+    t.integer  "sales_user_id"
+    t.integer  "created_by_id"
+    t.integer  "updated_by_id"
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
   end
 
   create_table "contacts", force: :cascade do |t|

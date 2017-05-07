@@ -18,7 +18,7 @@ class AccAccount < ActiveRecord::Base
         search = search.where(id: code.to_i)
       else
         search = search.where("acc_code LIKE :search
-          OR name LIKE :search OR type LIKE :search OR description LIKE :search", search: "%#{search_text}%")
+          OR name LIKE :search OR acc_type LIKE :search OR description LIKE :search", search: "%#{search_text}%")
       end
     else
       search = search.where("id = ?", search_text)
@@ -31,14 +31,14 @@ class AccAccount < ActiveRecord::Base
     search = search.where("acc_accounts.id = ?",params[:code].gsub(/\D/,'')) if params[:code].present?
     search = search.where('acc_accounts.acc_code = ?',params[:acc_code]) if params[:acc_code].present?
     search = search.where('acc_accounts.name = ?',params[:name]) if params[:name].present?
-    search = search.where('acc_accounts.type = ?',params[:type]) if params[:type].present?
+    search = search.where('acc_accounts.acc_type = ?',params[:acc_type]) if params[:acc_type].present?
     search = search.where('DATE(acc_accounts.created_at) = ?', params[:created_at].to_date) if params[:created_at].present?
     search = search.where('acc_accounts.created_by_id = ?',params[:created_by_id]) if params[:created_by_id].present?
     return search
   end
 
   def get_json_acc_account
-    as_json(only: [:id,:acc_code,:name,:type,:description])
+    as_json(only: [:id,:acc_code,:name,:acc_type,:description])
     .merge({
       code:"ACC#{self.id.to_s.rjust(4, '0')}",
       created_at:self.created_at.strftime('%d %B, %Y'),
@@ -64,7 +64,7 @@ class AccAccount < ActiveRecord::Base
     list = []
     acc_accounts.each do |acc_account|
       list << as_json(only: [])
-      .merge({name:acc_account.subject,
+      .merge({name:acc_account.name,
         acc_account_id:acc_account.id,
       })
     end

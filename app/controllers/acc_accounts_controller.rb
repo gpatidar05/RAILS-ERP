@@ -57,6 +57,6 @@ class AccAccountsController < ApplicationController
     end
 
     def acc_account_params
-      params.require(:acc_account).permit(:id, :acc_code, :name, :type, :description)
+      params.require(:acc_account).permit(:id, :acc_code, :name, :acc_type, :description)
     end
 end

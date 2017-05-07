@@ -54,7 +54,12 @@ class SalesOrderInvoicesController < ApplicationController
     def edit_form
       render status: 200, json: @invoice.get_json_invoice_edit.as_json 
     end
-    
+
+    def get_sales_order_invoices
+      sales_order_invoices = Invoice.sales_sales_order_invoices(current_user)
+      render status: 200, json: Invoice.get_json_sales_order_invoices_dropdown(sales_order_invoices)
+    end
+  
     private
       def set_invoice
         @invoice = Invoice.find(params[:id])

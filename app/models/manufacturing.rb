@@ -43,11 +43,14 @@ class Manufacturing < ActiveRecord::Base
   end
 
   def self.search(params,current_user_id)
+    status = JSON.parse(params[:status]) if params[:status].present?
+    m_type = JSON.parse(params[:m_type]) if params[:m_type].present?
+
     search = where("manufacturings.sales_user_id = ?",current_user_id)
     search = search.where("manufacturings.id = ?",params[:code].gsub(/\D/,'')) if params[:code].present?
     search = search.where('manufacturings.subject = ?',params[:subject]) if params[:subject].present?
-    search = search.where('manufacturings.status = ?',params[:status]) if params[:status].present?
-    search = search.where('manufacturings.m_type = ?',params[:m_type]) if params[:m_type].present?
+    search = search.where('manufacturings.status IN (?)',status) if status.present?
+    search = search.where('manufacturings.m_type IN (?)',m_type) if m_type.present?
     search = search.where('manufacturings.quantity = ?',params[:quantity]) if params[:quantity].present?
     search = search.where('manufacturings.description = ?',params[:description]) if params[:description].present?
     search = search.where('DATE(manufacturings.start_date) = ?', params[:start_date].to_date) if params[:start_date].present?

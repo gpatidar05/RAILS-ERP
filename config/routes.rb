@@ -179,7 +179,13 @@ Rails.application.routes.draw do
         get 'delete_all'
       end
     end
-
+    resources :return_wizards do
+      collection do
+        get 'delete_all'
+        get 'get_return_wizards'
+      end
+    end
+    
     # default integration custom actions paths
     match '/integration/:account_id/connect' => 'integration_custom_actions#auth_connect', as: :connect_integration, :via => [:get, :post]
     match '/integration/:account_id/:action' => 'integration_custom_actions#action_missing', as: :integration_custom_action_for_account, :via => [:get, :post]

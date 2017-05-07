@@ -9,6 +9,7 @@ class Invoice < ActiveRecord::Base
   #Has Many Relationship
   has_many :sales_order_items, :dependent => :destroy
   has_many :ledger_entries
+  has_many :return_wizards
   
   #Html Form Nested Attributes
   accepts_nested_attributes_for :buyer
@@ -16,7 +17,10 @@ class Invoice < ActiveRecord::Base
 
   #Scope For the Active Record
   scope :with_active, -> { where('is_active = ?', true) }
-  
+
+  #After Create Call Function
+  after_create :create_ledger_entry
+
   #Creator,Updater to your ActiveRecord objects
   track_who_does_it
 
@@ -167,5 +171,10 @@ class Invoice < ActiveRecord::Base
     end
     return list
   end
+  private
+    def create_ledger_entry
+      acc_account = AccAccount.find_by_default_type("CreateInvoice") 
+      LedgerEntry.create(subject:"Created By Receivables Invoice",customer_id:self.customer_user_id,acc_account_id:acc_account.id,invoice_id:self.id,amount:self.grand_total,sales_user_id:self.sales_user_id)
+    end
 
 end

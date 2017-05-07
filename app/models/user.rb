@@ -145,9 +145,12 @@ class User < ActiveRecord::Base
         Marketplace.all.each { |marketplace|
           Account.create(:user_id => self.id, :title => marketplace.name, :marketplace_id => marketplace.id)
         }
+        AccAccount.create(acc_code:"1001",name:"Receivables",acc_type:"Profit/Loss",description:"Amount received through Invoices",sales_user_id: self.id,default_type:"CreateInvoice")
+        AccAccount.create(acc_code:"1002",name:"Payables",acc_type:"Profit/Loss",description:"Amount Payed to customers like Cheque and Returns",sales_user_id: self.id,default_type:"CreateReturnWizard")
       end
 
       def set_role_and_password
+        return true if self.Sales?
         self.role = 'Customer' if self.customer.present?
         self.role = 'Contact' if self.contact.present?
         self.role = 'Employee' if self.employee.present?

@@ -185,6 +185,9 @@ Rails.application.routes.draw do
         get 'get_return_wizards'
       end
     end
+    resources :cash_flow_reports , only: [:index]
+
+
     
     # default integration custom actions paths
     match '/integration/:account_id/connect' => 'integration_custom_actions#auth_connect', as: :connect_integration, :via => [:get, :post]

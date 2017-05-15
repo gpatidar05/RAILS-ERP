@@ -8,9 +8,10 @@ class Customer < ActiveRecord::Base
   has_many :sales_orders, dependent: :destroy
   has_many :ledger_entries
   has_many :return_wizards
+  has_many :cheque_registers
 
   #Validations
-  validates :phone, :street, :city, :state, :country, :postal_code, :decription, presence: true
+  validates :phone, presence: true
 
   #Scope For the Active Record
   scope :with_active, -> { where('is_active = ?', true) }

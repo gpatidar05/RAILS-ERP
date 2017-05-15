@@ -6,10 +6,7 @@ class Contact < ActiveRecord::Base
   #Has Many Relationship
   has_many :notes
   has_many :sales_orders, dependent: :destroy
-
-  #Validations
-  validates :customer_id,:salutation,:phone_mobile,:phone_work,:designation,:department, presence: true
-    
+   
   #Scope For the Active Record
   scope :with_active, -> { where('is_active = ?', true) }
 
@@ -69,7 +66,7 @@ class Contact < ActiveRecord::Base
       first_name:self.user.first_name,
       last_name:self.user.last_name,
       middle_name:self.user.middle_name,
-      customer:self.customer.user.full_name,
+      customer:self.customer.try(:user).try(:full_name),
       email:self.user.email,
       created_at:self.created_at.strftime('%d %B, %Y'),
       created_by:self.creator.try(:full_name),
@@ -83,7 +80,7 @@ class Contact < ActiveRecord::Base
     as_json(only: [:id,:phone_mobile,:primary_country,:designation])
     .merge({
       code:"CUS#{self.customer_id.to_s.rjust(4, '0')}-CON#{self.id.to_s.rjust(4, '0')}",
-      customer:self.customer.user.full_name,
+      customer:self.customer.try(:user).try(:full_name),
       name:self.user.full_name,
       created_at:self.created_at.strftime('%d %B, %Y'),
       })
@@ -108,7 +105,7 @@ class Contact < ActiveRecord::Base
       last_name: self.user.last_name,
       contact_attributes:{
         id: self.id,
-        customer_id: self.customer.id,
+        customer_id: self.customer.try(:id),
         salutation: self.salutation,
         phone_mobile: self.phone_mobile,
         phone_work: self.phone_work,

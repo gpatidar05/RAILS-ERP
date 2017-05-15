@@ -1,8 +1,13 @@
 class ChequeRegister < ActiveRecord::Base
 
+  belongs_to :customer
+  
   #Scope For the Active Record
   scope :with_active, -> { where('is_active = ?', true) }
   
+  #After Create Call Function
+  after_create :create_ledger_entry
+
   #Creator,Updater to your ActiveRecord objects
   track_who_does_it
 
@@ -24,8 +29,6 @@ class ChequeRegister < ActiveRecord::Base
     return search
   end
 
-
-
   def self.search(params,current_user_id)
     search = where("cheque_registers.sales_user_id = ?",current_user_id)
     search = search.where("cheque_registers.id = ?",params[:code].gsub(/\D/,'')) if params[:code].present?
@@ -40,9 +43,10 @@ class ChequeRegister < ActiveRecord::Base
   end
 
   def get_json_cheque_register
-    as_json(only: [:id, :payee, :cheque_date, :debit, :credit, :notes, :status])
+    as_json(only: [:id, :payee, :customer_id, :cheque_date, :debit, :credit, :notes, :status])
     .merge({
       code:"ACC#{self.id.to_s.rjust(4, '0')}",
+      customer:self.customer.try(:user).try(:full_name),
       created_at:self.created_at.strftime('%d %B, %Y'),
       created_by:self.creator.try(:full_name),
       updated_at:self.updated_at.strftime('%d %B, %Y'),
@@ -58,4 +62,14 @@ class ChequeRegister < ActiveRecord::Base
     return cheque_registers_list
   end
 
+  private
+    def create_ledger_entry
+      if self.debit.present?
+        acc_account = AccAccount.find_by_default_type("CreateReturnWizard") 
+        LedgerEntry.create(subject:"Created By Payables Cheque Registers", customer_id:self.customer_id, acc_account_id:acc_account.id,amount:self.debit,sales_user_id:self.sales_user_id)
+      else
+        acc_account = AccAccount.find_by_default_type("CreateInvoice") 
+        LedgerEntry.create(subject:"Created By Receivables Cheque Registers", customer_id:self.customer_id,acc_account_id:acc_account.id,amount:self.credit,sales_user_id:self.sales_user_id)
+      end
+    end
 end

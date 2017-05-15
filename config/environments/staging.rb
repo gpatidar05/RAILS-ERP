@@ -82,7 +82,7 @@ Rails.application.configure do
     :address              => "smtp.gmail.com",
     :port                 => 587,
     :user_name            => "wherever2016rails@gmail.com",
-    :password             => "wherever2016",
+    :password             => "Dev12345678",
     :authentication       => "plain",
   }
 end

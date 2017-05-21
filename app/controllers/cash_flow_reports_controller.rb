@@ -48,8 +48,19 @@ class CashFlowReportsController < ApplicationController
         # InFlow + # OutFlow
         months.append(start_date.strftime('%b'))
     end
-    net_cash_flow = outcome - income
-    render status: 200, json: { months: months,flow: flow,sales_flow: sales_flow,
+    months.append("Total")
+    sales_flow.append(sales_flow.inject(:+))
+    cheque_register_flow.append(cheque_register_flow.inject(:+))
+
+    return_wizard_outflow.append(return_wizard_outflow.inject(:+))
+    cheque_register_outflow.append(cheque_register_outflow.inject(:+))
+    material_outflow.append(material_outflow.inject(:+))
+
+    inflow_total = flow.inject(:+)
+    outflow_total = outflow.inject(:+)
+    
+    net_cash_flow = income - outcome
+    render status: 200, json: { outflow_total: outflow_total, inflow_total: inflow_total, months: months,flow: flow,sales_flow: sales_flow,
     	cheque_register_flow: cheque_register_flow, return_wizard_outflow: return_wizard_outflow,
     	cheque_register_outflow: cheque_register_outflow, material_outflow: material_outflow,
     	outflow: outflow ,net_cash_flow:net_cash_flow}

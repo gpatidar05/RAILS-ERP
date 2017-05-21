@@ -71,6 +71,7 @@ class Material < ActiveRecord::Base
       .merge({name:material.name,
         material_id:material.id,
         unit:material.unit,
+        quantity:material.quantity,
       })
     end
     return list

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170515163839) do
+ActiveRecord::Schema.define(version: 20170521170335) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,8 +37,6 @@ ActiveRecord::Schema.define(version: 20170515163839) do
     t.string   "auto_renew"
     t.text     "relisting_pricing"
     t.text     "state"
-    t.string   "api_uid"
-    t.boolean  "has_api"
     t.datetime "created_at",                        null: false
     t.datetime "updated_at",                        null: false
     t.boolean  "is_connected",      default: false
@@ -625,6 +623,11 @@ ActiveRecord::Schema.define(version: 20170515163839) do
     t.string   "last_name"
     t.string   "middle_name"
     t.string   "role"
+    t.string   "email",                  default: "", null: false
+    t.string   "confirmation_token"
+    t.string   "unconfirmed_email"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
   end
 
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree

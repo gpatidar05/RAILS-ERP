@@ -10,7 +10,7 @@ Rails.application.routes.draw do
     end
 
     devise_for :users, path: 'auth_users', controllers: {
-          sessions: 'users/sessions',registrations: 'users/registrations',passwords: 'users/passwords'
+          sessions: 'users/sessions',registrations: 'users/registrations',passwords: 'users/passwords',confirmations: 'users/confirmations'
     }
 
     devise_scope :user do

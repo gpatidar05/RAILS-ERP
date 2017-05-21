@@ -69,8 +69,6 @@ GEM
       railties (>= 4.1.0, < 5.1)
       responders
       warden (~> 1.2.3)
-    devise-multi_email (1.0.5)
-      devise
     erubis (2.7.0)
     etsy (0.3.1)
       json (>= 1.5.0)
@@ -204,7 +202,6 @@ DEPENDENCIES
   clerk
   coffee-rails (~> 4.1.0)
   devise
-  devise-multi_email
   etsy
   htmlentities
   jbuilder (~> 2.0)

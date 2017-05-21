@@ -52,12 +52,13 @@ class ReturnWizard < ActiveRecord::Base
   end
 
   def get_json_return_wizard
+    date_paid = self.date_paid.present? ? self.date_paid.strftime('%d %B, %Y') : ""
     as_json(only: [:id,:subject, :invoice_id, :customer_id, :original_amount,
-    	:shipping_charges, :amount_to_be_refunded, :refund_type, :payment_type,
-    	:date_paid, :status, :reason_for_return, :return_description])
+    	:shipping_charges, :amount_to_be_refunded, :refund_type, :payment_type, :status, :reason_for_return, :return_description])
     .merge({
       code:"RW#{self.id.to_s.rjust(4, '0')}",
       customer: self.customer.try(:user).try(:full_name),
+      date_paid: date_paid,
       invoice: self.invoice.try(:name),
       created_at:self.created_at.strftime('%d %B, %Y'),
       created_by:self.creator.try(:full_name),

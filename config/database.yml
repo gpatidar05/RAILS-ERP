@@ -6,7 +6,7 @@ default: &default
 
 development:
   <<: *default
-  database: erp1
+  database: erp2
   username: postgres
   password: postgres
 

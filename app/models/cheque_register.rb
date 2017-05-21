@@ -43,10 +43,11 @@ class ChequeRegister < ActiveRecord::Base
   end
 
   def get_json_cheque_register
-    as_json(only: [:id, :payee, :customer_id, :cheque_date, :debit, :credit, :notes, :status])
+    as_json(only: [:id, :payee, :customer_id, :debit, :credit, :notes, :status])
     .merge({
       code:"ACC#{self.id.to_s.rjust(4, '0')}",
       customer:self.customer.try(:user).try(:full_name),
+      cheque_date:self.cheque_date.strftime('%d %B, %Y'),
       created_at:self.created_at.strftime('%d %B, %Y'),
       created_by:self.creator.try(:full_name),
       updated_at:self.updated_at.strftime('%d %B, %Y'),

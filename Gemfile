@@ -38,9 +38,6 @@ gem 'devise'
 #Clerk adds the creator,updater to your ActiveRecord objects
 gem 'clerk'
 
-# Multilpe Emails
-gem 'devise-multi_email'
-
 # Upload files from Ruby applications
 gem 'carrierwave', '~> 1.0'
 

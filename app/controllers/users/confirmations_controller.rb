@@ -12,9 +12,18 @@ class Users::ConfirmationsController < Devise::ConfirmationsController
   # end
 
   # GET /resource/confirmation?confirmation_token=abcdef
-  # def show
-  #   super
-  # end
+  def show
+    begin
+      super
+    rescue Exception => e
+      puts e
+    end
+    if Rails.env.development?
+      redirect_to "http://localhost:3000/"
+    else
+      redirect_to "https://angular-rails-erp.herokuapp.com/"
+    end
+  end
 
   # protected
 

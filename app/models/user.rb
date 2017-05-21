@@ -7,12 +7,10 @@ class User < ActiveRecord::Base
 
   #Has Many Relationship
   has_many :accounts
-  has_many :emails, dependent: :destroy
 
   #Devise Setting
-  devise :multi_email_authenticatable, :registerable, :multi_email_confirmable,
-           :recoverable, :rememberable, :trackable, :multi_email_validatable
-
+  devise :database_authenticatable, :registerable,:confirmable,
+         :recoverable, :rememberable, :trackable, :validatable
   #After Create Call Function
   after_create :create_default_accounts
 
@@ -155,6 +153,6 @@ class User < ActiveRecord::Base
         self.role = 'Contact' if self.contact.present?
         self.role = 'Employee' if self.employee.present?
         self.role = 'Supplier' if self.supplier.present?
-        self.password = Devise.friendly_token.first(8)
+        self.password = "123456789"
       end
 end

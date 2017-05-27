@@ -20,22 +20,22 @@ class ChequeRegister < ActiveRecord::Base
         search = search.where(id: code.to_i)
       else
         search = search.where("payee LIKE :search
-          OR notes LIKE :search OR status LIKE :search", search: "%#{search_text}%")
+          OR notes LIKE :search OR status LIKE :search OR rate_type LIKE :search", search: "%#{search_text}%")
       end
     else
-      search = search.where("id :search OR debit :search
-                OR credit :search ", search: "%#{search_text}%")
+      search = search.where("id :search OR rate :search", search: "%#{search_text}%")
     end
     return search
   end
 
   def self.search(params,current_user_id)
+    rate_type = JSON.parse(params[:rate_type]) if params[:rate_type].present?
     search = where("cheque_registers.sales_user_id = ?",current_user_id)
     search = search.where("cheque_registers.id = ?",params[:code].gsub(/\D/,'')) if params[:code].present?
     search = search.where('cheque_registers.payee = ?',params[:payee]) if params[:payee].present?
     search = search.where('cheque_registers.status = ?',params[:status]) if params[:status].present?
-    search = search.where('cheque_registers.debit = ?',params[:debit]) if params[:debit].present?
-    search = search.where('cheque_registers.credit = ?',params[:credit]) if params[:credit].present?
+    search = search.where('cheque_registers.rate_type IN (?)', rate_type) if rate_type.present?
+    search = search.where('cheque_registers.rate = ?',params[:rate]) if params[:rate].present?
     search = search.where('DATE(cheque_registers.cheque_date) = ?', params[:cheque_date].to_date) if params[:cheque_date].present?
     search = search.where('DATE(cheque_registers.created_at) = ?', params[:created_at].to_date) if params[:created_at].present?
     search = search.where('cheque_registers.created_by_id = ?',params[:created_by_id]) if params[:created_by_id].present?
@@ -43,11 +43,12 @@ class ChequeRegister < ActiveRecord::Base
   end
 
   def get_json_cheque_register
-    as_json(only: [:id, :payee, :customer_id, :debit, :credit, :notes, :status])
+    cheque_date = self.cheque_date.present? ? self.cheque_date.strftime('%d %B, %Y') : self.cheque_date 
+    as_json(only: [:id, :payee, :customer_id, :rate_type, :rate, :notes, :status])
     .merge({
       code:"ACC#{self.id.to_s.rjust(4, '0')}",
       customer:self.customer.try(:user).try(:full_name),
-      cheque_date:self.cheque_date.strftime('%d %B, %Y'),
+      cheque_date:cheque_date,
       created_at:self.created_at.strftime('%d %B, %Y'),
       created_by:self.creator.try(:full_name),
       updated_at:self.updated_at.strftime('%d %B, %Y'),
@@ -65,12 +66,12 @@ class ChequeRegister < ActiveRecord::Base
 
   private
     def create_ledger_entry
-      if self.debit.present?
+      if self.rate_type.eql?("Credit")
         acc_account = AccAccount.find_by_default_type("CreateReturnWizard") 
-        LedgerEntry.create(subject:"Created By Payables Cheque Registers", customer_id:self.customer_id, acc_account_id:acc_account.id,amount:self.debit,sales_user_id:self.sales_user_id)
+        LedgerEntry.create(subject:"Created By Payables Cheque Registers", customer_id:self.customer_id, acc_account_id:acc_account.id,amount:self.rate,sales_user_id:self.sales_user_id)
       else
         acc_account = AccAccount.find_by_default_type("CreateInvoice") 
-        LedgerEntry.create(subject:"Created By Receivables Cheque Registers", customer_id:self.customer_id,acc_account_id:acc_account.id,amount:self.credit,sales_user_id:self.sales_user_id)
+        LedgerEntry.create(subject:"Created By Receivables Cheque Registers", customer_id:self.customer_id,acc_account_id:acc_account.id,amount:self.rate,sales_user_id:self.sales_user_id)
       end
     end
 end

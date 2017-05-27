@@ -8,6 +8,7 @@ class CustomersController < ApplicationController
     else
       customers = Customer.search(params,current_user.id).with_active.get_json_customers
     end
+    puts customers
     render status: 200, json: customers.as_json
   end
 

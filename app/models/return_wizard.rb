@@ -92,6 +92,6 @@ class ReturnWizard < ActiveRecord::Base
   private
     def create_ledger_entry
       acc_account = AccAccount.find_by_default_type("CreateReturnWizard") 
-      LedgerEntry.create(subject:"Created By Payables Return Wizard",customer_id:self.customer_id,acc_account_id:acc_account.id,invoice_id:self.invoice_id,amount:self.original_amount,sales_user_id:self.sales_user_id)
+      LedgerEntry.create(subject:"Created By Payables Return Wizard",customer_id:self.customer_id,acc_account_id:acc_account.id,invoice_id:self.invoice_id,amount:self.amount_to_be_refunded,sales_user_id:self.sales_user_id)
     end
 end

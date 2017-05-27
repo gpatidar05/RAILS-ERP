@@ -52,7 +52,7 @@ class ChequeRegistersController < ApplicationController
     end
 
     def cheque_register_params
-      params.require(:cheque_register).permit(:id, :payee, :status, :cheque_date, :debit, :credit, :notes, :customer_id)
+      params.require(:cheque_register).permit(:id, :payee, :status, :cheque_date, :rate_type, :rate, :notes, :customer_id)
     end
 
 end
